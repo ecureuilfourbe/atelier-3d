@@ -1,0 +1,16 @@
+{
+  "id": "birefnet_remove_background",
+  "label": "Détourage BiRefNet (template officiel Comfy, nodes natives)",
+  "capability": "image.remove_background",
+  "engine": {"name": "BiRefNet", "runtime": "ComfyUI dédié (RemoveBackground natif)", "model": "birefnet.safetensors"},
+  "provenance": {
+    "source": "comfyui_workflow_templates_json/templates/utility_birefnet_remove_background.json (ComfyUI v0.38.0)",
+    "conversion": "app.graphToPrompt() du frontend officiel ComfyUI 1.53.6",
+    "outputs_note": "Le template n'a pas de SaveImage : les sorties PreviewImage (RGBA) et MaskPreview sont récupérées dans le dossier temp via /view, puis le canal alpha est vérifié."
+  },
+  "inputs": {"image": {"node": "17", "input": "image", "type": "IMAGE_UPLOAD"}},
+  "outputs": {"image": {"node": "18", "kind": "images", "expect_alpha": true}, "mask": {"node": "20", "kind": "images"}},
+  "required_models": [{"folder": "background_removal", "name": "birefnet.safetensors"}],
+  "required_classes": ["LoadImage", "PreviewImage", "MaskPreview", "RemoveBackground", "LoadBackgroundRemovalModel", "InvertMask", "JoinImageWithAlpha"],
+  "limits": {"deterministic": true}
+}

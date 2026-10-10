@@ -1,0 +1,348 @@
+{
+  "8": {
+    "inputs": {
+      "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "MiniMax H3 FL2VA MODEL — T2V + I2V"
+    }
+  },
+  "10": {
+    "inputs": {
+      "unet_name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "MiniMax H3 REF2VA MODEL — REFERENCE VIDEO"
+    }
+  },
+  "12": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "MiniMax H3 QWEN3-VL TEXT ENCODER"
+    }
+  },
+  "14": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "MiniMax H3 VIDEO VAE"
+    }
+  },
+  "16": {
+    "inputs": {
+      "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "MiniMax H3 AUDIO VAE"
+    }
+  },
+  "2017": {
+    "inputs": {
+      "PowerLoraLoaderHeaderWidget": {
+        "type": "PowerLoraLoaderHeaderWidget"
+      },
+      "lora_1": {
+        "on": true,
+        "lora": "minimax_h3_turbo_4step_ckpt500_comfyui_pruned.safetensors",
+        "strength": 1
+      },
+      "➕ Add Lora": "",
+      "model": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "Power Lora Loader (rgthree)",
+    "_meta": {
+      "title": "Power Lora Loader (rgthree)"
+    }
+  },
+  "2020": {
+    "inputs": {
+      "noise_seed": 42069
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "SEED"
+    }
+  },
+  "2021": {
+    "inputs": {
+      "value": 5
+    },
+    "class_type": "PrimitiveFloat",
+    "_meta": {
+      "title": "Video Duration (in seconds)"
+    }
+  },
+  "2022": {
+    "inputs": {
+      "scheduler": "beta",
+      "steps": 8,
+      "denoise": 1,
+      "model": [
+        "2027:2003",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "PlanificateurBasique"
+    }
+  },
+  "2023": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "2024": {
+    "inputs": {
+      "prompt": "",
+      "width": [
+        "2065:2064",
+        0
+      ],
+      "height": [
+        "2065:2061",
+        0
+      ],
+      "length": [
+        "2065:2063",
+        1
+      ],
+      "clip": [
+        "12",
+        0
+      ],
+      "vae": [
+        "14",
+        0
+      ],
+      "first_frame": [
+        "2037",
+        0
+      ],
+      "last_frame": [
+        "2047",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ImageToVideo",
+    "_meta": {
+      "title": "MINIMAX H3 — IMAGE/ FIRST-LAST FRAME CONDITIONING"
+    }
+  },
+  "2030": {
+    "inputs": {
+      "frame_rate": 24,
+      "loop_count": 0,
+      "filename_prefix": "MiMx-IMG",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": true,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "2065:2058",
+        0
+      ],
+      "audio": [
+        "2065:2060",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "2031": {
+    "inputs": {
+      "aspect_ratio": "16:9 (Widescreen)",
+      "megapixels": 0.9,
+      "multiple": 32
+    },
+    "class_type": "ResolutionSelector",
+    "_meta": {
+      "title": "Sélecteur de résolution"
+    }
+  },
+  "2037": {
+    "inputs": {
+      "image": "Krea2_00558_.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Charger Image"
+    }
+  },
+  "2047": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "megapixels": 1,
+      "resolution_steps": 32,
+      "image": [
+        "2048",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "Redimensionner l'image en fonction du nombre total de pixels"
+    }
+  },
+  "2048": {
+    "inputs": {
+      "image": "Krea2_00558_.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Charger Image"
+    }
+  },
+  "2027:2003": {
+    "inputs": {
+      "shift_video": 12.191111450195313,
+      "shift_audio": 3,
+      "model": [
+        "2017",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3SigmaShift",
+    "_meta": {
+      "title": "MiniMax H3 Sigma Shift"
+    }
+  },
+  "2065:2058": {
+    "inputs": {
+      "samples": [
+        "2065:2059",
+        0
+      ],
+      "vae": [
+        "14",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "2065:2059": {
+    "inputs": {
+      "noise": [
+        "2020",
+        0
+      ],
+      "guider": [
+        "2065:2062",
+        0
+      ],
+      "sampler": [
+        "2023",
+        0
+      ],
+      "sigmas": [
+        "2022",
+        0
+      ],
+      "latent_image": [
+        "2024",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "ÉchantillonneurPersonnaliséAvancé"
+    }
+  },
+  "2065:2060": {
+    "inputs": {
+      "samples": [
+        "2065:2059",
+        0
+      ],
+      "vae": [
+        "16",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeAudio",
+    "_meta": {
+      "title": "VAEDecodeAudio"
+    }
+  },
+  "2065:2062": {
+    "inputs": {
+      "model": [
+        "2027:2003",
+        0
+      ],
+      "conditioning": [
+        "2024",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "GuideBasique"
+    }
+  },
+  "2065:2063": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "2021",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "H3 VALID FRAME LENGTH"
+    }
+  },
+  "2065:2064": {
+    "inputs": {
+      "any_02": [
+        "2031",
+        0
+      ]
+    },
+    "class_type": "Any Switch (rgthree)",
+    "_meta": {
+      "title": "WIDTH"
+    }
+  },
+  "2065:2061": {
+    "inputs": {
+      "any_02": [
+        "2031",
+        1
+      ]
+    },
+    "class_type": "Any Switch (rgthree)",
+    "_meta": {
+      "title": "HEIGHT"
+    }
+  }
+}

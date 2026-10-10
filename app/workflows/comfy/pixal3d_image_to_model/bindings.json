@@ -1,0 +1,58 @@
+{
+  "id": "pixal3d_image_to_model",
+  "label": "Pixal3D & TRELLIS.2 : image → modèle texturé (template officiel Comfy, nodes natives)",
+  "capability": "mesh.generate",
+  "engine": {"name": "Pixal3D (int8 convrot)", "runtime": "ComfyUI dédié v0.38.0 (intégration native PR #14718)",
+             "model": "pixal3d_int8_convrot.safetensors (+ VAE TRELLIS.2, DINOv3, MoGe-2, BiRefNet)"},
+  "provenance": {
+    "source": "comfyui_workflow_templates_json/templates/3d_pixal3d_trellis2_image_to_model.json (ComfyUI v0.38.0)",
+    "conversion": "app.graphToPrompt() du frontend officiel ComfyUI 1.53.6",
+    "pipeline": "détourage BiRefNet → recadrage → focale MoGe-2 → structure → forme → sur-échantillonnage 1536 → texture → remesh UDF → décimation → dépliage UV PEC → baking couleur/metallic/roughness depuis les voxels + normal map + AO → GLB",
+    "seed_mapping": "Une seed studio s : KSampler 3 (structure) = s+14, 18 (forme) = s, 23 (sur-échantillonnage) = s, 12 (texture) = s+1 — avec s=42 on retrouve exactement les seeds du template (56/42/42/43)."
+  },
+  "inputs": {
+    "image": {"node": "122", "input": "image", "type": "IMAGE_UPLOAD"},
+    "seed": [{"node": "3", "input": "seed", "offset": 14}, {"node": "18", "input": "seed", "offset": 0},
+             {"node": "23", "input": "seed", "offset": 0}, {"node": "12", "input": "seed", "offset": 1}],
+    "texture_size": {"node": "288", "input": "value", "type": "INT"},
+    "decimate_target": {"node": "186", "input": "target_face_count", "type": "INT"},
+    "use_trellis2": {"node": "316", "input": "value", "type": "BOOLEAN", "description": "false = Pixal3D (défaut), true = TRELLIS.2"},
+    "remove_background": {"node": "248", "input": "switch", "type": "BOOLEAN"},
+    "filename_prefix": {"node": "322", "input": "filename_prefix", "type": "STRING"}
+  },
+  "outputs": {
+    "mesh": {"node": "322", "kind": "3d"},
+    "base_color": {"node": "164", "kind": "images"},
+    "metallic": {"node": "207", "kind": "images"},
+    "roughness": {"node": "208", "kind": "images"},
+    "normal": {"node": "226", "kind": "images"},
+    "ambient_occlusion": {"node": "235", "kind": "images"},
+    "uv_atlas": {"node": "262", "kind": "images"},
+    "input_crop": {"node": "302", "kind": "images"},
+    "input_mask": {"node": "303", "kind": "images"},
+    "mesh_info": {"node": "202", "kind": "text"}
+  },
+  "quality_profiles": {
+    "preview": {"texture_size": 1024, "decimate_target": 100000},
+    "standard": {"texture_size": 2048, "decimate_target": 300000},
+    "detailed": {"texture_size": 4096, "decimate_target": 700000}
+  },
+  "required_models": [
+    {"folder": "diffusion_models", "name": "pixal3d_int8_convrot.safetensors"},
+    {"folder": "diffusion_models", "name": "trellis_2_int8_convrot.safetensors", "note": "branche TRELLIS.2 du switch, validée par ComfyUI"},
+    {"folder": "clip_vision", "name": "dino_v3_L_naf_fp32.safetensors"},
+    {"folder": "vae", "name": "trellis_2_shape_vae_bf16.safetensors"},
+    {"folder": "vae", "name": "trellis_2_texture_vae_bf16.safetensors"},
+    {"folder": "geometry_estimation", "name": "moge_2_vitl_normal_fp16.safetensors"},
+    {"folder": "background_removal", "name": "birefnet.safetensors"}
+  ],
+  "required_classes": ["Trellis2ShapeStage", "VaeDecodeTextureTrellis", "CLIPVisionLoader", "GetMeshInfo", "RenderUVAtlas", "KSampler",
+                       "ApplyTextureToMesh", "BakeTextureFromVoxel", "MeshSmoothNormals", "PaintMesh", "CFGOverride", "RescaleCFG",
+                       "RemoveBackground", "ComfySwitchNode", "Preview3DAdvanced", "VaeDecodeStructureTrellis2", "VoxelToMesh",
+                       "MeshToFile3D", "ModelSamplingSD3", "Trellis2UpsampleStage", "BakeAmbientOcclusion", "BakeNormalMapFromMesh",
+                       "RemeshMesh", "DecimateMesh", "UnwrapMesh", "LoadMoGeModel", "LoadBackgroundRemovalModel", "MoGeInference",
+                       "MoGeGeometryToFOV", "Trellis2Conditioning", "Pixal3DConditioning", "VaeDecodeShapeTrellis", "UNETLoader",
+                       "Trellis2TextureStage", "EmptyTrellis2LatentStructure", "LoadImage", "ImageCropToMask", "PrimitiveBoolean",
+                       "PrimitiveInt", "Save3DAdvanced", "PreviewImage", "MaskPreview", "VAELoader"],
+  "limits": {"source_images": 1, "note": "Une seule image source : les faces cachées sont des hypothèses du modèle. Le moteur ne produit que le résultat final (pas de maillage intermédiaire progressif)."}
+}

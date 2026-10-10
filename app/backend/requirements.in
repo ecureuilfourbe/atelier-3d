@@ -1,0 +1,15 @@
+# Dépendances directes du backend Atelier 3D (Python 3.12).
+# Verrouillées avec empreintes dans requirements.lock (uv pip compile --generate-hashes).
+fastapi==0.142.2
+uvicorn==0.54.0
+pydantic==2.13.5
+python-multipart==0.0.32
+httpx==0.28.1
+websocket-client==1.9.2
+pillow==12.3.0
+numpy==2.5.3
+jsonschema==4.26.0
+psutil==7.2.2
+truststore==0.10.4
+mcp==2.3.0
+imageio-ffmpeg==0.6.0

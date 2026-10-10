@@ -1,0 +1,81 @@
+{
+  "id": "seedvr2_3b_upscale_image",
+  "label": "SeedVR2 3B int8 — upscale d'image (template officiel Comfy)",
+  "capability": "image.upscale",
+  "engine": {
+    "name": "SeedVR2 3B (ByteDance Seed)",
+    "runtime": "ComfyUI dédié (nodes SeedVR2 natives)",
+    "model": "seedvr2_3b_int8_convrot.safetensors",
+    "license": "Apache-2.0"
+  },
+  "provenance": {
+    "source": "comfyui_workflow_templates_json/templates/utility_seedvr2_3b_int8_upscale_image.json (ComfyUI v0.38.0)",
+    "conversion": "app.graphToPrompt() du frontend officiel ComfyUI 1.53.6 (sous-graphe « Upscale Image (SeedVR2 3B Int8) » aplati par le frontend, aucun widget deviné)",
+    "preset": "1 step, CFG 1, euler/simple, VAE en tuiles 512 (chevauchement 128), redimensionnement lanczos par multiplicateur (valeurs du template)"
+  },
+  "inputs": {
+    "image": {
+      "node": "1",
+      "input": "image",
+      "type": "IMAGE_UPLOAD",
+      "description": "Image source ; son canal alpha (LoadImage → MASK) est réappliqué par JoinImageWithAlpha"
+    },
+    "multiplier": {
+      "node": "66:57",
+      "input": "resize_type.multiplier",
+      "type": "FLOAT",
+      "description": "Facteur d'agrandissement (≤ 8) ; calculé par Atelier 3D depuis la taille cible"
+    },
+    "seed": {
+      "node": "66:54",
+      "input": "seed",
+      "type": "INT"
+    },
+    "color_correction": {
+      "node": "66:59",
+      "input": "color_correction_method",
+      "type": "STRING",
+      "description": "none (template) | lab | wavelet | adain : alignement des couleurs sur l'original"
+    },
+    "filename_prefix": {
+      "node": "9",
+      "input": "filename_prefix",
+      "type": "STRING"
+    }
+  },
+  "outputs": {
+    "image": {
+      "node": "9",
+      "kind": "images"
+    }
+  },
+  "required_models": [
+    {
+      "folder": "diffusion_models",
+      "name": "seedvr2_3b_int8_convrot.safetensors"
+    },
+    {
+      "folder": "vae",
+      "name": "seedvr2_ema_vae_fp16.safetensors"
+    }
+  ],
+  "required_classes": [
+    "LoadImage",
+    "SaveImage",
+    "ImageCompare",
+    "VAEEncodeTiled",
+    "VAEDecodeTiled",
+    "JoinImageWithAlpha",
+    "VAELoader",
+    "UNETLoader",
+    "KSampler",
+    "ResizeImageMaskNode",
+    "SeedVR2Preprocess",
+    "SeedVR2PostProcessing",
+    "SeedVR2Conditioning"
+  ],
+  "limits": {
+    "max_multiplier": 8.0,
+    "note": "Restauration par diffusion en une étape : ajoute des détails plausibles, fidèle à l'original ; à vérifier visuellement (texte, visages)."
+  }
+}

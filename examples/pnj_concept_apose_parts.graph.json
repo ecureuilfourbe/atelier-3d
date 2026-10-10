@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.1",
+  "name": "PNJ · concept, A-pose et parties",
+  "nodes": [
+    {"id": "p_concept", "type": "text.prompt", "params": {"text": "Concept art d'un PNJ original de science-fiction, personnage entier, tenue détaillée, visage et membres lisibles."}},
+    {"id": "concept", "type": "image.generate", "params": {"provider": "krea2_turbo", "seed": 42001, "width": 1024, "height": 1024}},
+    {"id": "p_apose", "type": "text.prompt", "params": {"text": "Isole ce même personnage en pied en A-pose, bras légèrement écartés et mains ouvertes. Conserve visage, coiffure, proportions, tenue et accessoires. Aucun élément du corps ne doit être coupé. Retire le décor."}},
+    {"id": "apose", "type": "image.edit", "params": {"workflow_id": "image_edit_default", "seed": 42002, "postprocess": {"remove_background": true}}},
+    {"id": "p_tete", "type": "text.prompt", "label": "Tête", "params": {"text": "Isole la tête de ce personnage en gros plan de face, conserve exactement les traits visibles, sans modifier son identité. Fond simple."}},
+    {"id": "p_cheveux", "type": "text.prompt", "label": "Cheveux", "params": {"text": "Isole la coiffure de ce personnage pour une référence de modélisation, conserve forme, longueur, couleur et disposition des mèches. Fond simple."}},
+    {"id": "p_tenue", "type": "text.prompt", "label": "Tenue", "params": {"text": "Présente la tenue de ce personnage sur un mannequin neutre en A-pose. Conserve coupe, couches, coutures, couleurs et matières visibles. Fond simple."}},
+    {"id": "p_accessoires", "type": "text.prompt", "label": "Accessoires", "params": {"text": "Isole les accessoires visibles portés par ce personnage, conserve leurs formes et détails et dispose-les séparément sur un fond simple."}},
+    {"id": "p_bottes", "type": "text.prompt", "label": "Bottes", "params": {"text": "Isole les bottes de ce personnage en gros plan lisible, conserve forme, couleurs, attaches et semelles visibles. Fond simple."}},
+    {
+      "id": "parts",
+      "type": "image.edit",
+      "params": {"workflow_id": "image_edit_default", "seed": 43000, "num_variants": 1},
+      "execution": {"mode": "foreach_prompts", "shared_inputs": ["image"], "max_items": 5, "on_item_error": "continue", "output_policy": "activate_first_success_only"},
+      "presentation": {"auto_previews": "per_item"}
+    }
+  ],
+  "edges": [
+    {"id": "e_concept_prompt", "from": ["p_concept", "text"], "to": ["concept", "prompt"]},
+    {"id": "e_concept_reference", "from": ["concept", "image"], "to": ["apose", "image"]},
+    {"id": "e_apose_prompt", "from": ["p_apose", "text"], "to": ["apose", "prompt"]},
+    {"id": "e_shared_apose", "from": ["apose", "image"], "to": ["parts", "image"]},
+    {"id": "e_tete", "from": ["p_tete", "text"], "to": ["parts", "prompts"], "item_key": "tete", "order": 0},
+    {"id": "e_cheveux", "from": ["p_cheveux", "text"], "to": ["parts", "prompts"], "item_key": "cheveux", "order": 1},
+    {"id": "e_tenue", "from": ["p_tenue", "text"], "to": ["parts", "prompts"], "item_key": "tenue", "order": 2},
+    {"id": "e_accessoires", "from": ["p_accessoires", "text"], "to": ["parts", "prompts"], "item_key": "accessoires", "order": 3},
+    {"id": "e_bottes", "from": ["p_bottes", "text"], "to": ["parts", "prompts"], "item_key": "bottes", "order": 4}
+  ]
+}

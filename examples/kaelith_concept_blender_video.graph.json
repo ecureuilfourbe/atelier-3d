@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "name": "Kaelith · concept, Blender et vidéo",
+  "nodes": [
+    {"id": "p_image", "type": "text.prompt", "params": {"text": "Personnage entier en A-pose, mains visibles, vêtements séparables, fond simple"}},
+    {"id": "image", "type": "image.generate", "params": {"provider": "krea2_turbo", "seed": 42001, "width": 1024, "height": 1024}},
+    {"id": "image_view", "type": "image.preview", "params": {}},
+    {"id": "mesh", "type": "mesh.generate", "params": {"category": "humanoid"}},
+    {"id": "prepare", "type": "mesh.prepare", "params": {"profile": "standard"}},
+    {"id": "rig", "type": "mesh.rig", "params": {"profile": "humanoid"}},
+    {"id": "mesh_view", "type": "mesh.preview", "params": {"show_skeleton": true}},
+    {"id": "blend", "type": "asset.export", "params": {"formats": ["blend", "glb"]}},
+    {"id": "p_video", "type": "text.prompt", "params": {"text": "Le personnage de la référence Kaelith avance dans les ruines, plan lent en travelling"}},
+    {"id": "refs", "type": "reference.collection", "params": {"slots": [{"id": "kaelith", "role": "subject", "label": "Kaelith"}]}},
+    {"id": "video", "type": "video.generate", "params": {"workflow_id": "minimax_user", "mode": "reference_to_video"}},
+    {"id": "video_view", "type": "video.preview", "params": {}}
+  ],
+  "edges": [
+    {"from": ["p_image", "text"], "to": ["image", "prompt"]},
+    {"from": ["image", "image"], "to": ["image_view", "image"]},
+    {"from": ["image", "image"], "to": ["mesh", "image"]},
+    {"from": ["mesh", "mesh"], "to": ["prepare", "mesh"]},
+    {"from": ["prepare", "mesh"], "to": ["rig", "mesh"]},
+    {"from": ["rig", "rigged_mesh"], "to": ["mesh_view", "mesh"]},
+    {"from": ["rig", "rigged_mesh"], "to": ["blend", "asset"]},
+    {"from": ["image", "image"], "to": ["refs", "image:kaelith"]},
+    {"from": ["p_video", "text"], "to": ["video", "prompt"]},
+    {"from": ["refs", "references"], "to": ["video", "references"]},
+    {"from": ["video", "video"], "to": ["video_view", "video"]}
+  ]
+}

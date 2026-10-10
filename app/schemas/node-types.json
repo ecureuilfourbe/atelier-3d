@@ -1,0 +1,2348 @@
+{
+  "node_types": [
+    {
+      "type": "text.prompt",
+      "label": "Prompt",
+      "category": "Texte",
+      "kind": "source",
+      "description": "Texte réutilisable ; plusieurs générateurs peuvent utiliser le même prompt.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "Prompt",
+          "type_label": "Texte / prompt",
+          "label": "Texte",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Texte",
+            "default": "",
+            "format": "textarea"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": true
+      },
+      "actions": [
+        "edit"
+      ],
+      "execution_modes": {},
+      "default_steps": []
+    },
+    {
+      "type": "text.compose",
+      "label": "Composer prompt",
+      "category": "Texte",
+      "kind": "deterministic",
+      "description": "Assemble plusieurs fragments (ordre des connexions) en UN prompt affiché en entier.",
+      "inputs": [
+        {
+          "name": "fragments",
+          "type": "PromptList",
+          "type_label": "Collection de prompts",
+          "label": "Fragments",
+          "multi": true,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "Prompt",
+          "type_label": "Texte / prompt",
+          "label": "Texte final",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "separator": {
+            "type": "string",
+            "title": "Séparateur",
+            "default": ", "
+          },
+          "prefix": {
+            "type": "string",
+            "title": "Préfixe",
+            "default": ""
+          },
+          "suffix": {
+            "type": "string",
+            "title": "Suffixe",
+            "default": ""
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [],
+      "execution_modes": {},
+      "default_steps": []
+    },
+    {
+      "type": "text.randomize",
+      "label": "Prompts aléatoires",
+      "category": "Texte",
+      "kind": "generative",
+      "description": "Écrit N prompts variés à partir d'un contexte (« village sur une planète désertique, Star Wars »), avec Qwen3-VL 4B en local. Sortie « Prompts » : un item par prompt sur un générateur « pour chaque prompt » ; sorties « Prompt n » : un prompt à la fois.",
+      "inputs": [
+        {
+          "name": "context",
+          "type": "Prompt",
+          "type_label": "Texte / prompt",
+          "label": "Contexte",
+          "multi": false,
+          "required": false,
+          "description": "Facultatif : remplace le contexte écrit dans la node."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompts",
+          "type": "PromptList",
+          "type_label": "Collection de prompts",
+          "label": "Prompts (liste)",
+          "multi": false,
+          "required": false,
+          "description": "Un item par prompt généré (générateur en mode « pour chaque prompt »)."
+        },
+        {
+          "name": "prompt:",
+          "type": "Prompt",
+          "type_label": "Texte / prompt",
+          "label": "Prompt n",
+          "multi": false,
+          "required": false,
+          "dynamic_prefix": "prompt:",
+          "description": "Le n-ième prompt généré (prompt:1 … prompt:N)."
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "context": {
+            "type": "string",
+            "default": "",
+            "title": "Contexte",
+            "format": "textarea",
+            "description": "Thème, univers, ambiance : en français ou en anglais."
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 16,
+            "default": 5,
+            "title": "Nombre de prompts"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "en",
+              "fr"
+            ],
+            "default": "en",
+            "title": "Langue des prompts",
+            "enumLabels": {
+              "en": "anglais (conseillé pour Krea 2)",
+              "fr": "français"
+            }
+          },
+          "subject": {
+            "type": "string",
+            "enum": [
+              "free",
+              "scene",
+              "character",
+              "object",
+              "creature"
+            ],
+            "default": "free",
+            "title": "Type de sujet",
+            "enumLabels": {
+              "free": "libre",
+              "scene": "lieux / scènes",
+              "character": "personnages",
+              "object": "objets / accessoires",
+              "creature": "créatures"
+            }
+          },
+          "extra": {
+            "type": "string",
+            "default": "",
+            "title": "Consignes supplémentaires",
+            "format": "textarea",
+            "x-advanced": true,
+            "description": "Ex. « un seul personnage, de face, sans texte, fond neutre »."
+          },
+          "creativity": {
+            "type": "number",
+            "minimum": 0.2,
+            "maximum": 1.5,
+            "default": 0.9,
+            "title": "Créativité (température)",
+            "x-advanced": true,
+            "x-engine": "local"
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "local",
+              "openai"
+            ],
+            "default": "local",
+            "title": "Moteur",
+            "enumLabels": {
+              "local": "Qwen3-VL 4B (local, sur ce PC)",
+              "openai": "OpenAI / ChatGPT (service externe)"
+            }
+          },
+          "openai_model": {
+            "type": "string",
+            "default": "",
+            "title": "Modèle OpenAI (texte)",
+            "x-engine": "openai",
+            "x-openai-text-models": true,
+            "description": "Vide : modèle texte par défaut des Réglages → OpenAI."
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "title": "Seed"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "regenerate",
+        "select_variant"
+      ],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "generate",
+          "label": "Écriture des prompts (Qwen3-VL 4B, local)",
+          "capability": "text.generate",
+          "resource": "gpu",
+          "generative": true
+        }
+      ]
+    },
+    {
+      "type": "image.import",
+      "label": "Importer une image",
+      "category": "Image",
+      "kind": "import",
+      "description": "Fichier PNG/JPEG/WebP ; l'original est conservé. Plusieurs instances possibles.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "upload_id": {
+            "type": "string",
+            "title": "Fichier importé"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "replace"
+      ],
+      "execution_modes": {},
+      "default_steps": []
+    },
+    {
+      "type": "image.generate",
+      "label": "Générer une image",
+      "category": "Image",
+      "kind": "generative",
+      "description": "Texte → image : Krea 2 Turbo (local) ou OpenAI / ChatGPT Images (service externe). Modes unique ou pour chaque prompt (foreach).",
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "Prompt",
+          "type_label": "Texte / prompt",
+          "label": "Prompt",
+          "multi": false,
+          "required": false,
+          "description": "Mode unique : une seule consigne."
+        },
+        {
+          "name": "prompts",
+          "type": "PromptList",
+          "type_label": "Collection de prompts",
+          "label": "Prompts",
+          "multi": true,
+          "required": false,
+          "description": "Mode foreach : une tâche indépendante par noodle (item_key et ordre persistants)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image",
+          "multi": false,
+          "required": false,
+          "description": "Mode unique : variante sélectionnée."
+        },
+        {
+          "name": "images",
+          "type": "ImageList",
+          "type_label": "Liste d'images",
+          "label": "Images (collection)",
+          "multi": false,
+          "required": false,
+          "description": "Mode foreach : sorties de chaque item, identité conservée."
+        },
+        {
+          "name": "image:",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image d'un item",
+          "multi": false,
+          "required": false,
+          "dynamic_prefix": "image:",
+          "description": "Mode foreach : port stable image:<item_key>."
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "create",
+              "edit"
+            ],
+            "default": "create",
+            "title": "Opération",
+            "x-hidden": true,
+            "description": "Toujours « create » ; « edit » (anciens graphes) est converti en node « Éditer une image »."
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "krea2",
+              "openai"
+            ],
+            "default": "krea2",
+            "title": "Moteur",
+            "enumLabels": {
+              "krea2": "Krea 2 (local, sur ce PC)",
+              "openai": "OpenAI / ChatGPT Images (service externe)"
+            }
+          },
+          "openai_model": {
+            "type": "string",
+            "default": "",
+            "title": "Modèle OpenAI",
+            "x-engine": "openai",
+            "x-openai-models": true,
+            "description": "Vide : modèle par défaut choisi dans Réglages → OpenAI."
+          },
+          "quality": {
+            "type": "string",
+            "enum": [
+              "",
+              "auto",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "default": "",
+            "title": "Qualité",
+            "x-engine": "openai",
+            "description": "xhigh / max : modèles GPT Image 2.5 seulement ; coût plus élevé.",
+            "enumLabels": {
+              "": "par défaut des Réglages",
+              "auto": "automatique",
+              "low": "basse (rapide, économique)",
+              "medium": "moyenne",
+              "high": "haute",
+              "xhigh": "très haute (GPT Image 2.5)",
+              "max": "maximale (GPT Image 2.5)"
+            }
+          },
+          "background": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "opaque",
+              "transparent"
+            ],
+            "default": "auto",
+            "title": "Fond",
+            "x-engine": "openai",
+            "enumLabels": {
+              "auto": "automatique",
+              "opaque": "opaque",
+              "transparent": "transparent (PNG avec alpha)"
+            }
+          },
+          "moderation": {
+            "type": "string",
+            "enum": [
+              "",
+              "auto",
+              "low"
+            ],
+            "default": "",
+            "title": "Modération OpenAI",
+            "x-engine": "openai",
+            "x-advanced": true,
+            "enumLabels": {
+              "": "par défaut des Réglages",
+              "auto": "standard (auto)",
+              "low": "moins stricte (low)"
+            }
+          },
+          "provider": {
+            "type": "string",
+            "title": "Moteur (informatif)",
+            "default": "krea2_turbo",
+            "x-hidden": true
+          },
+          "workflow_id": {
+            "type": "string",
+            "title": "Workflow (alias)",
+            "default": "",
+            "x-engine": "krea2",
+            "x-advanced": true
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "title": "Seed"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 256,
+            "maximum": 3840,
+            "multipleOf": 16,
+            "default": 1024,
+            "title": "Largeur"
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 256,
+            "maximum": 3840,
+            "multipleOf": 16,
+            "default": 1024,
+            "title": "Hauteur"
+          },
+          "refine_prompt": {
+            "type": "boolean",
+            "default": false,
+            "title": "Affiner le prompt (Qwen3-VL du template officiel)",
+            "x-advanced": true,
+            "x-engine": "krea2"
+          },
+          "steps": {
+            "type": "integer",
+            "minimum": 4,
+            "maximum": 30,
+            "default": 10,
+            "title": "Steps (édition)",
+            "x-hidden": true
+          },
+          "ref_boost": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 4.0,
+            "title": "ref_boost",
+            "x-hidden": true
+          },
+          "grounding_px": {
+            "type": "integer",
+            "minimum": 384,
+            "maximum": 1024,
+            "default": 768,
+            "title": "grounding_px",
+            "x-hidden": true
+          },
+          "num_variants": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1,
+            "default": 1,
+            "title": "Variantes par item",
+            "description": "V1 : une variante par item (5 prompts → 5 résultats)."
+          },
+          "postprocess": {
+            "type": "object",
+            "title": "Post-traitement",
+            "properties": {
+              "remove_background": {
+                "type": "boolean",
+                "default": false,
+                "title": "Retirer le fond (vrai canal alpha)"
+              }
+            }
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "regenerate",
+        "rerun_item",
+        "select_variant"
+      ],
+      "execution_modes": {
+        "single": {
+          "label": "Unique",
+          "implemented": true,
+          "description": "Une consigne et les références autorisées pour une génération."
+        },
+        "foreach_prompts": {
+          "label": "Pour chaque prompt",
+          "implemented": true,
+          "description": "Un traitement indépendant par prompt connecté, avec la même image/référence partagée."
+        },
+        "foreach_images": {
+          "label": "Pour chaque image",
+          "implemented": false,
+          "reason": "Non intégré en V1 : prévu avec une entrée ImageList multi-connexion."
+        },
+        "zip": {
+          "label": "Appariement i ↔ i",
+          "implemented": false,
+          "reason": "Non intégré en V1 (le contrôle de longueurs est déjà refusé à la planification)."
+        },
+        "cartesian": {
+          "label": "Toutes les paires",
+          "implemented": false,
+          "reason": "Non intégré en V1 : nécessite un affichage du nombre total et une limite explicite."
+        }
+      },
+      "default_steps": [
+        {
+          "id": "create",
+          "label": "Génération",
+          "capability": "image.create",
+          "resource": "gpu",
+          "generative": true
+        }
+      ]
+    },
+    {
+      "type": "image.edit",
+      "label": "Éditer une image",
+      "category": "Image",
+      "kind": "generative",
+      "description": "Image + consigne → image modifiée : Krea 2 Identity Edit (local) ou OpenAI / ChatGPT Images (service externe : l'image est envoyée à OpenAI). Modes unique ou pour chaque prompt (même image, une consigne par item).",
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "Prompt",
+          "type_label": "Texte / prompt",
+          "label": "Prompt",
+          "multi": false,
+          "required": false,
+          "description": "Mode unique : une seule consigne."
+        },
+        {
+          "name": "prompts",
+          "type": "PromptList",
+          "type_label": "Collection de prompts",
+          "label": "Prompts",
+          "multi": true,
+          "required": false,
+          "description": "Mode foreach : une tâche indépendante par noodle (item_key et ordre persistants)."
+        },
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image à éditer",
+          "multi": false,
+          "required": true,
+          "description": "Image source (scène / sujet principal)."
+        },
+        {
+          "name": "image_b",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Seconde référence",
+          "multi": false,
+          "required": false,
+          "description": "OpenAI : image supplémentaire jointe à la demande. Non exposée avec Krea 2 en V1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image",
+          "multi": false,
+          "required": false,
+          "description": "Mode unique : variante sélectionnée."
+        },
+        {
+          "name": "images",
+          "type": "ImageList",
+          "type_label": "Liste d'images",
+          "label": "Images (collection)",
+          "multi": false,
+          "required": false,
+          "description": "Mode foreach : sorties de chaque item, identité conservée."
+        },
+        {
+          "name": "image:",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image d'un item",
+          "multi": false,
+          "required": false,
+          "dynamic_prefix": "image:",
+          "description": "Mode foreach : port stable image:<item_key>."
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "edit"
+            ],
+            "default": "edit",
+            "title": "Opération",
+            "x-hidden": true
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "krea2",
+              "openai"
+            ],
+            "default": "krea2",
+            "title": "Moteur",
+            "enumLabels": {
+              "krea2": "Krea 2 (local, sur ce PC)",
+              "openai": "OpenAI / ChatGPT Images (service externe)"
+            }
+          },
+          "openai_model": {
+            "type": "string",
+            "default": "",
+            "title": "Modèle OpenAI",
+            "x-engine": "openai",
+            "x-openai-models": true,
+            "description": "Vide : modèle par défaut choisi dans Réglages → OpenAI."
+          },
+          "quality": {
+            "type": "string",
+            "enum": [
+              "",
+              "auto",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "default": "",
+            "title": "Qualité",
+            "x-engine": "openai",
+            "description": "xhigh / max : modèles GPT Image 2.5 seulement ; coût plus élevé.",
+            "enumLabels": {
+              "": "par défaut des Réglages",
+              "auto": "automatique",
+              "low": "basse (rapide, économique)",
+              "medium": "moyenne",
+              "high": "haute",
+              "xhigh": "très haute (GPT Image 2.5)",
+              "max": "maximale (GPT Image 2.5)"
+            }
+          },
+          "background": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "opaque",
+              "transparent"
+            ],
+            "default": "auto",
+            "title": "Fond",
+            "x-engine": "openai",
+            "enumLabels": {
+              "auto": "automatique",
+              "opaque": "opaque",
+              "transparent": "transparent (PNG avec alpha)"
+            }
+          },
+          "moderation": {
+            "type": "string",
+            "enum": [
+              "",
+              "auto",
+              "low"
+            ],
+            "default": "",
+            "title": "Modération OpenAI",
+            "x-engine": "openai",
+            "x-advanced": true,
+            "enumLabels": {
+              "": "par défaut des Réglages",
+              "auto": "standard (auto)",
+              "low": "moins stricte (low)"
+            }
+          },
+          "workflow_id": {
+            "type": "string",
+            "title": "Workflow (alias)",
+            "default": "",
+            "x-engine": "krea2",
+            "x-advanced": true
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "title": "Seed"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 256,
+            "maximum": 3840,
+            "multipleOf": 16,
+            "default": 1024,
+            "title": "Largeur"
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 256,
+            "maximum": 3840,
+            "multipleOf": 16,
+            "default": 1024,
+            "title": "Hauteur"
+          },
+          "steps": {
+            "type": "integer",
+            "minimum": 4,
+            "maximum": 30,
+            "title": "Steps (édition)",
+            "default": 10,
+            "x-advanced": true,
+            "x-engine": "krea2"
+          },
+          "ref_boost": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 4.0,
+            "title": "Fidélité à la référence (ref_boost)",
+            "x-advanced": true,
+            "x-engine": "krea2"
+          },
+          "grounding_px": {
+            "type": "integer",
+            "minimum": 384,
+            "maximum": 1024,
+            "default": 768,
+            "title": "grounding_px",
+            "x-advanced": true,
+            "x-engine": "krea2"
+          },
+          "num_variants": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1,
+            "default": 1,
+            "title": "Variantes par item",
+            "description": "V1 : une variante par item (5 prompts → 5 résultats)."
+          },
+          "postprocess": {
+            "type": "object",
+            "title": "Post-traitement",
+            "properties": {
+              "remove_background": {
+                "type": "boolean",
+                "default": false,
+                "title": "Retirer le fond (vrai canal alpha)"
+              }
+            }
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "regenerate",
+        "rerun_item",
+        "select_variant"
+      ],
+      "execution_modes": {
+        "single": {
+          "label": "Unique",
+          "implemented": true,
+          "description": "Une consigne et les références autorisées pour une génération."
+        },
+        "foreach_prompts": {
+          "label": "Pour chaque prompt",
+          "implemented": true,
+          "description": "Un traitement indépendant par prompt connecté, avec la même image/référence partagée."
+        },
+        "foreach_images": {
+          "label": "Pour chaque image",
+          "implemented": false,
+          "reason": "Non intégré en V1 : prévu avec une entrée ImageList multi-connexion."
+        },
+        "zip": {
+          "label": "Appariement i ↔ i",
+          "implemented": false,
+          "reason": "Non intégré en V1 (le contrôle de longueurs est déjà refusé à la planification)."
+        },
+        "cartesian": {
+          "label": "Toutes les paires",
+          "implemented": false,
+          "reason": "Non intégré en V1 : nécessite un affichage du nombre total et une limite explicite."
+        }
+      },
+      "default_steps": [
+        {
+          "id": "edit",
+          "label": "Édition avec référence",
+          "capability": "image.edit",
+          "resource": "gpu",
+          "generative": true
+        }
+      ]
+    },
+    {
+      "type": "image.prepare",
+      "label": "Préparer l'image",
+      "category": "Image",
+      "kind": "deterministic",
+      "description": "Pose A ou T (édition IA, facultative), détourage BiRefNet recalculable (vrai PNG RGBA) et cadrage sur le sujet, avec avertissements.",
+      "inputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image préparée",
+          "multi": false,
+          "required": false
+        },
+        {
+          "name": "mask",
+          "type": "Mask",
+          "type_label": "Masque",
+          "label": "Masque",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "pose": {
+            "type": "string",
+            "enum": [
+              "none",
+              "a_pose",
+              "t_pose"
+            ],
+            "default": "none",
+            "title": "Pose",
+            "enumLabels": {
+              "none": "inchangée",
+              "a_pose": "A-pose (bras à 45°)",
+              "t_pose": "T-pose (bras à l'horizontale)"
+            },
+            "description": "Redessine le personnage dans la pose choisie (édition IA : nouvelle image, à vérifier visuellement)."
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "krea2",
+              "openai"
+            ],
+            "default": "krea2",
+            "title": "Moteur de la pose",
+            "enumLabels": {
+              "krea2": "Krea 2 (local, sur ce PC)",
+              "openai": "OpenAI / ChatGPT Images (service externe)"
+            },
+            "x-show-if": {
+              "pose": [
+                "a_pose",
+                "t_pose"
+              ]
+            }
+          },
+          "pose_details": {
+            "type": "string",
+            "default": "",
+            "title": "Précisions pour la pose",
+            "format": "textarea",
+            "description": "Ajoutées à la consigne (ex. « mains ouvertes, regard face caméra »).",
+            "x-show-if": {
+              "pose": [
+                "a_pose",
+                "t_pose"
+              ]
+            }
+          },
+          "remove_background": {
+            "type": "boolean",
+            "default": true,
+            "title": "Retirer le fond (vrai canal alpha)"
+          },
+          "crop_to_subject": {
+            "type": "boolean",
+            "default": true,
+            "title": "Recadrer sur le sujet",
+            "description": "Utilise le canal alpha : sans détourage, l'image est conservée telle quelle."
+          },
+          "padding": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 0.5,
+            "default": 0.08,
+            "title": "Marge"
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "title": "Seed",
+            "x-show-if": {
+              "pose": [
+                "a_pose",
+                "t_pose"
+              ]
+            }
+          },
+          "ref_boost": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 2.0,
+            "title": "Fidélité au personnage (ref_boost)",
+            "x-advanced": true,
+            "x-engine": "krea2",
+            "x-show-if": {
+              "pose": [
+                "a_pose",
+                "t_pose"
+              ]
+            },
+            "description": "Plus haut : identité mieux conservée, mais la pose change moins."
+          },
+          "openai_model": {
+            "type": "string",
+            "default": "",
+            "title": "Modèle OpenAI",
+            "x-engine": "openai",
+            "x-openai-models": true,
+            "x-show-if": {
+              "pose": [
+                "a_pose",
+                "t_pose"
+              ]
+            }
+          },
+          "quality": {
+            "type": "string",
+            "enum": [
+              "",
+              "auto",
+              "low",
+              "medium",
+              "high",
+              "xhigh",
+              "max"
+            ],
+            "default": "",
+            "title": "Qualité",
+            "x-engine": "openai",
+            "description": "xhigh / max : modèles GPT Image 2.5 seulement ; coût plus élevé.",
+            "enumLabels": {
+              "": "par défaut des Réglages",
+              "auto": "automatique",
+              "low": "basse (rapide, économique)",
+              "medium": "moyenne",
+              "high": "haute",
+              "xhigh": "très haute (GPT Image 2.5)",
+              "max": "maximale (GPT Image 2.5)"
+            },
+            "x-show-if": {
+              "pose": [
+                "a_pose",
+                "t_pose"
+              ]
+            }
+          },
+          "moderation": {
+            "type": "string",
+            "enum": [
+              "",
+              "auto",
+              "low"
+            ],
+            "default": "",
+            "title": "Modération OpenAI",
+            "x-engine": "openai",
+            "x-advanced": true,
+            "enumLabels": {
+              "": "par défaut des Réglages",
+              "auto": "standard (auto)",
+              "low": "moins stricte (low)"
+            },
+            "x-show-if": {
+              "pose": [
+                "a_pose",
+                "t_pose"
+              ]
+            }
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "regenerate"
+      ],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "remove_background",
+          "label": "Détourage (masque alpha)",
+          "capability": "image.remove_background",
+          "resource": "gpu",
+          "generative": false
+        },
+        {
+          "id": "crop",
+          "label": "Cadrage et contrôle",
+          "capability": "local",
+          "resource": "cpu",
+          "generative": false
+        }
+      ]
+    },
+    {
+      "type": "image.props",
+      "label": "Extraction de props",
+      "category": "Image",
+      "kind": "deterministic",
+      "description": "Envoie l'image à ChatGPT (ou Qwen3-VL en local) qui décrit le personnage et liste ce qu'on peut en extraire (tête, corps, masque, cape, ceinture, bottes…). Chaque partie cochée devient une image isolée dans le groupe « Props » (une édition par partie, avec sa preview).",
+      "inputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image du personnage",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompts",
+          "type": "PromptList",
+          "type_label": "Collection de prompts",
+          "label": "Consignes d'extraction",
+          "multi": false,
+          "required": false,
+          "description": "Une consigne par partie cochée (un item par partie)."
+        },
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image source",
+          "multi": false,
+          "required": false,
+          "description": "L'image d'entrée, transmise telle quelle."
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "include": {
+            "type": "string",
+            "enum": [
+              "props",
+              "props_body"
+            ],
+            "default": "props_body",
+            "title": "Inclure",
+            "enumLabels": {
+              "props": "Props seuls",
+              "props_body": "Props + corps (tête, corps)"
+            }
+          },
+          "detail": {
+            "type": "string",
+            "enum": [
+              "minimal",
+              "standard",
+              "detailed"
+            ],
+            "default": "standard",
+            "title": "Détail",
+            "enumLabels": {
+              "minimal": "Minimal (3-6)",
+              "standard": "Standard (6-15)",
+              "detailed": "Détaillé (15+)"
+            }
+          },
+          "merge_symmetric": {
+            "type": "boolean",
+            "default": true,
+            "title": "Fusionner les pièces symétriques",
+            "description": "Une seule botte, un seul gant… (l'autre côté est son miroir)."
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "openai",
+              "local"
+            ],
+            "default": "openai",
+            "title": "Analyse par",
+            "enumLabels": {
+              "openai": "OpenAI / ChatGPT (service externe)",
+              "local": "Qwen3-VL 4B (local, sur ce PC)"
+            }
+          },
+          "openai_model": {
+            "type": "string",
+            "default": "",
+            "title": "Modèle OpenAI (vision)",
+            "x-engine": "openai",
+            "x-openai-text-models": true,
+            "description": "Vide : modèle texte / vision par défaut des Réglages → OpenAI."
+          },
+          "character": {
+            "type": "string",
+            "default": "",
+            "title": "Personnage (description)",
+            "format": "textarea",
+            "x-advanced": true,
+            "description": "Écrite par l'analyse ; modifiable. Reprise dans chaque consigne d'extraction."
+          },
+          "extra": {
+            "type": "string",
+            "default": "",
+            "title": "Consigne ajoutée à chaque extraction",
+            "format": "textarea",
+            "x-advanced": true
+          },
+          "parts": {
+            "type": "array",
+            "default": [],
+            "title": "Parties",
+            "x-hidden": true,
+            "items": {
+              "type": "object"
+            },
+            "description": "Écrites par l'analyse puis modifiables dans la node : key, name, kind (body|prop), symmetric, description, enabled, manual."
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "title": "Seed",
+            "x-show-if": {
+              "engine": [
+                "local"
+              ]
+            }
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "analyze",
+        "extract"
+      ],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "analyze",
+          "label": "Analyse de l'image (OpenAI, service externe)",
+          "capability": "vision.openai",
+          "resource": "net",
+          "generative": false
+        }
+      ]
+    },
+    {
+      "type": "image.upscale",
+      "label": "Upscale image (2K / 4K)",
+      "category": "Image",
+      "kind": "deterministic",
+      "description": "Agrandit une image de référence : SeedVR2 3B (restauration IA, détails nets) ou Real-ESRGAN x4 (rapide). Le canal alpha d'une image détourée est conservé.",
+      "inputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image agrandie",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "resolution": {
+            "type": "string",
+            "enum": [
+              "2k",
+              "4k"
+            ],
+            "default": "2k",
+            "title": "Taille cible",
+            "enumLabels": {
+              "2k": "2K — 2048 px (côté le plus long)",
+              "4k": "4K — 4096 px (côté le plus long)"
+            }
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "seedvr2",
+              "esrgan"
+            ],
+            "default": "seedvr2",
+            "title": "Moteur",
+            "enumLabels": {
+              "seedvr2": "Détaillé — SeedVR2 3B (IA, local)",
+              "esrgan": "Rapide — Real-ESRGAN x4 (local)"
+            }
+          },
+          "color_correction": {
+            "type": "string",
+            "enum": [
+              "lab",
+              "wavelet",
+              "adain",
+              "none"
+            ],
+            "default": "lab",
+            "title": "Correction des couleurs (SeedVR2)",
+            "x-advanced": true,
+            "x-show-if": {
+              "engine": [
+                "seedvr2"
+              ]
+            },
+            "enumLabels": {
+              "lab": "lab — la plus fidèle",
+              "wavelet": "wavelet",
+              "adain": "adain (rapide)",
+              "none": "aucune (valeur du template)"
+            }
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "title": "Seed",
+            "x-show-if": {
+              "engine": [
+                "seedvr2"
+              ]
+            }
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "regenerate"
+      ],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "upscale",
+          "label": "Upscale (SeedVR2, détails)",
+          "capability": "image.upscale.seedvr2",
+          "resource": "gpu",
+          "generative": true
+        }
+      ]
+    },
+    {
+      "type": "image.preview",
+      "label": "Preview image",
+      "category": "Image",
+      "kind": "preview",
+      "description": "Zoom, comparaison, sélection de variante. La sortie transmet la variante sélectionnée, sans calcul.",
+      "inputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image sélectionnée",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "refresh",
+        "regenerate_item",
+        "select_variant",
+        "download"
+      ],
+      "execution_modes": {},
+      "default_steps": []
+    },
+    {
+      "type": "mesh.generate",
+      "label": "Image → 3D",
+      "category": "3D",
+      "kind": "generative",
+      "description": "Génère un vrai maillage texturé (Pixal3D natif ComfyUI, template officiel) ; seed et versions tracées.",
+      "inputs": [
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "Mesh",
+          "type_label": "Maillage (avec matériaux/textures)",
+          "label": "Maillage",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "humanoid",
+              "static",
+              "articulated"
+            ],
+            "default": "humanoid",
+            "title": "Catégorie",
+            "enumLabels": {
+              "humanoid": "Personnage humanoïde",
+              "static": "Objet statique",
+              "articulated": "Objet articulé"
+            }
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "pixal3d",
+              "trellis2"
+            ],
+            "default": "pixal3d",
+            "title": "Moteur 3D",
+            "enumLabels": {
+              "pixal3d": "Pixal3D (recommandé : ≈ 4 min sur 8 Go)",
+              "trellis2": "TRELLIS.2 (très lent sur 8 Go : plus de 3 h constatées)"
+            }
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "title": "Seed"
+          },
+          "quality": {
+            "type": "string",
+            "enum": [
+              "preview",
+              "standard",
+              "detailed"
+            ],
+            "default": "standard",
+            "title": "Profil",
+            "enumLabels": {
+              "preview": "Aperçu",
+              "standard": "Standard",
+              "detailed": "Détaillé"
+            }
+          },
+          "texture_size": {
+            "type": "integer",
+            "enum": [
+              1024,
+              2048,
+              4096
+            ],
+            "default": 2048,
+            "title": "Taille des textures"
+          },
+          "decimate_target": {
+            "type": "integer",
+            "minimum": 5000,
+            "maximum": 2000000,
+            "default": 300000,
+            "title": "Faces après décimation (moteur)",
+            "x-advanced": true
+          },
+          "remove_background": {
+            "type": "boolean",
+            "default": true,
+            "title": "Détourer l'image (BiRefNet du template)",
+            "x-advanced": true
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "regenerate"
+      ],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "generate",
+          "label": "Génération 3D + textures + aperçus",
+          "capability": "mesh.generate",
+          "resource": "gpu",
+          "generative": true
+        }
+      ]
+    },
+    {
+      "type": "mesh.import",
+      "label": "Importer un maillage",
+      "category": "3D",
+      "kind": "import",
+      "description": "GLB/GLTF/OBJ/FBX pour riggage sans nouvelle génération.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "Mesh",
+          "type_label": "Maillage (avec matériaux/textures)",
+          "label": "Maillage",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "upload_id": {
+            "type": "string",
+            "title": "Fichier importé"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "replace"
+      ],
+      "execution_modes": {},
+      "default_steps": []
+    },
+    {
+      "type": "mesh.prepare",
+      "label": "Préparer le maillage",
+      "category": "3D",
+      "kind": "deterministic",
+      "description": "Macro dépliable : diagnostic/réparation, simplification, UV et baking (chaque sous-étape relançable).",
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "Mesh",
+          "type_label": "Maillage (avec matériaux/textures)",
+          "label": "Maillage",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "Mesh",
+          "type_label": "Maillage (avec matériaux/textures)",
+          "label": "Maillage préparé",
+          "multi": false,
+          "required": false
+        },
+        {
+          "name": "report",
+          "type": "Report",
+          "type_label": "Rapport",
+          "label": "Rapport",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "string",
+            "enum": [
+              "preview",
+              "standard",
+              "detailed"
+            ],
+            "default": "standard",
+            "title": "Profil"
+          },
+          "triangle_budget": {
+            "type": "integer",
+            "minimum": 1000,
+            "maximum": 1000000,
+            "default": 40000,
+            "title": "Budget triangles"
+          },
+          "simplify_mode": {
+            "type": "string",
+            "enum": [
+              "decimate",
+              "quadriflow"
+            ],
+            "default": "decimate",
+            "title": "Simplification",
+            "enumLabels": {
+              "decimate": "Décimation (triangles)",
+              "quadriflow": "Retopologie quads QuadriFlow (Blender)"
+            }
+          },
+          "texture_size": {
+            "type": "integer",
+            "enum": [
+              1024,
+              2048,
+              4096
+            ],
+            "default": 2048,
+            "title": "Taille des textures"
+          },
+          "repair": {
+            "type": "boolean",
+            "default": true,
+            "title": "Réparations limitées (doublons, normales)"
+          },
+          "keep_parts_separate": {
+            "type": "boolean",
+            "default": true,
+            "title": "Conserver les pièces séparées"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "repair",
+          "label": "Diagnostic et réparation",
+          "capability": "blender",
+          "resource": "cpu",
+          "generative": false
+        },
+        {
+          "id": "simplify",
+          "label": "Simplification / retopologie",
+          "capability": "blender",
+          "resource": "cpu",
+          "generative": false
+        },
+        {
+          "id": "bake",
+          "label": "UV et baking haute → basse (Cycles GPU)",
+          "capability": "blender",
+          "resource": "gpu",
+          "generative": false
+        }
+      ]
+    },
+    {
+      "type": "mesh.rig",
+      "label": "Rig + skin",
+      "category": "3D",
+      "kind": "deterministic",
+      "description": "Macro : placement du squelette et poids de skinning, puis assemblage Blender vérifié.",
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "Mesh",
+          "type_label": "Maillage (avec matériaux/textures)",
+          "label": "Maillage",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "rigged_mesh",
+          "type": "RiggedMesh",
+          "type_label": "Maillage riggé",
+          "label": "Maillage riggé",
+          "multi": false,
+          "required": false
+        },
+        {
+          "name": "report",
+          "type": "Report",
+          "type_label": "Rapport",
+          "label": "Rapport",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "type": "string",
+            "enum": [
+              "humanoid",
+              "articulated"
+            ],
+            "default": "humanoid",
+            "title": "Profil",
+            "enumLabels": {
+              "humanoid": "Humanoïde",
+              "articulated": "Objet articulé (pivots)"
+            }
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "mia",
+              "blender_auto"
+            ],
+            "default": "mia",
+            "title": "Moteur",
+            "enumLabels": {
+              "mia": "Make-It-Animatable (squelette + poids)",
+              "blender_auto": "Squelette MIA + poids automatiques Blender (« rig automatique à vérifier »)"
+            }
+          },
+          "no_fingers": {
+            "type": "boolean",
+            "default": false,
+            "title": "Sans doigts (mains en un bloc)"
+          },
+          "input_normal": {
+            "type": "boolean",
+            "default": true,
+            "title": "Affiner les poids avec les normales"
+          },
+          "joint_overrides": {
+            "type": "object",
+            "title": "Corrections d'articulations (mode guidé)",
+            "x-advanced": true,
+            "description": "{nom_os: [x,y,z]} en mètres, repère Blender ; recalcul des poids."
+          },
+          "pivots": {
+            "type": "array",
+            "title": "Pivots (objet articulé)",
+            "x-advanced": true,
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "skeleton_skin",
+          "label": "Squelette + poids (Make-It-Animatable)",
+          "capability": "rig.mia",
+          "resource": "gpu",
+          "generative": false
+        },
+        {
+          "id": "bind",
+          "label": "Assemblage Blender (armature, groupes, modificateur)",
+          "capability": "blender",
+          "resource": "cpu",
+          "generative": false
+        }
+      ]
+    },
+    {
+      "type": "mesh.validate",
+      "label": "Vérifier la déformation",
+      "category": "3D",
+      "kind": "deterministic",
+      "description": "Poses de test procédurales, mesures de déformation, images et aperçu animé ; rest pose restaurée.",
+      "inputs": [
+        {
+          "name": "rigged_mesh",
+          "type": "RiggedMesh",
+          "type_label": "Maillage riggé",
+          "label": "Maillage riggé",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "report",
+          "type": "Report",
+          "type_label": "Rapport",
+          "label": "Rapport",
+          "multi": false,
+          "required": false
+        },
+        {
+          "name": "rigged_mesh",
+          "type": "RiggedMesh",
+          "type_label": "Maillage riggé",
+          "label": "Maillage riggé (inchangé)",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "amplitude": {
+            "type": "number",
+            "minimum": 0.2,
+            "maximum": 1.5,
+            "default": 1.0,
+            "title": "Amplitude des poses"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "deform_tests",
+          "label": "Tests de déformation",
+          "capability": "blender",
+          "resource": "cpu",
+          "generative": false
+        }
+      ]
+    },
+    {
+      "type": "mesh.preview",
+      "label": "Preview 3D",
+      "category": "3D",
+      "kind": "preview",
+      "description": "Maillage, textures, filaire, os et poses ; inspecte tout artefact intermédiaire.",
+      "inputs": [
+        {
+          "name": "mesh",
+          "type": "Mesh",
+          "type_label": "Maillage (avec matériaux/textures)",
+          "label": "Maillage",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mesh",
+          "type": "Mesh",
+          "type_label": "Maillage (avec matériaux/textures)",
+          "label": "Maillage sélectionné",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "show_skeleton": {
+            "type": "boolean",
+            "default": true,
+            "title": "Afficher les os"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "refresh",
+        "select_variant"
+      ],
+      "execution_modes": {},
+      "default_steps": []
+    },
+    {
+      "type": "asset.export",
+      "label": "Export Blender",
+      "category": "3D",
+      "kind": "export",
+      "description": ".blend autonome (textures intégrées), .glb, .fbx, textures et metadata.json ; réouverture vérifiée.",
+      "inputs": [
+        {
+          "name": "asset",
+          "type": "Mesh",
+          "type_label": "Maillage (avec matériaux/textures)",
+          "label": "Asset (maillage ou maillage riggé)",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "files",
+          "type": "Files",
+          "type_label": "Fichiers exportés",
+          "label": "Fichiers",
+          "multi": false,
+          "required": false
+        },
+        {
+          "name": "report",
+          "type": "Report",
+          "type_label": "Rapport",
+          "label": "Rapport d'export",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "Asset",
+            "title": "Nom"
+          },
+          "formats": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "blend",
+                "glb",
+                "fbx"
+              ]
+            },
+            "default": [
+              "blend",
+              "glb",
+              "fbx"
+            ],
+            "title": "Formats"
+          },
+          "target_height_m": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "default": 1.8,
+            "title": "Hauteur souhaitée (m, 0 = inchangée)"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "reexport",
+        "open_in_blender",
+        "open_folder",
+        "download"
+      ],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "export",
+          "label": "Export et vérification",
+          "capability": "blender",
+          "resource": "cpu",
+          "generative": false
+        }
+      ]
+    },
+    {
+      "type": "reference.collection",
+      "label": "Références",
+      "category": "Vidéo",
+      "kind": "collection",
+      "description": "Slots nommés (rôle, sujet, description) ; l'ordre est conservé jusqu'au prompt réel.",
+      "inputs": [
+        {
+          "name": "image:",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Image d'un slot",
+          "multi": false,
+          "required": false,
+          "dynamic_prefix": "image:"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "references",
+          "type": "ReferenceCollection",
+          "type_label": "Collection de références",
+          "label": "Références",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "slots": {
+            "type": "array",
+            "title": "Slots",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "subject",
+                    "identity",
+                    "decor",
+                    "style",
+                    "movement",
+                    "camera"
+                  ]
+                },
+                "label": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [],
+      "execution_modes": {},
+      "default_steps": []
+    },
+    {
+      "type": "video.generate",
+      "label": "Générer vidéo · MiniMax H3 Ultra",
+      "category": "Vidéo",
+      "kind": "generative",
+      "description": "Réutilise votre accès MiniMax H3 existant (workflow importé). Modes selon les capacités réelles du workflow.",
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "Prompt",
+          "type_label": "Texte / prompt",
+          "label": "Prompt",
+          "multi": false,
+          "required": true
+        },
+        {
+          "name": "image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Première image",
+          "multi": false,
+          "required": false
+        },
+        {
+          "name": "last_image",
+          "type": "Image",
+          "type_label": "Image",
+          "label": "Dernière image",
+          "multi": false,
+          "required": false
+        },
+        {
+          "name": "references",
+          "type": "ReferenceCollection",
+          "type_label": "Collection de références",
+          "label": "Références",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "Video",
+          "type_label": "Vidéo",
+          "label": "Vidéo",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "workflow_id": {
+            "type": "string",
+            "default": "minimax_user",
+            "title": "Workflow (alias)"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "text_to_video",
+              "image_to_video",
+              "first_last_to_video",
+              "reference_to_video"
+            ],
+            "default": "image_to_video",
+            "title": "Mode",
+            "enumLabels": {
+              "text_to_video": "Texte → vidéo",
+              "image_to_video": "Image → vidéo",
+              "first_last_to_video": "Début/fin → vidéo",
+              "reference_to_video": "Références → vidéo"
+            }
+          },
+          "duration_s": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 15,
+            "default": 5,
+            "title": "Durée (s, arrondie à la grille 17k+5 à 24 i/s)"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 256,
+            "maximum": 1920,
+            "multipleOf": 32,
+            "default": 480,
+            "title": "Largeur"
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 256,
+            "maximum": 1920,
+            "multipleOf": 32,
+            "default": 864,
+            "title": "Hauteur"
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "title": "Seed"
+          },
+          "low_memory": {
+            "type": "boolean",
+            "default": true,
+            "title": "Profil mémoire réduite (lancement par Atelier 3D)",
+            "x-advanced": true
+          },
+          "apply_prompt_guide": {
+            "type": "boolean",
+            "default": true,
+            "title": "Appliquer le guide de prompt de votre workflow (ancre <Picture 1>)",
+            "x-advanced": true
+          },
+          "text_encoder": {
+            "type": "string",
+            "enum": [
+              "",
+              "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+              "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"
+            ],
+            "default": "",
+            "title": "Encodeur texte (vide = celui de votre workflow)",
+            "x-advanced": true
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "regenerate"
+      ],
+      "execution_modes": {},
+      "default_steps": [
+        {
+          "id": "generate",
+          "label": "Génération vidéo + miniature et frames",
+          "capability": "video.minimax",
+          "resource": "gpu",
+          "generative": true
+        }
+      ]
+    },
+    {
+      "type": "compare.before_after",
+      "label": "Avant / après",
+      "category": "Comparer",
+      "kind": "preview",
+      "description": "Compare deux résultats : images, vidéos (lecture synchronisée) ou modèles 3D (rendus, et vue 3D côte à côte à caméras liées). Curseur, côte à côte ou différence. Aucun calcul.",
+      "inputs": [
+        {
+          "name": "before",
+          "type": "Media",
+          "type_label": "Image, vidéo ou 3D",
+          "label": "Avant",
+          "multi": false,
+          "required": false,
+          "description": "Image, vidéo, maillage ou maillage riggé."
+        },
+        {
+          "name": "after",
+          "type": "Media",
+          "type_label": "Image, vidéo ou 3D",
+          "label": "Après",
+          "multi": false,
+          "required": false,
+          "description": "Image, vidéo, maillage ou maillage riggé."
+        }
+      ],
+      "outputs": [],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "slider",
+              "side_by_side",
+              "difference"
+            ],
+            "default": "slider",
+            "title": "Affichage",
+            "enumLabels": {
+              "slider": "Curseur",
+              "side_by_side": "Côte à côte",
+              "difference": "Différence"
+            }
+          },
+          "label_before": {
+            "type": "string",
+            "default": "Avant",
+            "title": "Libellé de gauche"
+          },
+          "label_after": {
+            "type": "string",
+            "default": "Après",
+            "title": "Libellé de droite"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "compare"
+      ],
+      "execution_modes": {},
+      "default_steps": []
+    },
+    {
+      "type": "video.import",
+      "label": "Importer une vidéo",
+      "category": "Vidéo",
+      "kind": "import",
+      "description": "Fichier MP4 / WebM / MOV (disque ou médiathèque) ; l'original est conservé. Pour comparer ou prévisualiser.",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "Video",
+          "type_label": "Vidéo",
+          "label": "Vidéo",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "upload_id": {
+            "type": "string",
+            "title": "Fichier importé"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "replace"
+      ],
+      "execution_modes": {},
+      "default_steps": []
+    },
+    {
+      "type": "video.preview",
+      "label": "Preview vidéo",
+      "category": "Vidéo",
+      "kind": "preview",
+      "description": "Lecture réelle, timeline, frames horodatées et comparaison de clips.",
+      "inputs": [
+        {
+          "name": "video",
+          "type": "Video",
+          "type_label": "Vidéo",
+          "label": "Vidéo",
+          "multi": false,
+          "required": true
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "Video",
+          "type_label": "Vidéo",
+          "label": "Vidéo sélectionnée",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "refresh",
+        "select_variant"
+      ],
+      "execution_modes": {},
+      "default_steps": []
+    }
+  ],
+  "port_types": {
+    "Prompt": "Texte / prompt",
+    "PromptList": "Collection de prompts",
+    "Image": "Image",
+    "ImageList": "Liste d'images",
+    "Mask": "Masque",
+    "ReferenceCollection": "Collection de références",
+    "Mesh": "Maillage (avec matériaux/textures)",
+    "Materials": "Matériaux",
+    "RiggedMesh": "Maillage riggé",
+    "Animation": "Animation",
+    "Video": "Vidéo",
+    "Report": "Rapport",
+    "Files": "Fichiers exportés",
+    "Media": "Image, vidéo ou 3D"
+  },
+  "compatibility": {
+    "Prompt": [
+      "Prompt",
+      "PromptList"
+    ],
+    "Image": [
+      "Image",
+      "ImageList",
+      "Media"
+    ],
+    "ImageList": [
+      "ImageList"
+    ],
+    "Mask": [
+      "Mask"
+    ],
+    "ReferenceCollection": [
+      "ReferenceCollection"
+    ],
+    "Mesh": [
+      "Media",
+      "Mesh"
+    ],
+    "RiggedMesh": [
+      "Media",
+      "Mesh",
+      "RiggedMesh"
+    ],
+    "Video": [
+      "Media",
+      "Video"
+    ],
+    "Report": [
+      "Report"
+    ],
+    "Files": [
+      "Files"
+    ],
+    "Materials": [
+      "Materials"
+    ],
+    "Animation": [
+      "Animation"
+    ]
+  }
+}

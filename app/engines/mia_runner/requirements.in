@@ -1,0 +1,17 @@
+# Environnement isolÃ© du moteur de rigging Make-It-Animatable (Python 3.11).
+# AdaptÃ© de requirements.txt upstream (torch 2.1.2/cu121) vers des roues Windows rÃ©ellement publiÃ©es :
+#  - torch / torchvision : index officiel PyTorch cu128
+#  - torch-cluster      : roues officielles PyG (data.pyg.org)
+#  - pytorch3d          : index citÃ© par MIA upstream (miropsota/torch_packages_builder)
+torch==2.8.0+cu128
+torchvision==0.23.0+cu128
+torch-cluster==1.6.3+pt28cu128
+pytorch3d==0.7.9+pt2.8.0cu128
+einops==0.8.2
+timm==1.0.30
+trimesh==4.11.2
+scipy==1.15.3
+numpy==1.26.4
+tqdm==4.70.1
+typing_extensions==4.16.0
+shapely==2.1.2

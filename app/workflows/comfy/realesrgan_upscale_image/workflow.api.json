@@ -1,0 +1,47 @@
+{
+  "1": {
+    "inputs": {
+      "model_name": "RealESRGAN_x4plus.safetensors"
+    },
+    "class_type": "UpscaleModelLoader",
+    "_meta": {
+      "title": "Charger le modèle de mise à l'échelle"
+    }
+  },
+  "2": {
+    "inputs": {
+      "upscale_model": [
+        "1",
+        0
+      ],
+      "image": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "ImageUpscaleWithModel",
+    "_meta": {
+      "title": "Agrandir l'Image (à l'aide du Modèle)"
+    }
+  },
+  "13": {
+    "inputs": {},
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Charger Image"
+    }
+  },
+  "14": {
+    "inputs": {
+      "filename_prefix": "atelier3d/upscale",
+      "images": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Enregistrer Image"
+    }
+  }
+}

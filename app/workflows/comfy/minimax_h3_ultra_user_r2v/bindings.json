@@ -1,0 +1,102 @@
+{
+  "id": "minimax_h3_ultra_user_r2v",
+  "label": "MiniMax H3 Ultra (votre workflow) — références → vidéo (1 image)",
+  "capability": "video.minimax",
+  "engine": {
+    "name": "MiniMax H3 (Ref2VA, int8, LoRA turbo 4 steps)",
+    "runtime": "votre ComfyUI portable 0.30.2 (E:\\AI\\VidGen) — poids locaux",
+    "model": "minimax_h3_ref2va_pruned_int8_convrot"
+  },
+  "provenance": {
+    "source": "MINIMAX_H3_ULTRA_+TURBO-LORA_WORKFLOW.json (copie importée de E:\\AI\\VidGen\\ComfyUI_windows_portable, pack Aitrepreneur)",
+    "conversion": "groupes activés comme le ferait « Fast Groups Bypasser » (installer/tools/minimax_mode_variants.py), puis app.graphToPrompt() du frontend 1.47.12 de VOTRE ComfyUI (custom nodes rgthree, VHS, KJ, Spectrum chargés)",
+    "configuration": "reproduit la génération réussie du 30/09/2026 : LoRA turbo, MiniMaxH3SigmaShift (12,19 / 3), euler/beta 8 steps ; Spectrum et Patch Sage contournés ; piste audio du modèle décodée et muxée dans le MP4"
+  },
+  "inputs": {
+    "prompt": {
+      "node": "2124",
+      "input": "value",
+      "type": "STRING"
+    },
+    "seed": {
+      "node": "2098",
+      "input": "noise_seed",
+      "type": "INT"
+    },
+    "duration_s": {
+      "node": "2097",
+      "input": "value",
+      "type": "FLOAT",
+      "description": "secondes ; le workflow convertit en 17k+5 images à 24 i/s"
+    },
+    "width": {
+      "node": "2112",
+      "input": "width",
+      "type": "INT",
+      "replaces_link": true
+    },
+    "height": {
+      "node": "2112",
+      "input": "height",
+      "type": "INT",
+      "replaces_link": true
+    },
+    "filename_prefix": {
+      "node": "2110",
+      "input": "filename_prefix",
+      "type": "STRING"
+    },
+    "turbo_lora": {
+      "node": "2095",
+      "input": "lora_1",
+      "type": "POWER_LORA",
+      "default": {
+        "on": true,
+        "lora": "minimax_h3_turbo_4step_ckpt500_pruned_comfyui.safetensors",
+        "strength": 1
+      },
+      "description": "Correction documentée : le workflow importé nomme « minimax_h3_turbo_4step_ckpt500_comfyui_pruned » ; le fichier présent (et utilisé par la génération réussie du 30/09/2026) est « …_pruned_comfyui ». Sans correction, rgthree ignorerait la LoRA."
+    },
+    "text_encoder": {
+      "node": "12",
+      "input": "clip_name",
+      "type": "STRING",
+      "description": "Défaut du workflow : int8 (25 Go). Profil réduit : nvfp4_awq (14,6 Go), utilisé par la génération réussie du 30/09."
+    },
+    "ref_image_1": {
+      "node": "2099",
+      "input": "image",
+      "type": "IMAGE_UPLOAD"
+    }
+  },
+  "outputs": {
+    "video": {
+      "node": "2110",
+      "kind": "video"
+    }
+  },
+  "required_models": [
+    {
+      "folder": "diffusion_models",
+      "name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors"
+    },
+    {
+      "folder": "vae",
+      "name": "minimax_h3_video_vae_fp16.safetensors"
+    },
+    {
+      "folder": "vae",
+      "name": "minimax_h3_audio_vae_fp32.safetensors"
+    },
+    {
+      "folder": "loras",
+      "name": "minimax_h3_turbo_4step_ckpt500_pruned_comfyui.safetensors"
+    }
+  ],
+  "limits": {
+    "max_reference_images": 1,
+    "fps": 24,
+    "frame_grid": "17k+5",
+    "note": "Modes exposés par votre workflow : texte, image, début/fin, références (1 ou 2 images ; le modèle Ref2VA en accepte jusqu'à 9, votre workflow en câble 2). Références vidéo/audio présentes dans le workflow mais non exposées en V1."
+  }
+}

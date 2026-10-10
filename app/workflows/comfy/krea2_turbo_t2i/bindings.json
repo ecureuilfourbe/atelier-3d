@@ -1,0 +1,33 @@
+{
+  "id": "krea2_turbo_t2i",
+  "label": "Krea 2 Turbo — texte vers image (template officiel Comfy)",
+  "capability": "image.create",
+  "engine": {"name": "Krea 2 Turbo", "runtime": "ComfyUI dédié", "model": "krea2_turbo_fp8_scaled.safetensors"},
+  "provenance": {
+    "source": "comfyui_workflow_templates_json/templates/image_krea2_turbo_t2i.json (ComfyUI v0.38.0, paquet de templates 0.1.96)",
+    "conversion": "app.graphToPrompt() du frontend officiel ComfyUI 1.53.6 (sous-graphe aplati par le frontend, aucun widget deviné)",
+    "preset": "8 steps, CFG 1, euler/simple (valeurs du template officiel)"
+  },
+  "inputs": {
+    "prompt": {"node": "30:19", "input": "value", "type": "STRING", "description": "Prompt utilisateur (Text String (User Prompt))"},
+    "seed": {"node": "30:3", "input": "seed", "type": "INT"},
+    "width": {"node": "30:5", "input": "width", "type": "INT", "replaces_link": true},
+    "height": {"node": "30:5", "input": "height", "type": "INT", "replaces_link": true},
+    "refine_prompt": {"node": "30:24", "input": "value", "type": "BOOLEAN", "description": "Boolean (Refine Prompt?) : réécriture du prompt par Qwen3-VL (TextGenerate)"},
+    "filename_prefix": {"node": "29", "input": "filename_prefix", "type": "STRING"}
+  },
+  "outputs": {
+    "image": {"node": "29", "kind": "images"},
+    "final_prompt": {"node": "30:20", "kind": "text", "description": "Texte réellement envoyé à l'encodeur (PreviewAny)"}
+  },
+  "required_models": [
+    {"folder": "diffusion_models", "name": "krea2_turbo_fp8_scaled.safetensors"},
+    {"folder": "text_encoders", "name": "qwen3vl_4b_fp8_scaled.safetensors"},
+    {"folder": "vae", "name": "qwen_image_vae.safetensors"},
+    {"folder": "loras", "name": "krea2_darkbrush.safetensors", "note": "LoRA de style du template, désactivée par switch mais validée par ComfyUI"}
+  ],
+  "required_classes": ["SaveImage", "CLIPTextEncode", "EmptyLatentImage", "KSampler", "VAEDecode", "UNETLoader", "CLIPLoader", "VAELoader",
+                       "ConditioningZeroOut", "LoraLoaderModelOnly", "TextGenerate", "StringConcatenate", "PrimitiveStringMultiline",
+                       "PreviewAny", "ComfySwitchNode", "PrimitiveBoolean", "ResolutionSelector"],
+  "limits": {"accepts_image": false, "note": "Profil texte seul : aucune image de référence n'est exploitée."}
+}

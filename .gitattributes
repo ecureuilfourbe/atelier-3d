@@ -1,0 +1,10 @@
+* text=auto
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.safetensors binary
+*.png binary
+*.jpg binary
+*.glb binary
+# workflows ComfyUI : octets inchangés (leur SHA-256 fait partie de l'empreinte des résultats)
+app/workflows/** -text
+installer/versions.lock.json -text

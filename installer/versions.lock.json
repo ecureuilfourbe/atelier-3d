@@ -1,0 +1,1637 @@
+{
+  "schema": "atelier3d-lock/1",
+  "generated_at": "2026-10-10T08:23:01+00:00",
+  "python": {
+    "app_version": "3.12.15",
+    "mia_version": "3.11.17",
+    "note": "CPython portable (python-build-standalone) installé par uv dans <runtime>\\python"
+  },
+  "tools": {
+    "uv": {
+      "url": "https://github.com/astral-sh/uv/releases/download/0.12.23/uv-x86_64-pc-windows-msvc.zip",
+      "size": 18043715,
+      "sha256": "75d05de6762778c31ee183398de7dd15093fad0ed90b1f236d8205ea5ec00c90",
+      "source": "GitHub Releases astral-sh/uv@0.12.23",
+      "version": "0.12.23"
+    },
+    "7zr": {
+      "url": "https://github.com/ip7z/7zip/releases/download/26.03/7zr.exe",
+      "size": 602624,
+      "sha256": "ad4c82fadcbdf93c03b4fc440f300509c7d60c5c2f4d183e35d9d70d6957037d",
+      "source": "GitHub Releases ip7z/7zip@26.03",
+      "version": "26.03"
+    }
+  },
+  "comfyui": {
+    "portable": {
+      "url": "https://github.com/Comfy-Org/ComfyUI/releases/download/v0.38.0/ComfyUI_windows_portable_nvidia.7z",
+      "size": 1994326521,
+      "sha256": "8f137eac345707fd7e42bcf8e29377415243011ca15522a86aed6c77331fbd56",
+      "source": "GitHub Releases Comfy-Org/ComfyUI@v0.38.0",
+      "version": "v0.38.0",
+      "commit": "6b747c0428c343e1417219641db93a4fb7cb69ae"
+    },
+    "custom_nodes": {
+      "comfyui-krea2edit": {
+        "url": "https://codeload.github.com/lbouaraba/comfyui-krea2edit/zip/86f886dac23013d88996e3a2e99093ba44d322fb",
+        "commit": "86f886dac23013d88996e3a2e99093ba44d322fb",
+        "license": "Apache-2.0",
+        "archive_root": "comfyui-krea2edit-86f886dac23013d88996e3a2e99093ba44d322fb",
+        "files": {
+          "CHANGELOG.md": {
+            "git_blob_sha1": "baae533d957f5758557e779959e9e38fbb964c01",
+            "size": 4727
+          },
+          "LICENSE": {
+            "git_blob_sha1": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+            "size": 11358
+          },
+          "README.md": {
+            "git_blob_sha1": "993730ab97895c6efac46562fc33dd9e8210a4da",
+            "size": 9531
+          },
+          "__init__.py": {
+            "git_blob_sha1": "3dca2c2bcb846760c00fe94858a7bced5484a1e5",
+            "size": 27483
+          },
+          "pyproject.toml": {
+            "git_blob_sha1": "fce51a5ef255eb66a0014b737f75aa8ec13d0e3b",
+            "size": 616
+          },
+          "workflows/krea2_identity_edit.json": {
+            "git_blob_sha1": "a707d8d27cb8504f8a63ab38babe3855ac797c59",
+            "size": 24180
+          }
+        },
+        "source": "GitHub lbouaraba/comfyui-krea2edit@86f886dac230"
+      },
+      "rgthree-comfy": {
+        "url": "https://codeload.github.com/rgthree/rgthree-comfy/zip/6b76ee6f2c5a007710b5a16f97c94330d6ecc871",
+        "commit": "6b76ee6f2c5a007710b5a16f97c94330d6ecc871",
+        "license": "MIT",
+        "archive_root": "rgthree-comfy-6b76ee6f2c5a007710b5a16f97c94330d6ecc871",
+        "files": {
+          ".gitignore": {
+            "git_blob_sha1": "1526efa2a13afec03677a73c3fe07ebdfb37e197",
+            "size": 206
+          },
+          ".prettierrc.json": {
+            "git_blob_sha1": "582f76b20736717b28dced7aa429721f5f6d0261",
+            "size": 78
+          },
+          ".pylintrc": {
+            "git_blob_sha1": "8a082e8efeab523b735b15b0d4b3491a1f4a0c99",
+            "size": 21911
+          },
+          ".style.yapf": {
+            "git_blob_sha1": "9657de3ba37be527405ffcf40e4ed5546ddf79ea",
+            "size": 300
+          },
+          "LICENSE": {
+            "git_blob_sha1": "5a4eb87c0791b74af3db40c2a4d362469a8b6b43",
+            "size": 1106
+          },
+          "README.md": {
+            "git_blob_sha1": "89034746925113a4d217c66949b519e1586f274f",
+            "size": 26669
+          },
+          "__build__.py": {
+            "git_blob_sha1": "32b78d04df69d9f1502b517f5695867628a61c85",
+            "size": 6148
+          },
+          "__commit__.py": {
+            "git_blob_sha1": "bab14170261566dca011e247765b4e5c86d8c2cb",
+            "size": 1690
+          },
+          "__init__.py": {
+            "git_blob_sha1": "edf954cbbeafef1f99748e7927aa405ab73e3a1d",
+            "size": 5504
+          },
+          "__update_comfy__.py": {
+            "git_blob_sha1": "233f47426ae5c3ed2612c14dfcb8df61a94f3879",
+            "size": 3621
+          },
+          "package-lock.json": {
+            "git_blob_sha1": "ccb4fd2758dfd8ea0b2165078a270f3c5bb9b4cb",
+            "size": 20459
+          },
+          "package.json": {
+            "git_blob_sha1": "39fc9c3f0ef7f340e4d8bc03eb1153f835728919",
+            "size": 279
+          },
+          "pnpm-lock.yaml": {
+            "git_blob_sha1": "d3ca55960ab786477934a5329aa9a9bd662daee5",
+            "size": 16067
+          },
+          "prestartup_script.py": {
+            "git_blob_sha1": "81d81b35a80675a13e3d5d279644a96e52658838",
+            "size": 235
+          },
+          "py/__init__.py": {
+            "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+            "size": 0
+          },
+          "py/any_switch.py": {
+            "git_blob_sha1": "99713fafd3db1812b384689b7ed70b6e7f96f4d9",
+            "size": 1111
+          },
+          "py/config.py": {
+            "git_blob_sha1": "a50c49293e3a574881351a0f04d58b72d638561b",
+            "size": 3628
+          },
+          "py/constants.py": {
+            "git_blob_sha1": "73b7d687ad24999c3b441f2c2ef39e4e8b3f3d54",
+            "size": 238
+          },
+          "py/context.py": {
+            "git_blob_sha1": "e2c94f6a687606708cd1399e228c6b6b7d451318",
+            "size": 1078
+          },
+          "py/context_big.py": {
+            "git_blob_sha1": "411cdc8fee86118c0a4201ff7441eab0f5c792d1",
+            "size": 1038
+          },
+          "py/context_merge.py": {
+            "git_blob_sha1": "02d0afe68554f16e99d99ff969afbd98a646ff8c",
+            "size": 1225
+          },
+          "py/context_merge_big.py": {
+            "git_blob_sha1": "f4039e4eb87a3e6fedae2a871f13bb4537cc12a9",
+            "size": 592
+          },
+          "py/context_switch.py": {
+            "git_blob_sha1": "67e02e1452da99b4df57f0d00a3fd6963a5d48ce",
+            "size": 1191
+          },
+          "py/context_switch_big.py": {
+            "git_blob_sha1": "4382e3027641d8a546ef509be824e18533376551",
+            "size": 619
+          },
+          "py/context_utils.py": {
+            "git_blob_sha1": "6c2e68478fce2cd97042af8a9aed2ea84ef78b3e",
+            "size": 4566
+          },
+          "py/display_any.py": {
+            "git_blob_sha1": "19238dbab0cc886cbde4d0106724cd3bc95ed085",
+            "size": 1932
+          },
+          "py/dynamic_context.py": {
+            "git_blob_sha1": "411210d0e0cbc3c038b8b9c0822b69658fc63c7d",
+            "size": 1800
+          },
+          "py/dynamic_context_switch.py": {
+            "git_blob_sha1": "3d1b9e6a7eb1a592db3941298e57ff0c38dfb5e0",
+            "size": 1192
+          },
+          "py/image_comparer.py": {
+            "git_blob_sha1": "079ebdbf6051fa86cf89f75f55f8502904d0c93f",
+            "size": 1360
+          },
+          "py/image_inset_crop.py": {
+            "git_blob_sha1": "5f5f29adf825494dc91dd00519d8d2af287cce19",
+            "size": 2857
+          },
+          "py/image_or_latent_size.py": {
+            "git_blob_sha1": "65f62f86fcfdfc5caedfddf773cb808f796bbef1",
+            "size": 974
+          },
+          "py/image_resize.py": {
+            "git_blob_sha1": "a21001b36ac8f6de616d68c2a9827d791acff2ee",
+            "size": 4534
+          },
+          "py/ksampler_config.py": {
+            "git_blob_sha1": "043ea49e4d09fe1b8fdae92d2d95bb6ee324c717",
+            "size": 1707
+          },
+          "py/log.py": {
+            "git_blob_sha1": "4f41675ef6ccdb610821f147cb860c7b720f3eab",
+            "size": 3128
+          },
+          "py/lora_stack.py": {
+            "git_blob_sha1": "c6d947aadcd7fcd3a49564695275041c8ac9e223",
+            "size": 2042
+          },
+          "py/power_lora_loader.py": {
+            "git_blob_sha1": "1d11ac547205a95aa6b100cc90816954146abd44",
+            "size": 4241
+          },
+          "py/power_primitive.py": {
+            "git_blob_sha1": "c8deea1c8bbe4d0e48c16b9b535f0478f3cbae04",
+            "size": 1827
+          },
+          "py/power_prompt.py": {
+            "git_blob_sha1": "5fa75bf084f6a6b089adcec549886d5942004af7",
+            "size": 3295
+          },
+          "py/power_prompt_simple.py": {
+            "git_blob_sha1": "5a94cab5554d7ad9cb1b8238398eca3749414023",
+            "size": 1584
+          },
+          "py/power_prompt_utils.py": {
+            "git_blob_sha1": "ea167f4bd8db0db352afe63e5aa752b7467e4dd7",
+            "size": 4162
+          },
+          "py/power_puter.py": {
+            "git_blob_sha1": "db73f7a5a3f22787a4cd75c182eff54ea701ecfb",
+            "size": 32629
+          },
+          "py/pyproject.py": {
+            "git_blob_sha1": "26eab343a142079580af83d990c8e0d2cd28057f",
+            "size": 2283
+          },
+          "py/sdxl_empty_latent_image.py": {
+            "git_blob_sha1": "c367aaa6931b32060be2032c19a668e02469c941",
+            "size": 1915
+          },
+          "py/sdxl_power_prompt_postive.py": {
+            "git_blob_sha1": "d070da03be21354517cc283eca199f0510b0e6f8",
+            "size": 7417
+          },
+          "py/sdxl_power_prompt_simple.py": {
+            "git_blob_sha1": "9774d878359a52a313d7ec5f42a5c795989cc7cd",
+            "size": 3293
+          },
+          "py/seed.py": {
+            "git_blob_sha1": "b470f213357e12567296c9d9d191174944c0451f",
+            "size": 5022
+          },
+          "py/server/rgthree_server.py": {
+            "git_blob_sha1": "fe42165e463429cd34a898b7a118ec7ebad03ded",
+            "size": 1865
+          },
+          "py/server/routes_config.py": {
+            "git_blob_sha1": "74e7e1e29688ad52c018906321af8e7dc1e67321",
+            "size": 2324
+          },
+          "py/server/routes_model_info.py": {
+            "git_blob_sha1": "61feb4de339132d22d82fc74cbdac89aa43d8ecd",
+            "size": 7171
+          },
+          "py/server/utils_info.py": {
+            "git_blob_sha1": "4723a664540235fa04f18c1460c2eef6f8fc88f5",
+            "size": 17033
+          },
+          "py/server/utils_server.py": {
+            "git_blob_sha1": "f2fa5d741964a767daf45ed7918c7b371348d222",
+            "size": 2234
+          },
+          "py/utils.py": {
+            "git_blob_sha1": "e86949e904e12c53bb1c02750f16776028edce82",
+            "size": 6153
+          },
+          "py/utils_graph.py": {
+            "git_blob_sha1": "0982a55cbc105b297c970770227d7da9be1f7abf",
+            "size": 1111
+          },
+          "py/utils_userdata.py": {
+            "git_blob_sha1": "b10b757ab503908fb03ae6df97ef775809a3f40d",
+            "size": 1485
+          },
+          "pyproject.toml": {
+            "git_blob_sha1": "54958acbae3b067cefc106bad3d2a6028ee25b48",
+            "size": 351
+          },
+          "requirements.txt": {
+            "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+            "size": 0
+          },
+          "rgthree_config.json.default": {
+            "git_blob_sha1": "e8da96f086e4055f8965ea9710c3d2b3da17cb08",
+            "size": 2025
+          },
+          "src_web/comfyui/any_switch.ts": {
+            "git_blob_sha1": "9e72642b60436236eccd3177cb8e2573f00ac33c",
+            "size": 3597
+          },
+          "src_web/comfyui/base_any_input_connected_node.ts": {
+            "git_blob_sha1": "d54279a949528162111c57c0c732943cb53f30fc",
+            "size": 11399
+          },
+          "src_web/comfyui/base_node.ts": {
+            "git_blob_sha1": "be4e1be533355e24b47acb73cb5d03b988532150",
+            "size": 19252
+          },
+          "src_web/comfyui/base_node_collector.ts": {
+            "git_blob_sha1": "30076301e30ee179ebd566bfd6e6b4f3ac54c122",
+            "size": 3401
+          },
+          "src_web/comfyui/base_node_mode_changer.ts": {
+            "git_blob_sha1": "ae1afeafd900c6143a696c5612fc63edf59327d3",
+            "size": 3981
+          },
+          "src_web/comfyui/base_power_prompt.ts": {
+            "git_blob_sha1": "02a161b7e88be4f6184578578b14d0f0c869373d",
+            "size": 13476
+          },
+          "src_web/comfyui/bookmark.ts": {
+            "git_blob_sha1": "8eb742302b56d958b35e0c3e30c2e48b9c1f5188",
+            "size": 6048
+          },
+          "src_web/comfyui/bypasser.ts": {
+            "git_blob_sha1": "0cfb51f83a0ed7f221cc9e66392d9b58f2c6e331",
+            "size": 1513
+          },
+          "src_web/comfyui/comfy_ui_bar.ts": {
+            "git_blob_sha1": "af79cc9571286a4601d5db77e6f28ef9e2df3071",
+            "size": 8103
+          },
+          "src_web/comfyui/config.ts": {
+            "git_blob_sha1": "6593d0fe85bdc675217a62e55b8dd82f6988af04",
+            "size": 14903
+          },
+          "src_web/comfyui/constants.ts": {
+            "git_blob_sha1": "4e6a13f8ed895fdee59da922bd91ed90245741f7",
+            "size": 2828
+          },
+          "src_web/comfyui/context.ts": {
+            "git_blob_sha1": "a49b7a9ed6bd779b2e2a9b8368659441731b2911",
+            "size": 16641
+          },
+          "src_web/comfyui/dialog_info.ts": {
+            "git_blob_sha1": "6c8b02a4e02bab68e44aac56f7789df44a804bc1",
+            "size": 15715
+          },
+          "src_web/comfyui/display_any.ts": {
+            "git_blob_sha1": "f2c725a5eef7db3faacf58ceb63ed01c3a341760",
+            "size": 3038
+          },
+          "src_web/comfyui/dynamic_context.ts": {
+            "git_blob_sha1": "a964d6209159e0a7f9e2c112415dabc001a41a70",
+            "size": 10064
+          },
+          "src_web/comfyui/dynamic_context_base.ts": {
+            "git_blob_sha1": "a983ac30c9766bfe8ed0fd347f794bdfd8d8a86e",
+            "size": 7978
+          },
+          "src_web/comfyui/dynamic_context_switch.ts": {
+            "git_blob_sha1": "b2f090ba56d7b4319c90d3243e7aa8aa59e4b3df",
+            "size": 6641
+          },
+          "src_web/comfyui/fast_actions_button.ts": {
+            "git_blob_sha1": "890c05aca78783062cc767902afe42f7d9540312",
+            "size": 11713
+          },
+          "src_web/comfyui/fast_groups_bypasser.ts": {
+            "git_blob_sha1": "4e18b07f71c96284356fb454db66e6a1d0a50825",
+            "size": 1233
+          },
+          "src_web/comfyui/fast_groups_muter.ts": {
+            "git_blob_sha1": "4eee7f8c9e7d8898072a81655e26a87f75f23ead",
+            "size": 20628
+          },
+          "src_web/comfyui/feature_group_fast_toggle.ts": {
+            "git_blob_sha1": "260d7cba41f5b1f30c2f6f83e294dd2b410e9948",
+            "size": 11028
+          },
+          "src_web/comfyui/feature_import_individual_nodes.ts": {
+            "git_blob_sha1": "f01aa87d402c8d3c9111db2e7823af20050ecf76",
+            "size": 3306
+          },
+          "src_web/comfyui/image_comparer.ts": {
+            "git_blob_sha1": "3c648f8f8a36040cd6122ebc510dcc90bfb865fe",
+            "size": 15951
+          },
+          "src_web/comfyui/image_inset_crop.ts": {
+            "git_blob_sha1": "631ceaf0cf155649d89fa721cfa2b738b1f4bfc7",
+            "size": 2263
+          },
+          "src_web/comfyui/image_or_latent_size.ts": {
+            "git_blob_sha1": "d52a1e49cc918f83b38ebaaccca1279398308d7e",
+            "size": 1719
+          },
+          "src_web/comfyui/label.ts": {
+            "git_blob_sha1": "4d240e08650760c69e47353cc9a8ee66d6d437fc",
+            "size": 8653
+          },
+          "src_web/comfyui/menu_auto_nest.ts": {
+            "git_blob_sha1": "79d0d2897caa3dd59dcb43150381b7990fb1dd4e",
+            "size": 6518
+          },
+          "src_web/comfyui/menu_copy_image.ts": {
+            "git_blob_sha1": "b4c5dac8bb0ebce2deb57cdbb39f95f43f7fd453",
+            "size": 3049
+          },
+          "src_web/comfyui/menu_queue_node.ts": {
+            "git_blob_sha1": "c8e5507c631cb3a195c37c6f23ee0500cca85a95",
+            "size": 3491
+          },
+          "src_web/comfyui/muter.ts": {
+            "git_blob_sha1": "89fe00f22d604d28a04c118c74b7768ae076598a",
+            "size": 1461
+          },
+          "src_web/comfyui/node_collector.ts": {
+            "git_blob_sha1": "87bb6ba8151f7d68417a6db0221b9083531d4312",
+            "size": 5384
+          },
+          "src_web/comfyui/node_mode_relay.ts": {
+            "git_blob_sha1": "aac47b4c6f62efac5c70a78344258a2ace950de1",
+            "size": 9390
+          },
+          "src_web/comfyui/node_mode_repeater.ts": {
+            "git_blob_sha1": "452b8d75a52370bc4571211946c5c05c72f1883e",
+            "size": 7455
+          },
+          "src_web/comfyui/power_conductor.ts": {
+            "git_blob_sha1": "9fb57cfe3682c7939c45b0333d9fcd6188debc46",
+            "size": 3495
+          },
+          "src_web/comfyui/power_lora_loader.ts": {
+            "git_blob_sha1": "557bd5e08d98e061084026ca3dc64677d0bdc302",
+            "size": 32309
+          },
+          "src_web/comfyui/power_primitive.ts": {
+            "git_blob_sha1": "a4e4847057ca713ea3704787f9f9c6c5ff5344d3",
+            "size": 8124
+          },
+          "src_web/comfyui/power_prompt.ts": {
+            "git_blob_sha1": "6eac6d22fea50c21cda72cf03424836ce8dd2496",
+            "size": 2076
+          },
+          "src_web/comfyui/power_puter.ts": {
+            "git_blob_sha1": "74fc76869f4d64893fc075a840bc622106ec2814",
+            "size": 16408
+          },
+          "src_web/comfyui/random_unmuter.ts": {
+            "git_blob_sha1": "1f951a94e8a2614878045fd6a72f8725bc0dbfde",
+            "size": 3996
+          },
+          "src_web/comfyui/reroute.ts": {
+            "git_blob_sha1": "de0155ae5c644ccc938ca8ce7b7ade726b7c39b3",
+            "size": 47636
+          },
+          "src_web/comfyui/rgthree.scss": {
+            "git_blob_sha1": "4df9c3a9cf890133029fb8fb8dca2e4b615ff80f",
+            "size": 7750
+          },
+          "src_web/comfyui/rgthree.ts": {
+            "git_blob_sha1": "6e40ea29b0fc986d9002920cd0491740cd91c5db",
+            "size": 40391
+          },
+          "src_web/comfyui/seed.ts": {
+            "git_blob_sha1": "638385bb45846cc270de003c923ff3c206afe48f",
+            "size": 11237
+          },
+          "src_web/comfyui/services/bookmarks_services.ts": {
+            "git_blob_sha1": "25a34c7aecf12483b1827c8ccb502a4d54741103",
+            "size": 1115
+          },
+          "src_web/comfyui/services/config_service.ts": {
+            "git_blob_sha1": "4737ab11c9190055b7bfa5a62b3c1268a305733e",
+            "size": 1410
+          },
+          "src_web/comfyui/services/context_service.ts": {
+            "git_blob_sha1": "3a3cfaff57d724f8bf9965518b149a28c9f89e1c",
+            "size": 2036
+          },
+          "src_web/comfyui/services/fast_groups_service.ts": {
+            "git_blob_sha1": "dc765e8f45f1f8b1e5766146833ee6ad874a2581",
+            "size": 8248
+          },
+          "src_web/comfyui/services/key_events_services.ts": {
+            "git_blob_sha1": "6d9a332147e1f10b033b5430f33e8f9b63f9bfcb",
+            "size": 6923
+          },
+          "src_web/comfyui/testing/comfyui_env.ts": {
+            "git_blob_sha1": "23d88331bba9f9d7b393b69476b4d85b17d3876d",
+            "size": 2096
+          },
+          "src_web/comfyui/testing/runner.ts": {
+            "git_blob_sha1": "f20e59a3155db1554bb40fbaea60d7dd37e2c83b",
+            "size": 5900
+          },
+          "src_web/comfyui/testing/utils_test.ts": {
+            "git_blob_sha1": "9c805f2cf79283fcce377d7505a1ef578503c903",
+            "size": 1454
+          },
+          "src_web/comfyui/tests/context_dynamic_tests.ts": {
+            "git_blob_sha1": "45c2b2c82c85fa073208ee84687c6c3057d4a3a7",
+            "size": 7869
+          },
+          "src_web/comfyui/tests/image_or_latent_size_tests.ts": {
+            "git_blob_sha1": "0cb932bc66afcf23b9b8d8ed17fd4098c5c1f887",
+            "size": 4074
+          },
+          "src_web/comfyui/tests/power_puter.ts": {
+            "git_blob_sha1": "5f0bc07cf6fe97878085a3da3904d8fd27006237",
+            "size": 6747
+          },
+          "src_web/comfyui/utils.ts": {
+            "git_blob_sha1": "72bd0a15c1e3819d4c7eb4e08f204c81115bda56",
+            "size": 41354
+          },
+          "src_web/comfyui/utils_canvas.ts": {
+            "git_blob_sha1": "4d1c227d76fc7c81b3edacb34f29fe43cdccbcf6",
+            "size": 10738
+          },
+          "src_web/comfyui/utils_deprecated_comfyui.ts": {
+            "git_blob_sha1": "2077e6e92f8e459ca4c85688e8daf186efdad3ab",
+            "size": 10694
+          },
+          "src_web/comfyui/utils_inputs_outputs.ts": {
+            "git_blob_sha1": "69a215d6631fdfff01ec6c3bc31114b7868a73f1",
+            "size": 652
+          },
+          "src_web/comfyui/utils_menu.ts": {
+            "git_blob_sha1": "fdf921a0f066716f3f55ed081bbcb4bd8ba2690d",
+            "size": 2855
+          },
+          "src_web/comfyui/utils_widgets.ts": {
+            "git_blob_sha1": "b6c765b97cb0d1cb79380a5f4bf3faa1b18f67ac",
+            "size": 15891
+          },
+          "src_web/common/comfyui_shim.ts": {
+            "git_blob_sha1": "45befcf386a0ac5c16237293ca7d8fc5bb633841",
+            "size": 1881
+          },
+          "src_web/common/comfyui_shim_pnginfo.ts": {
+            "git_blob_sha1": "e3d4639796c63f009be27d24f34e807579b36b70",
+            "size": 17952
+          },
+          "src_web/common/components/base_custom_element.ts": {
+            "git_blob_sha1": "659bee5918fb72320ef69047f57789987180b6b2",
+            "size": 8290
+          },
+          "src_web/common/css/buttons.scss": {
+            "git_blob_sha1": "569d380aeda6b6846ed3051cc348f029eeaa87b5",
+            "size": 3780
+          },
+          "src_web/common/css/dialog.scss": {
+            "git_blob_sha1": "c47e2f9d651102c5546d0d0a974f9639f91d3828",
+            "size": 2651
+          },
+          "src_web/common/css/dialog_lora_chooser.scss": {
+            "git_blob_sha1": "373152d1d51baf93c90303978181eec378acc3f9",
+            "size": 3756
+          },
+          "src_web/common/css/dialog_model_info.scss": {
+            "git_blob_sha1": "247cdc08ad504bf0f7bffa5c10c7e16d42b277e6",
+            "size": 8633
+          },
+          "src_web/common/css/menu.scss": {
+            "git_blob_sha1": "31b661a1164964cecff95148f26cef67733a7137",
+            "size": 2426
+          },
+          "src_web/common/css/pages_base.scss": {
+            "git_blob_sha1": "09f292edce41bd58342c8d18cc3f9efc8b8e88d8",
+            "size": 1224
+          },
+          "src_web/common/dialog.ts": {
+            "git_blob_sha1": "2f107106a6956c57f1ff9f4fff37d4d8520fc29a",
+            "size": 4931
+          },
+          "src_web/common/link_fixer.ts": {
+            "git_blob_sha1": "1ec3cf714049a5ee1cd522187f046957bc0c6abc",
+            "size": 18438
+          },
+          "src_web/common/media/rgthree.svg": {
+            "git_blob_sha1": "766a76152eefcdf8d05bf320c329b82afc704eaa",
+            "size": 1593
+          },
+          "src_web/common/media/svgs.ts": {
+            "git_blob_sha1": "b468cd0e9070b9cac52412ea0a7fe9e0eab5518c",
+            "size": 20981
+          },
+          "src_web/common/menu.ts": {
+            "git_blob_sha1": "623d28b88c169c43329ee8034a622a686640c3e2",
+            "size": 3613
+          },
+          "src_web/common/model_info_service.ts": {
+            "git_blob_sha1": "efa36866c5c4203e0ecf65e6c999a518dcfbe57a",
+            "size": 3062
+          },
+          "src_web/common/progress_bar.ts": {
+            "git_blob_sha1": "af55edab93c02595c2eb61e19445220c0febf5a1",
+            "size": 7307
+          },
+          "src_web/common/prompt_service.ts": {
+            "git_blob_sha1": "4ed8b40f5290b77e64e64c7b3a0e622e005f23cf",
+            "size": 10319
+          },
+          "src_web/common/py_parser.ts": {
+            "git_blob_sha1": "22d69d281c460082e043fce28626fadbeb110baf",
+            "size": 32723
+          },
+          "src_web/common/rgthree_api.ts": {
+            "git_blob_sha1": "c9e36779930e09cac8bd5624adc91faa8679ec4b",
+            "size": 6906
+          },
+          "src_web/common/shared_utils.ts": {
+            "git_blob_sha1": "4adea7ed1f191f1fc5dfe267b9b98e49323b39f9",
+            "size": 16947
+          },
+          "src_web/common/utils_dom.ts": {
+            "git_blob_sha1": "143b68c54d8ac7e655185de921c002c3762735e1",
+            "size": 14310
+          },
+          "src_web/common/utils_templates.ts": {
+            "git_blob_sha1": "897f4289947df703421d0a6fe90d7ad3b8aa3ed5",
+            "size": 31496
+          },
+          "src_web/common/utils_workflow.ts": {
+            "git_blob_sha1": "4c3668ea371e74c5cf39e67feb1e98823784db7a",
+            "size": 2818
+          },
+          "src_web/lib/tree-sitter-python.wasm": {
+            "git_blob_sha1": "ebd96b5db34ec49ca6993c854f0fa70a2eb664c2",
+            "size": 457796
+          },
+          "src_web/lib/tree-sitter.js": {
+            "git_blob_sha1": "1ef49495cdd5971427d2b1b78f36cf2a1c41ab41",
+            "size": 150832
+          },
+          "src_web/lib/tree-sitter.wasm": {
+            "git_blob_sha1": "54a7a110d3c5fdf7c7e7fc8e426530e2e230f634",
+            "size": 205491
+          },
+          "src_web/link_fixer/icon_file_json.png": {
+            "git_blob_sha1": "ad3a1cb2b89a2051010d53d69b12cca8735af353",
+            "size": 7213
+          },
+          "src_web/link_fixer/index.html": {
+            "git_blob_sha1": "2e1b66ecd2f5e0c4cb1489b02eba9b226e86d819",
+            "size": 3394
+          },
+          "src_web/link_fixer/link_page.ts": {
+            "git_blob_sha1": "024ff6bc9c1c8ae6c2b1e007b310fedafe03781f",
+            "size": 7167
+          },
+          "src_web/models/components/model-info-card.html": {
+            "git_blob_sha1": "3be75c9d3adab73695a711b1943d3edf92212486",
+            "size": 711
+          },
+          "src_web/models/components/model-info-card.scss": {
+            "git_blob_sha1": "82e085a5a468e320ab6cd4092a3c772718b98265",
+            "size": 658
+          },
+          "src_web/models/components/model-info-card.ts": {
+            "git_blob_sha1": "3d5cdea97df5b1e5197ee3ea829a32439b004793",
+            "size": 1499
+          },
+          "src_web/models/index.html": {
+            "git_blob_sha1": "137a1f72a9f72a76d585b6a006c4d6eebceb3fe6",
+            "size": 472
+          },
+          "src_web/models/models.scss": {
+            "git_blob_sha1": "160ff1743023a8151abecc317606f60fa0094357",
+            "size": 635
+          },
+          "src_web/models/models_info_page.ts": {
+            "git_blob_sha1": "df6e38e415f0701a2f65107c0d527d5d59efa19d",
+            "size": 4198
+          },
+          "src_web/scripts_comfy/README.md": {
+            "git_blob_sha1": "9b5b422571a25740dd1732db363bd442c89c21dc",
+            "size": 375
+          },
+          "src_web/scripts_comfy/api.ts": {
+            "git_blob_sha1": "dc4400852938db227c995d9be9c845c71476bdad",
+            "size": 331
+          },
+          "src_web/scripts_comfy/app.ts": {
+            "git_blob_sha1": "9bec3ee977a1781792aaf9e9dbcd12bf618d7c96",
+            "size": 209
+          },
+          "src_web/scripts_comfy/widgets.ts": {
+            "git_blob_sha1": "7a6508d11c51f7ab3cfe136433a866e912fef0ef",
+            "size": 543
+          },
+          "src_web/typings/comfy.d.ts": {
+            "git_blob_sha1": "f6f2e1b5fcd2b21a7288cd287bb2041603428080",
+            "size": 3474
+          },
+          "src_web/typings/index.d.ts": {
+            "git_blob_sha1": "ac6f9f01a55a244a321a52b71da51098f246621f",
+            "size": 774
+          },
+          "src_web/typings/litegraph.d.ts": {
+            "git_blob_sha1": "24b171a77879172e89a4c45de793f8065084d961",
+            "size": 8815
+          },
+          "src_web/typings/rgthree.d.ts": {
+            "git_blob_sha1": "e1573a0ca0061a6329cc33b9ed2083946ed117d1",
+            "size": 2045
+          },
+          "src_web/typings/web-tree-sitter.d.ts": {
+            "git_blob_sha1": "87b3100f108993f4f60e17fd5b4e3a65b5fa48bd",
+            "size": 27
+          },
+          "tsconfig.json": {
+            "git_blob_sha1": "fd7d330dc31e49b5bd5cec6040cd6acbd7944db4",
+            "size": 2027
+          },
+          "web/comfyui/any_switch.js": {
+            "git_blob_sha1": "50e0d796eb939bab92ef8084c1939d7cfdc66d02",
+            "size": 2951
+          },
+          "web/comfyui/base_any_input_connected_node.js": {
+            "git_blob_sha1": "09e2950c76a3c503df1fa35102829af0aa0d00ec",
+            "size": 8932
+          },
+          "web/comfyui/base_node.js": {
+            "git_blob_sha1": "a004ca9fa5138965b1ec544a18f0a78eab892a00",
+            "size": 12849
+          },
+          "web/comfyui/base_node_collector.js": {
+            "git_blob_sha1": "3dd924f744bda3fba05c090e272ea74873e8fc16",
+            "size": 2794
+          },
+          "web/comfyui/base_node_mode_changer.js": {
+            "git_blob_sha1": "8d2b20783025517227b9acab8076a113b838d36d",
+            "size": 3927
+          },
+          "web/comfyui/base_power_prompt.js": {
+            "git_blob_sha1": "c682f237fafb1d78113e1563c73309cdb42bc84d",
+            "size": 12275
+          },
+          "web/comfyui/bookmark.js": {
+            "git_blob_sha1": "c48877185179124eff4200ea6344cdd32603d995",
+            "size": 4270
+          },
+          "web/comfyui/bypasser.js": {
+            "git_blob_sha1": "96e47e21d6b9f5e20d52c81d2105dc3c770a6ec6",
+            "size": 1484
+          },
+          "web/comfyui/comfy_ui_bar.js": {
+            "git_blob_sha1": "a95fb0ff22b968a0df603a75d6645f8bc6a01684",
+            "size": 7767
+          },
+          "web/comfyui/config.js": {
+            "git_blob_sha1": "698d42551e72f79bf77c7c944c579091e44d02f8",
+            "size": 16260
+          },
+          "web/comfyui/constants.js": {
+            "git_blob_sha1": "b05bf4bda40f45921483f291808aa8809b0b6a9f",
+            "size": 2744
+          },
+          "web/comfyui/context.js": {
+            "git_blob_sha1": "e6185dada9d8e2d802990b5589104d8a6dc66390",
+            "size": 13272
+          },
+          "web/comfyui/dialog_info.js": {
+            "git_blob_sha1": "f2679b6cfdf40a15e7c1235411a311675b09abe9",
+            "size": 15401
+          },
+          "web/comfyui/display_any.js": {
+            "git_blob_sha1": "cff00f9258cced5da324de9e18aa91de7d857038",
+            "size": 1860
+          },
+          "web/comfyui/dynamic_context.js": {
+            "git_blob_sha1": "5a2bc16a8916e0761e36690c4b7a342d797640e9",
+            "size": 10800
+          },
+          "web/comfyui/dynamic_context_base.js": {
+            "git_blob_sha1": "4ead4a61d44c9e532ba1c8f021f9c69320705dd4",
+            "size": 7415
+          },
+          "web/comfyui/dynamic_context_switch.js": {
+            "git_blob_sha1": "a91197e5d0f9e2ab38c3b0b8858ee74fcfb6c3a9",
+            "size": 5982
+          },
+          "web/comfyui/fast_actions_button.js": {
+            "git_blob_sha1": "62d3bac592ff8a5fc56dd079583278d282b3b77e",
+            "size": 11703
+          },
+          "web/comfyui/fast_groups_bypasser.js": {
+            "git_blob_sha1": "80ee99108156aac3d96e66cbe91db224b5877c99",
+            "size": 1010
+          },
+          "web/comfyui/fast_groups_muter.js": {
+            "git_blob_sha1": "11ee58f03605f014060d74a3cd67f19fa8567163",
+            "size": 20455
+          },
+          "web/comfyui/feature_group_fast_toggle.js": {
+            "git_blob_sha1": "8058a87b76ade8f1e76b209bf3c80ff91a150dd4",
+            "size": 10676
+          },
+          "web/comfyui/feature_import_individual_nodes.js": {
+            "git_blob_sha1": "ca5058aa6e254e0f690ded2f03ff87ea2222b230",
+            "size": 3450
+          },
+          "web/comfyui/image_comparer.js": {
+            "git_blob_sha1": "4c5d6b8d8f33f53387d8e385ba6d9ffe4ed4caba",
+            "size": 14371
+          },
+          "web/comfyui/image_inset_crop.js": {
+            "git_blob_sha1": "186e5c14cdcfc784675493ad1ff781985548def0",
+            "size": 2093
+          },
+          "web/comfyui/image_or_latent_size.js": {
+            "git_blob_sha1": "3e12fc620295e6394c9cd008c41fa2d2c1f5ebb5",
+            "size": 1339
+          },
+          "web/comfyui/label.js": {
+            "git_blob_sha1": "b6dedad371197d26c219ea1b21342b0590f88ad6",
+            "size": 6910
+          },
+          "web/comfyui/menu_auto_nest.js": {
+            "git_blob_sha1": "d720ee8fad5b86900c2123b95b2d31b0f5247534",
+            "size": 6119
+          },
+          "web/comfyui/menu_copy_image.js": {
+            "git_blob_sha1": "30d034f00dccda849f7868e53d52cd61d48ce66f",
+            "size": 3198
+          },
+          "web/comfyui/menu_queue_node.js": {
+            "git_blob_sha1": "a53250a496f5a82505f463f389b1feeeb7f76dac",
+            "size": 3442
+          },
+          "web/comfyui/muter.js": {
+            "git_blob_sha1": "f18210f61bfb2c1ba30ae871c61411b1435744ef",
+            "size": 1425
+          },
+          "web/comfyui/node_collector.js": {
+            "git_blob_sha1": "477bf8689a8c2961faaeeac5f7210a1e549b35c3",
+            "size": 4413
+          },
+          "web/comfyui/node_mode_relay.js": {
+            "git_blob_sha1": "5daeffbe0f1d1159c151719bb2a516c4facb3214",
+            "size": 8482
+          },
+          "web/comfyui/node_mode_repeater.js": {
+            "git_blob_sha1": "22300d11fd1c290f5bc0a07356aa90956db1d6a3",
+            "size": 6703
+          },
+          "web/comfyui/power_conductor.js": {
+            "git_blob_sha1": "9c51a2f7e1a2477004b909c3abf88a63c4b2176f",
+            "size": 5888
+          },
+          "web/comfyui/power_lora_loader.js": {
+            "git_blob_sha1": "b2146d71455ad5fa57502df09e48a1a74ee9b951",
+            "size": 26883
+          },
+          "web/comfyui/power_primitive.js": {
+            "git_blob_sha1": "eb55e8e93e7678730be16b476b28a68b191288ae",
+            "size": 6854
+          },
+          "web/comfyui/power_prompt.js": {
+            "git_blob_sha1": "c82ac944710996b26eac2c32c2a97347662f0120",
+            "size": 1889
+          },
+          "web/comfyui/power_puter.js": {
+            "git_blob_sha1": "52231b3af0bf5151a7604dfca0b82b821929b4ef",
+            "size": 13701
+          },
+          "web/comfyui/random_unmuter.js": {
+            "git_blob_sha1": "213aa8c0ac50da67b21f81bf4a969b0c3a0efe62",
+            "size": 3952
+          },
+          "web/comfyui/reroute.js": {
+            "git_blob_sha1": "7d741cee6ec7713534de73f42c28066d596460bb",
+            "size": 43580
+          },
+          "web/comfyui/rgthree.css": {
+            "git_blob_sha1": "a0493ebf7d7db17ec3636851faca41fb3a26282c",
+            "size": 16695
+          },
+          "web/comfyui/rgthree.js": {
+            "git_blob_sha1": "5b63959e153e2fb73ea0135f5c3e3ae232dfe9f1",
+            "size": 35352
+          },
+          "web/comfyui/seed.js": {
+            "git_blob_sha1": "46c81d6422dda1ef0cb49bd741bfd51416a7844e",
+            "size": 9027
+          },
+          "web/comfyui/services/bookmarks_services.js": {
+            "git_blob_sha1": "839df30e7299b0d00910a141cbd5abc7dff82734",
+            "size": 999
+          },
+          "web/comfyui/services/config_service.js": {
+            "git_blob_sha1": "34f1087173c01cda464a519f4d8ebdfb81fbf25a",
+            "size": 1137
+          },
+          "web/comfyui/services/context_service.js": {
+            "git_blob_sha1": "27e19658cbdc20d6213cd673fa6f10f79ee9ee7a",
+            "size": 1888
+          },
+          "web/comfyui/services/fast_groups_service.js": {
+            "git_blob_sha1": "3ee8778f2c2558ffa2f5bdadcf1e4901ccb6a38a",
+            "size": 6525
+          },
+          "web/comfyui/services/key_events_services.js": {
+            "git_blob_sha1": "af1550488246ac2b9e53c34a0374f49f226dbb31",
+            "size": 4210
+          },
+          "web/comfyui/utils.js": {
+            "git_blob_sha1": "747e78fe6390afc363fe7730046841930b611c5a",
+            "size": 33090
+          },
+          "web/comfyui/utils_canvas.js": {
+            "git_blob_sha1": "7c29bfdb76210831869bf2d29c482f5a5d4ae716",
+            "size": 8267
+          },
+          "web/comfyui/utils_deprecated_comfyui.js": {
+            "git_blob_sha1": "a15f692b539220b6fb7e260481535c72e18e275b",
+            "size": 7051
+          },
+          "web/comfyui/utils_inputs_outputs.js": {
+            "git_blob_sha1": "e58b8411994d81c70561c1ec7745ec9ec44d2dbb",
+            "size": 450
+          },
+          "web/comfyui/utils_menu.js": {
+            "git_blob_sha1": "c8dc405db84d6c400a2eb44aa015204c610f0aed",
+            "size": 1964
+          },
+          "web/comfyui/utils_widgets.js": {
+            "git_blob_sha1": "13dae464293db7ed02b1141ea37ee50c188fe091",
+            "size": 10967
+          },
+          "web/common/comfyui_shim.js": {
+            "git_blob_sha1": "54007bafceead4ce4f70defc2e67be68f37c2744",
+            "size": 1094
+          },
+          "web/common/comfyui_shim_pnginfo.js": {
+            "git_blob_sha1": "7ef8e6b005f46b0b6c367839bb2518accb6e7b19",
+            "size": 17631
+          },
+          "web/common/components/base_custom_element.js": {
+            "git_blob_sha1": "d389ffc23932ed933232c60be3a3841afa3bd7a1",
+            "size": 7228
+          },
+          "web/common/css/buttons.css": {
+            "git_blob_sha1": "2c9f13c0acd4416847b2778048a4b79a03234a60",
+            "size": 4415
+          },
+          "web/common/css/dialog.css": {
+            "git_blob_sha1": "c9efdf67c5848facf4589d308ed53e300d67cdd9",
+            "size": 2550
+          },
+          "web/common/css/dialog_lora_chooser.css": {
+            "git_blob_sha1": "0142ab10a522512a0cc8dbdb11ce5793baa41f11",
+            "size": 4159
+          },
+          "web/common/css/dialog_model_info.css": {
+            "git_blob_sha1": "5edee06a5eb3c3502c966320e3da1c6b0f655346",
+            "size": 9498
+          },
+          "web/common/css/menu.css": {
+            "git_blob_sha1": "426469e745b16056409b4318cf89f479cf0e11bd",
+            "size": 2192
+          },
+          "web/common/css/pages_base.css": {
+            "git_blob_sha1": "49233231999fa37182bb313afe5f9f61389387c6",
+            "size": 1135
+          },
+          "web/common/dialog.js": {
+            "git_blob_sha1": "6c1a6eadfb830acb6a76459ea908d93d55849f49",
+            "size": 4013
+          },
+          "web/common/link_fixer.js": {
+            "git_blob_sha1": "eed3eee06e68f98f9da069e4b8dc7bbc225484f4",
+            "size": 17186
+          },
+          "web/common/media/rgthree.svg": {
+            "git_blob_sha1": "766a76152eefcdf8d05bf320c329b82afc704eaa",
+            "size": 1593
+          },
+          "web/common/media/svgs.js": {
+            "git_blob_sha1": "2bd25227abc482dc6bfd006c211ab856a398fa80",
+            "size": 20489
+          },
+          "web/common/menu.js": {
+            "git_blob_sha1": "3e0e81429eb6f513667d9a2555e48a1db2e48dd2",
+            "size": 3654
+          },
+          "web/common/model_info_service.js": {
+            "git_blob_sha1": "e7ec80824062b5deae01df26fb75feb21dfe097b",
+            "size": 2523
+          },
+          "web/common/progress_bar.js": {
+            "git_blob_sha1": "e342f0e926f46af0d8b817e01b522d0bc0161260",
+            "size": 7259
+          },
+          "web/common/prompt_service.js": {
+            "git_blob_sha1": "1f238889da859785842190511a7918a7cfa6d55f",
+            "size": 7948
+          },
+          "web/common/py_parser.js": {
+            "git_blob_sha1": "0251c1683d3e418032f676c74920fcf60ed24879",
+            "size": 26868
+          },
+          "web/common/rgthree_api.js": {
+            "git_blob_sha1": "eae650f44bd2ab88f3468ad071978d21ac0d4489",
+            "size": 5003
+          },
+          "web/common/shared_utils.js": {
+            "git_blob_sha1": "61ba549c24140e53dde893a8a8a43fab3528b090",
+            "size": 13834
+          },
+          "web/common/utils_dom.js": {
+            "git_blob_sha1": "c07e876f8ec801f3467d05d78ef7b9b8c7db6ba3",
+            "size": 12377
+          },
+          "web/common/utils_templates.js": {
+            "git_blob_sha1": "973ca1b05e7ec588f2f4247d430fe5ab38884b3a",
+            "size": 25174
+          },
+          "web/common/utils_workflow.js": {
+            "git_blob_sha1": "5dc2963987e64bcc13d4e9e1e6d847bd44592b3a",
+            "size": 2800
+          },
+          "web/lib/tree-sitter-python.wasm": {
+            "git_blob_sha1": "ebd96b5db34ec49ca6993c854f0fa70a2eb664c2",
+            "size": 457796
+          },
+          "web/lib/tree-sitter.js": {
+            "git_blob_sha1": "1ef49495cdd5971427d2b1b78f36cf2a1c41ab41",
+            "size": 150832
+          },
+          "web/lib/tree-sitter.wasm": {
+            "git_blob_sha1": "54a7a110d3c5fdf7c7e7fc8e426530e2e230f634",
+            "size": 205491
+          },
+          "web/link_fixer/icon_file_json.png": {
+            "git_blob_sha1": "ad3a1cb2b89a2051010d53d69b12cca8735af353",
+            "size": 7213
+          },
+          "web/link_fixer/index.html": {
+            "git_blob_sha1": "2e1b66ecd2f5e0c4cb1489b02eba9b226e86d819",
+            "size": 3394
+          },
+          "web/link_fixer/link_page.js": {
+            "git_blob_sha1": "56609dc0e591bf7c2d0a1cd47dc9b31be864add1",
+            "size": 7288
+          },
+          "web/models/components/model-info-card.css": {
+            "git_blob_sha1": "87845235fddbce3b221de911322456dea687104a",
+            "size": 701
+          },
+          "web/models/components/model-info-card.html": {
+            "git_blob_sha1": "3be75c9d3adab73695a711b1943d3edf92212486",
+            "size": 711
+          },
+          "web/models/components/model-info-card.js": {
+            "git_blob_sha1": "76cb7dc9465d5a9546b41f11f3bc28dea3a5597f",
+            "size": 1479
+          },
+          "web/models/index.html": {
+            "git_blob_sha1": "137a1f72a9f72a76d585b6a006c4d6eebceb3fe6",
+            "size": 472
+          },
+          "web/models/models.css": {
+            "git_blob_sha1": "8fa8e91e5ea8289098885c7c75c83ec35b942dc6",
+            "size": 575
+          },
+          "web/models/models_info_page.js": {
+            "git_blob_sha1": "55b08ed9ad7929e894509a53cca3a8a50d07fe2f",
+            "size": 4469
+          }
+        },
+        "source": "GitHub rgthree/rgthree-comfy@6b76ee6f2c5a"
+      },
+      "ComfyUI-VideoHelperSuite": {
+        "url": "https://codeload.github.com/Kosinkadink/ComfyUI-VideoHelperSuite/zip/4ee72c065db22c9d96c2427954dc69e7b908444b",
+        "commit": "4ee72c065db22c9d96c2427954dc69e7b908444b",
+        "license": "GPL-3.0",
+        "archive_root": "ComfyUI-VideoHelperSuite-4ee72c065db22c9d96c2427954dc69e7b908444b",
+        "files": {
+          ".gitignore": {
+            "git_blob_sha1": "9b5379e8f93da3909706b0a7d37f5c8ab5e2a2a5",
+            "size": 3101
+          },
+          "LICENSE": {
+            "git_blob_sha1": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+            "size": 35149
+          },
+          "README.md": {
+            "git_blob_sha1": "753fcecf9979b40b2427869c6ad5bed1b61df482",
+            "size": 8877
+          },
+          "__init__.py": {
+            "git_blob_sha1": "9fa995f0ac7e296a62bcba9df68b5250a0f7d041",
+            "size": 398
+          },
+          "pyproject.toml": {
+            "git_blob_sha1": "39793ee53bd813c5188a2f65836a72bf541b4d9c",
+            "size": 425
+          },
+          "requirements.txt": {
+            "git_blob_sha1": "4fa34aa21b85c4b974e2a2b6891eae5fd6dd4164",
+            "size": 29
+          },
+          "testframework/README.md": {
+            "git_blob_sha1": "93cd503563080c9c7d785d419bef7dddc4c11cd8",
+            "size": 466
+          },
+          "testframework/__init__.py": {
+            "git_blob_sha1": "c75b11c164596ef873898dd843700c7164cc0932",
+            "size": 184
+          },
+          "testframework/server.py": {
+            "git_blob_sha1": "a9c20ea3eab31bab288d6089a89410ff409d43ad",
+            "size": 2836
+          },
+          "testframework/web/js/testRunner.js": {
+            "git_blob_sha1": "521a2204b9a2a3202441818461231872ea8a15c8",
+            "size": 3132
+          },
+          "video_formats/16bit-png.json": {
+            "git_blob_sha1": "b768bdbcfe8950cb7bde37d02444f0191ad29f51",
+            "size": 139
+          },
+          "video_formats/8bit-png.json": {
+            "git_blob_sha1": "88b27a75f9c979f18979ec46da8c8843a82e0759",
+            "size": 75
+          },
+          "video_formats/ProRes.json": {
+            "git_blob_sha1": "eddd3acf931c5ab3486197c18ba88a3959d3e1d6",
+            "size": 943
+          },
+          "video_formats/av1-webm.json": {
+            "git_blob_sha1": "659ea166fb140e18109f09f3d5710363af9c2294",
+            "size": 625
+          },
+          "video_formats/ffmpeg-gif.json": {
+            "git_blob_sha1": "3ca0865033c7dabc06176c737652f375e7badb27",
+            "size": 366
+          },
+          "video_formats/ffv1-mkv.json": {
+            "git_blob_sha1": "3248e5fc6425feeb1d55ccdb8bd8d49cb0e3401c",
+            "size": 1111
+          },
+          "video_formats/gifski.json": {
+            "git_blob_sha1": "c96b358ab0ae59dbd97c52a699c8ee9825c5d351",
+            "size": 287
+          },
+          "video_formats/h264-mp4.json": {
+            "git_blob_sha1": "4aa0bd57c6a4cc65334d82e5cdaa7aadb8372321",
+            "size": 619
+          },
+          "video_formats/h265-mp4.json": {
+            "git_blob_sha1": "559c35073edf9ed74baec0eeffc56fde2b0438c5",
+            "size": 645
+          },
+          "video_formats/nvenc_av1-mp4.json": {
+            "git_blob_sha1": "ed8294fcf0c9cc1a4780dc6e2454913a969f533b",
+            "size": 606
+          },
+          "video_formats/nvenc_h264-mp4.json": {
+            "git_blob_sha1": "f8676304effd31fb41ae13dd972d92736b122009",
+            "size": 607
+          },
+          "video_formats/nvenc_hevc-mp4.json": {
+            "git_blob_sha1": "a374ecde4d0e0c2a2f0042c282f8b1915e307aca",
+            "size": 632
+          },
+          "video_formats/webm.json": {
+            "git_blob_sha1": "6323f619ad2850ba60cd5e31b32cdfc060e030c9",
+            "size": 589
+          },
+          "videohelpersuite/batched_nodes.py": {
+            "git_blob_sha1": "624bb84f73cce1d8e51abf4fef0b80367ad4b9a3",
+            "size": 1790
+          },
+          "videohelpersuite/documentation.py": {
+            "git_blob_sha1": "857de6c6a5b4a3917f49d0b1c5c142f274203f22",
+            "size": 43805
+          },
+          "videohelpersuite/image_latent_nodes.py": {
+            "git_blob_sha1": "62b4e3e6452b51b42e3e49852d27a1bb9921edc2",
+            "size": 19039
+          },
+          "videohelpersuite/latent_preview.py": {
+            "git_blob_sha1": "a0a22b8ad028fb9de25cb9818b857a6e4aa0f3e1",
+            "size": 5500
+          },
+          "videohelpersuite/load_images_nodes.py": {
+            "git_blob_sha1": "43f3387c4f907d7372c207f7f1aeb626c27b836b",
+            "size": 8120
+          },
+          "videohelpersuite/load_video_nodes.py": {
+            "git_blob_sha1": "b23e40f535c8166ae05fa6a541d159cdadb368f7",
+            "size": 29032
+          },
+          "videohelpersuite/logger.py": {
+            "git_blob_sha1": "6e7b8d64bda275608ba6bf8ee28d2a2112e3e2be",
+            "size": 1057
+          },
+          "videohelpersuite/nodes.py": {
+            "git_blob_sha1": "4389f5de534d0fdc66fdc922257166125e26e444",
+            "size": 48222
+          },
+          "videohelpersuite/server.py": {
+            "git_blob_sha1": "f67e342400eb250b731245554bbd495864719f8f",
+            "size": 12178
+          },
+          "videohelpersuite/utils.py": {
+            "git_blob_sha1": "5b35ad47fa3d1412773ab561598031ba6a3b38bc",
+            "size": 17044
+          },
+          "web/js/VHS.core.js": {
+            "git_blob_sha1": "fcbf03ffc7eb517e8a0a7b5ce045aa9bee5d8e43",
+            "size": 106686
+          },
+          "web/js/videoinfo.js": {
+            "git_blob_sha1": "b1a9871067e07dc09b37a8dd666ce531c2c5f56b",
+            "size": 4313
+          }
+        },
+        "source": "GitHub Kosinkadink/ComfyUI-VideoHelperSuite@4ee72c065db2"
+      }
+    },
+    "python_packages": {
+      "video": [
+        {
+          "url": "https://files.pythonhosted.org/packages/4a/90/b338326131ccb2aaa3c2c85d00f41822c0050139a4bfe723cfd95455bd2d/opencv_python_headless-4.13.0.92-cp37-abi3-win_amd64.whl",
+          "size": 40070414,
+          "sha256": "77a82fe35ddcec0f62c15f2ba8a12ecc2ed4207c17b0902c7a3151ae29f37fb6",
+          "filename": "opencv_python_headless-4.13.0.92-cp37-abi3-win_amd64.whl",
+          "source": "PyPI opencv-python-headless==4.13.0.92",
+          "version": "4.13.0.92"
+        },
+        {
+          "url": "https://files.pythonhosted.org/packages/2c/c6/fa760e12a2483469e2bf5058c5faff664acf66cadb4df2ad6205b016a73d/imageio_ffmpeg-0.6.0-py3-none-win_amd64.whl",
+          "size": 31246824,
+          "sha256": "02fa47c83703c37df6bfe4896aab339013f62bf02c5ebf2dce6da56af04ffc0a",
+          "filename": "imageio_ffmpeg-0.6.0-py3-none-win_amd64.whl",
+          "source": "PyPI imageio-ffmpeg==0.6.0",
+          "version": "0.6.0"
+        }
+      ]
+    }
+  },
+  "blender": {
+    "minimum_version": "4.2.0",
+    "download": {
+      "url": "https://download.blender.org/release/Blender5.2/blender-5.2.1-windows-x64.zip",
+      "size": 404851964,
+      "sha256": "0e631dad7d0cad6d5d18abdd2e2550f6c0213215334eda00ddbd3d22b96ecb2c",
+      "version": "5.2.1",
+      "source": "download.blender.org"
+    }
+  },
+  "engines": {
+    "mia": {
+      "code": {
+        "url": "https://codeload.github.com/jasongzy/Make-It-Animatable/zip/8fb51382ff6da556cdb95cc03a48200603f3a493",
+        "commit": "8fb51382ff6da556cdb95cc03a48200603f3a493",
+        "license": "MIT",
+        "archive_root": "Make-It-Animatable-8fb51382ff6da556cdb95cc03a48200603f3a493",
+        "files": {
+          "LICENSE": {
+            "git_blob_sha1": "2bb375e9b82d59aa47c2682459192b9656adfbca",
+            "size": 1068
+          },
+          "README.md": {
+            "git_blob_sha1": "9da7a482d54725136f3969d6dc081d96bf141185",
+            "size": 5807
+          },
+          "app.py": {
+            "git_blob_sha1": "3db1c1bdbcf849bc9501c9aca45217e56874859d",
+            "size": 66825
+          },
+          "model.py": {
+            "git_blob_sha1": "86e09292e2c7de0edfd889a1667c4c9175e421a5",
+            "size": 37263
+          },
+          "models_ae.py": {
+            "git_blob_sha1": "0b55012beaaf9082c16a3bb8f4597a5cf2f66d49",
+            "size": 15096
+          },
+          "util/blender_utils.py": {
+            "git_blob_sha1": "5e747d1f9ae2bc1daee51b041616f7047e08c459",
+            "size": 23315
+          },
+          "util/dataset_mixamo.py": {
+            "git_blob_sha1": "debd29a4bd4cc13d243c862c235688177dfd7e4c",
+            "size": 55003
+          },
+          "util/dataset_mixamo_additional.py": {
+            "git_blob_sha1": "e13a8e21c53c0b6c4f17ae933f3efeb6fb284bd9",
+            "size": 9044
+          },
+          "util/misc.py": {
+            "git_blob_sha1": "03ce5465d359c14524b20372ddd92711049cf11e",
+            "size": 12743
+          },
+          "util/utils.py": {
+            "git_blob_sha1": "2e5736a844a4d67a73563fc17e3c4f69b1913816",
+            "size": 39043
+          }
+        },
+        "source": "GitHub jasongzy/Make-It-Animatable@8fb51382ff6d"
+      },
+      "weights": {
+        "bw.pth": {
+          "url": "https://huggingface.co/jasongzy/Make-It-Animatable/resolve/ca0daf6cb164f939e77bf32667513fc7558d5f98/output/best/new/bw.pth",
+          "size": 424693698,
+          "sha256": "8ff6abc9ed78665513d2dcd7b2d7e8430f6c86335389120281be3bd999d27830",
+          "source": "Hugging Face jasongzy/Make-It-Animatable@ca0daf6cb164",
+          "revision": "ca0daf6cb164f939e77bf32667513fc7558d5f98",
+          "gated": false
+        },
+        "bw_normal.pth": {
+          "url": "https://huggingface.co/jasongzy/Make-It-Animatable/resolve/ca0daf6cb164f939e77bf32667513fc7558d5f98/output/best/new/bw_normal.pth",
+          "size": 429008352,
+          "sha256": "d69d259863af77a06b6c4ee3d1fc2cb8566194fc8fc08cecbcb065bf9fa94818",
+          "source": "Hugging Face jasongzy/Make-It-Animatable@ca0daf6cb164",
+          "revision": "ca0daf6cb164f939e77bf32667513fc7558d5f98",
+          "gated": false
+        },
+        "joints.pth": {
+          "url": "https://huggingface.co/jasongzy/Make-It-Animatable/resolve/ca0daf6cb164f939e77bf32667513fc7558d5f98/output/best/new/joints.pth",
+          "size": 525833771,
+          "sha256": "595587abb2ef9977bc9e49f8221c326da473de8ff1cd8785eb55ac63acde2b8e",
+          "source": "Hugging Face jasongzy/Make-It-Animatable@ca0daf6cb164",
+          "revision": "ca0daf6cb164f939e77bf32667513fc7558d5f98",
+          "gated": false
+        },
+        "joints_coarse.pth": {
+          "url": "https://huggingface.co/jasongzy/Make-It-Animatable/resolve/ca0daf6cb164f939e77bf32667513fc7558d5f98/output/best/new/joints_coarse.pth",
+          "size": 424706373,
+          "sha256": "389e18f92a65e7925c1a940dfff22cc85e9ac4ead17ab4a65fd4ef5d6088b96b",
+          "source": "Hugging Face jasongzy/Make-It-Animatable@ca0daf6cb164",
+          "revision": "ca0daf6cb164f939e77bf32667513fc7558d5f98",
+          "gated": false
+        },
+        "pose.pth": {
+          "url": "https://huggingface.co/jasongzy/Make-It-Animatable/resolve/ca0daf6cb164f939e77bf32667513fc7558d5f98/output/best/new/pose.pth",
+          "size": 525848433,
+          "sha256": "4996440d7d90064516e134e748abacd3b96e17856a7d8a4a245bbeb205402b7e",
+          "source": "Hugging Face jasongzy/Make-It-Animatable@ca0daf6cb164",
+          "revision": "ca0daf6cb164f939e77bf32667513fc7558d5f98",
+          "gated": false
+        }
+      }
+    }
+  },
+  "models": {
+    "krea2_turbo_fp8_scaled": {
+      "url": "https://huggingface.co/Comfy-Org/Krea-2/resolve/eb1eddd3983a54678545a9b2c178c5853b30f7be/diffusion_models/krea2_turbo_fp8_scaled.safetensors",
+      "size": 13141730784,
+      "sha256": "eb4dd8c612cfd10f64f25b057e6e6bbcb5737c94a7372177e456dbf7579502f1",
+      "source": "Hugging Face Comfy-Org/Krea-2@eb1eddd3983a",
+      "revision": "eb1eddd3983a54678545a9b2c178c5853b30f7be",
+      "gated": false,
+      "filename": "krea2_turbo_fp8_scaled.safetensors",
+      "comfy_folder": "diffusion_models",
+      "profiles": [
+        "image"
+      ]
+    },
+    "qwen3vl_4b_fp8_scaled": {
+      "url": "https://huggingface.co/Comfy-Org/Krea-2/resolve/eb1eddd3983a54678545a9b2c178c5853b30f7be/text_encoders/qwen3vl_4b_fp8_scaled.safetensors",
+      "size": 5242467968,
+      "sha256": "54bd5144df0bbc25dd6ccadfcb826b521445a1b06ae5a42570bdd2974ca87094",
+      "source": "Hugging Face Comfy-Org/Krea-2@eb1eddd3983a",
+      "revision": "eb1eddd3983a54678545a9b2c178c5853b30f7be",
+      "gated": false,
+      "filename": "qwen3vl_4b_fp8_scaled.safetensors",
+      "comfy_folder": "text_encoders",
+      "profiles": [
+        "image"
+      ]
+    },
+    "qwen_image_vae": {
+      "url": "https://huggingface.co/Comfy-Org/Krea-2/resolve/eb1eddd3983a54678545a9b2c178c5853b30f7be/vae/qwen_image_vae.safetensors",
+      "size": 253806246,
+      "sha256": "a70580f0213e67967ee9c95f05bb400e8fb08307e017a924bf3441223e023d1f",
+      "source": "Hugging Face Comfy-Org/Krea-2@eb1eddd3983a",
+      "revision": "eb1eddd3983a54678545a9b2c178c5853b30f7be",
+      "gated": false,
+      "filename": "qwen_image_vae.safetensors",
+      "comfy_folder": "vae",
+      "profiles": [
+        "image"
+      ]
+    },
+    "krea2_identity_edit_v1_2": {
+      "url": "https://huggingface.co/conradlocke/krea2-identity-edit/resolve/89e9e7a09ee2e5c9331e952063d79b1b8a703280/krea2_identity_edit_v1_2.safetensors",
+      "size": 1828256432,
+      "sha256": "6adf9a69cc9502d286db7b69964d37da7e9cfe4b05b4d004bc275f087d3fd3cf",
+      "source": "Hugging Face conradlocke/krea2-identity-edit@89e9e7a09ee2",
+      "revision": "89e9e7a09ee2e5c9331e952063d79b1b8a703280",
+      "gated": false,
+      "filename": "krea2_identity_edit_v1_2.safetensors",
+      "comfy_folder": "loras/Krea2",
+      "profiles": [
+        "image_edit"
+      ]
+    },
+    "krea2_darkbrush": {
+      "url": "https://huggingface.co/Comfy-Org/Krea-2/resolve/eb1eddd3983a54678545a9b2c178c5853b30f7be/loras/krea2_darkbrush.safetensors",
+      "size": 469291992,
+      "sha256": "f47c4316dd93af66e0518c93b582f459571d4925b519133770c73a52cd5db7c6",
+      "source": "Hugging Face Comfy-Org/Krea-2@eb1eddd3983a",
+      "revision": "eb1eddd3983a54678545a9b2c178c5853b30f7be",
+      "gated": false,
+      "filename": "krea2_darkbrush.safetensors",
+      "comfy_folder": "loras",
+      "profiles": [
+        "image"
+      ]
+    },
+    "pixal3d_int8_convrot": {
+      "url": "https://huggingface.co/Comfy-Org/Pixal3D/resolve/f37641be376725d324c56626007cc477f1249a69/diffusion_models/pixal3d_int8_convrot.safetensors",
+      "size": 5584555824,
+      "sha256": "4621eac3b715484f79303c7152af641fe0b2b14f4d0e3d394fd6922d00f955ec",
+      "source": "Hugging Face Comfy-Org/Pixal3D@f37641be3767",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "gated": false,
+      "filename": "pixal3d_int8_convrot.safetensors",
+      "comfy_folder": "diffusion_models",
+      "profiles": [
+        "mesh"
+      ]
+    },
+    "dino_v3_L_naf_fp32": {
+      "url": "https://huggingface.co/Comfy-Org/Pixal3D/resolve/f37641be376725d324c56626007cc477f1249a69/clip_vision/dino_v3_L_naf_fp32.safetensors",
+      "size": 1215214176,
+      "sha256": "4ad2ec4e0879a5b5b04cd97325cc37da954a7b6edca5170b86510f17f2b2290f",
+      "source": "Hugging Face Comfy-Org/Pixal3D@f37641be3767",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "gated": false,
+      "filename": "dino_v3_L_naf_fp32.safetensors",
+      "comfy_folder": "clip_vision",
+      "profiles": [
+        "mesh"
+      ]
+    },
+    "trellis_2_shape_vae_bf16": {
+      "url": "https://huggingface.co/Comfy-Org/Pixal3D/resolve/f37641be376725d324c56626007cc477f1249a69/vae/trellis_2_shape_vae_bf16.safetensors",
+      "size": 1095844024,
+      "sha256": "de0cb4949a76c59ee5c091a995a69bcc8c51d5aeda939f0c641a50d2a72341f4",
+      "source": "Hugging Face Comfy-Org/Pixal3D@f37641be3767",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "gated": false,
+      "filename": "trellis_2_shape_vae_bf16.safetensors",
+      "comfy_folder": "vae",
+      "profiles": [
+        "mesh"
+      ]
+    },
+    "trellis_2_texture_vae_bf16": {
+      "url": "https://huggingface.co/Comfy-Org/Pixal3D/resolve/f37641be376725d324c56626007cc477f1249a69/vae/trellis_2_texture_vae_bf16.safetensors",
+      "size": 948461364,
+      "sha256": "714e5ebf094a610e12a8e3b5175c18a62f37f6ea4218acb6073644456b73ab0e",
+      "source": "Hugging Face Comfy-Org/Pixal3D@f37641be3767",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "gated": false,
+      "filename": "trellis_2_texture_vae_bf16.safetensors",
+      "comfy_folder": "vae",
+      "profiles": [
+        "mesh"
+      ]
+    },
+    "trellis_2_int8_convrot": {
+      "url": "https://huggingface.co/Comfy-Org/TRELLIS.2/resolve/430a9d09b2416687018c8fe8edced2ad4858a439/diffusion_models/trellis_2_int8_convrot.safetensors",
+      "size": 5253048192,
+      "sha256": "d01952ad137213f6a868f86b6b877026276f84af5eec23069217475a0bad3a31",
+      "source": "Hugging Face Comfy-Org/TRELLIS.2@430a9d09b241",
+      "revision": "430a9d09b2416687018c8fe8edced2ad4858a439",
+      "gated": false,
+      "filename": "trellis_2_int8_convrot.safetensors",
+      "comfy_folder": "diffusion_models",
+      "profiles": [
+        "mesh"
+      ]
+    },
+    "moge_2_vitl_normal_fp16": {
+      "url": "https://huggingface.co/Comfy-Org/MoGe/resolve/1484985258ba7ef45c314144fcf0e90924ffbf44/geometry_estimation/moge_2_vitl_normal_fp16.safetensors",
+      "size": 661859924,
+      "sha256": "cb1a692d03235671e959e81360d7b4d9f44aefadb1f852d6ca6aa17799d5e31f",
+      "source": "Hugging Face Comfy-Org/MoGe@1484985258ba",
+      "revision": "1484985258ba7ef45c314144fcf0e90924ffbf44",
+      "gated": false,
+      "filename": "moge_2_vitl_normal_fp16.safetensors",
+      "comfy_folder": "geometry_estimation",
+      "profiles": [
+        "mesh"
+      ]
+    },
+    "birefnet": {
+      "url": "https://huggingface.co/Comfy-Org/BiRefNet/resolve/25511f8787e51912e1480706b4e47b8f467fbf72/background_removal/birefnet.safetensors",
+      "size": 444473596,
+      "sha256": "9ab37426bf4de0567af6b5d21b16151357149139362e6e8992021b8ce356a154",
+      "source": "Hugging Face Comfy-Org/BiRefNet@25511f8787e5",
+      "revision": "25511f8787e51912e1480706b4e47b8f467fbf72",
+      "gated": false,
+      "filename": "birefnet.safetensors",
+      "comfy_folder": "background_removal",
+      "profiles": [
+        "image_edit",
+        "mesh"
+      ]
+    },
+    "seedvr2_3b_int8_convrot": {
+      "url": "https://huggingface.co/Comfy-Org/SeedVR2/resolve/df48879708206a403d2a61acd55578c2e80fd233/diffusion_models/seedvr2_3b_int8_convrot.safetensors",
+      "size": 3458259704,
+      "sha256": "c3dec8bcc5916843a8a858572970597462e1f2dc598d6dfd818f6cd40f53a157",
+      "source": "Hugging Face Comfy-Org/SeedVR2@df4887970820",
+      "revision": "df48879708206a403d2a61acd55578c2e80fd233",
+      "gated": false,
+      "filename": "seedvr2_3b_int8_convrot.safetensors",
+      "comfy_folder": "diffusion_models",
+      "profiles": [
+        "upscale"
+      ]
+    },
+    "seedvr2_ema_vae_fp16": {
+      "url": "https://huggingface.co/Comfy-Org/SeedVR2/resolve/df48879708206a403d2a61acd55578c2e80fd233/vae/seedvr2_ema_vae_fp16.safetensors",
+      "size": 501324814,
+      "sha256": "20678548f420d98d26f11442d3528f8b8c94e57ee046ef93dbb7633da8612ca1",
+      "source": "Hugging Face Comfy-Org/SeedVR2@df4887970820",
+      "revision": "df48879708206a403d2a61acd55578c2e80fd233",
+      "gated": false,
+      "filename": "seedvr2_ema_vae_fp16.safetensors",
+      "comfy_folder": "vae",
+      "profiles": [
+        "upscale"
+      ]
+    },
+    "realesrgan_x4plus": {
+      "url": "https://huggingface.co/Comfy-Org/Real-ESRGAN_repackaged/resolve/5fd49b7b278836f48af63ecd314d0f98ab336105/RealESRGAN_x4plus.safetensors",
+      "size": 66857836,
+      "sha256": "37f9a931c215f040aa6d50f711f2cb115f713c46df1d0d6469a8bd7bfe9a60bb",
+      "source": "Hugging Face Comfy-Org/Real-ESRGAN_repackaged@5fd49b7b2788",
+      "revision": "5fd49b7b278836f48af63ecd314d0f98ab336105",
+      "gated": false,
+      "filename": "RealESRGAN_x4plus.safetensors",
+      "comfy_folder": "upscale_models",
+      "profiles": [
+        "upscale"
+      ]
+    },
+    "minimax_h3_fl2va_pruned_int8": {
+      "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/e5eb578a89295337b8ff433a035929ce0279e0b6/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "size": 20970379616,
+      "sha256": "e889202c41dafb67b10d67b97f0d8541508036a6090af23425a5c2615d03c47a",
+      "source": "Hugging Face Comfy-Org/MiniMax-H3@e5eb578a8929",
+      "revision": "e5eb578a89295337b8ff433a035929ce0279e0b6",
+      "gated": false,
+      "filename": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "comfy_folder": "diffusion_models",
+      "profiles": [
+        "video"
+      ]
+    },
+    "minimax_h3_ref2va_pruned_int8": {
+      "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/e5eb578a89295337b8ff433a035929ce0279e0b6/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+      "size": 20970379616,
+      "sha256": "9255f52b6677845ad238f20dfaafa94727053694127ab7f255c048f0f9365779",
+      "source": "Hugging Face Comfy-Org/MiniMax-H3@e5eb578a8929",
+      "revision": "e5eb578a89295337b8ff433a035929ce0279e0b6",
+      "gated": false,
+      "filename": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+      "comfy_folder": "diffusion_models",
+      "profiles": [
+        "video_ref"
+      ]
+    },
+    "qwen3vl_32b_minimax_h3_int8": {
+      "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/e5eb578a89295337b8ff433a035929ce0279e0b6/text_encoders/qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+      "size": 27141342152,
+      "sha256": "bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923",
+      "source": "Hugging Face Comfy-Org/MiniMax-H3@e5eb578a8929",
+      "revision": "e5eb578a89295337b8ff433a035929ce0279e0b6",
+      "gated": false,
+      "filename": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+      "comfy_folder": "text_encoders",
+      "profiles": [
+        "video",
+        "video_ref"
+      ]
+    },
+    "minimax_h3_video_vae_fp16": {
+      "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/e5eb578a89295337b8ff433a035929ce0279e0b6/vae/minimax_h3_video_vae_fp16.safetensors",
+      "size": 5207808496,
+      "sha256": "7c1f131492e7eddacaac9069a61b81bdd39de5cc96561e677c5eab1cdce5e522",
+      "source": "Hugging Face Comfy-Org/MiniMax-H3@e5eb578a8929",
+      "revision": "e5eb578a89295337b8ff433a035929ce0279e0b6",
+      "gated": false,
+      "filename": "minimax_h3_video_vae_fp16.safetensors",
+      "comfy_folder": "vae",
+      "profiles": [
+        "video",
+        "video_ref"
+      ]
+    },
+    "minimax_h3_audio_vae_fp32": {
+      "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/e5eb578a89295337b8ff433a035929ce0279e0b6/vae/minimax_h3_audio_vae_fp32.safetensors",
+      "size": 605254808,
+      "sha256": "8e505d95dd1561d47abd43d4238fd40d9bb1ae9e147ed0a4cba778d76ae4db48",
+      "source": "Hugging Face Comfy-Org/MiniMax-H3@e5eb578a8929",
+      "revision": "e5eb578a89295337b8ff433a035929ce0279e0b6",
+      "gated": false,
+      "filename": "minimax_h3_audio_vae_fp32.safetensors",
+      "comfy_folder": "vae",
+      "profiles": [
+        "video",
+        "video_ref"
+      ]
+    },
+    "minimax_h3_turbo_4step_ckpt500": {
+      "url": "https://huggingface.co/drbaph/MiniMax-H3-Turbo-Lora-ComfyUI/resolve/bb2bc497cbaca89dadd0bcf1856eed4f8275be20/minimax_h3_turbo_4step_ckpt500_pruned_comfyui.safetensors",
+      "size": 620285648,
+      "sha256": "7f92761a2e3c8ce9c61177eb3e8836f2bbcb937a6c1615389355cf6dd5dc960d",
+      "source": "Hugging Face drbaph/MiniMax-H3-Turbo-Lora-ComfyUI@bb2bc497cbac",
+      "revision": "bb2bc497cbaca89dadd0bcf1856eed4f8275be20",
+      "gated": false,
+      "filename": "minimax_h3_turbo_4step_ckpt500_pruned_comfyui.safetensors",
+      "comfy_folder": "loras",
+      "profiles": [
+        "video",
+        "video_ref"
+      ]
+    }
+  }
+}

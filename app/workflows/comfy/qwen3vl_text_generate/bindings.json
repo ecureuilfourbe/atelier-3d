@@ -1,0 +1,58 @@
+{
+  "id": "qwen3vl_text_generate",
+  "label": "Qwen3-VL 4B — génération de texte locale (template officiel Comfy)",
+  "capability": "text.generate",
+  "engine": {
+    "name": "Qwen3-VL 4B (fp8)",
+    "runtime": "ComfyUI dédié (TextGenerate natif)",
+    "model": "qwen3vl_4b_fp8_scaled.safetensors",
+    "license": "Apache-2.0 (Qwen3-VL)"
+  },
+  "provenance": {
+    "source": "comfyui_workflow_templates_json/templates/llm_qwen3vl_text_gen.json (ComfyUI v0.38.0)",
+    "conversion": "node LoadImage de l'exemple retirée dans le frontend officiel 1.53.6 (texte seul), puis app.graphToPrompt()",
+    "note": "même fichier de poids que l'encodeur de Krea 2 : aucun téléchargement supplémentaire"
+  },
+  "inputs": {
+    "prompt": {
+      "node": "6",
+      "input": "prompt",
+      "type": "STRING"
+    },
+    "max_length": {
+      "node": "6",
+      "input": "max_length",
+      "type": "INT"
+    },
+    "temperature": {
+      "node": "6",
+      "input": "sampling_mode.temperature",
+      "type": "FLOAT"
+    },
+    "seed": {
+      "node": "6",
+      "input": "sampling_mode.seed",
+      "type": "INT"
+    }
+  },
+  "outputs": {
+    "text": {
+      "node": "7",
+      "kind": "text"
+    }
+  },
+  "required_models": [
+    {
+      "folder": "text_encoders",
+      "name": "qwen3vl_4b_fp8_scaled.safetensors"
+    }
+  ],
+  "required_classes": [
+    "CLIPLoader",
+    "TextGenerate",
+    "PreviewAny"
+  ],
+  "limits": {
+    "note": "Modèle 4B : bonnes reformulations, culture générale limitée ; le texte produit est toujours affiché et modifiable en aval."
+  }
+}

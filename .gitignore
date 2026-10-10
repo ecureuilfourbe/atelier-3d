@@ -1,0 +1,16 @@
+# Dépendances et fichiers régénérables
+app/frontend/node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.vite/
+logs/
+*.log
+*.part
+
+# Propre à la machine de développement (non partagé)
+install-location.json
+QUESTIONS_SESSION.md
+TEST_REPORT.md
+
+# Le frontend compilé (app/frontend/dist) est versionné : un clone s'installe sans Node.js.

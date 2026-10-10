@@ -1,0 +1,285 @@
+{
+  "id": "6fcb8b56-8232-4290-9b42-676373092edf",
+  "revision": 0,
+  "last_node_id": 14,
+  "last_link_id": 18,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "ImageUpscaleWithModel",
+      "pos": [
+        1110,
+        450
+      ],
+      "size": [
+        320,
+        46
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "modèle_d'agrandissement",
+          "name": "upscale_model",
+          "type": "UPSCALE_MODEL",
+          "link": 1
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageUpscaleWithModel",
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0"
+      }
+    },
+    {
+      "id": 1,
+      "type": "UpscaleModelLoader",
+      "pos": [
+        730,
+        620
+      ],
+      "size": [
+        288.1744140625,
+        60
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "nom_du_modèle",
+          "name": "model_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "model_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODÈLE_DE_MISE_À_L'ÉCHELLE",
+          "name": "UPSCALE_MODEL",
+          "type": "UPSCALE_MODEL",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UpscaleModelLoader",
+        "cnr_id": "comfy-core",
+        "ver": "0.10.0",
+        "models": [
+          {
+            "name": "RealESRGAN_x4plus.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/Real-ESRGAN_repackaged/resolve/main/RealESRGAN_x4plus.safetensors",
+            "directory": "upscale_models"
+          }
+        ]
+      },
+      "widgets_values": [
+        "RealESRGAN_x4plus.safetensors"
+      ],
+      "widgets_values_named": {
+        "model_name": "RealESRGAN_x4plus.safetensors"
+      }
+    },
+    {
+      "id": 7,
+      "type": "MarkdownNote",
+      "pos": [
+        310,
+        330
+      ],
+      "size": [
+        380,
+        510
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "# GAN Upscaler Workflow\n\nA fast approach for upscaling videos using GAN models. It can't create new detail like diffusion can, but it's much faster.\n\n- **Model determines output size** — 2x models upscale 2x, 4x models upscale 4x\n- **Tip:** Upscale 4x first, then use a resize node to bring it down to your target resolution\n\n## Model Links\n\n- [Hugging Face:Comfy-Org/Real-ESRGAN_repackaged](https://huggingface.co/Comfy-Org/Real-ESRGAN_repackaged)\n- [ModelScope:Comfy-Org/Real-ESRGAN_repackaged](https://modelscope.cn/models/Comfy-Org/Real-ESRGAN_repackaged)\n\n**upscale_models**\n\n- [RealESRGAN_x4plus.safetensors](https://huggingface.co/Comfy-Org/Real-ESRGAN_repackaged/resolve/main/RealESRGAN_x4plus.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 upscale_models/\n│   │   ├── RealESRGAN_x4plus.safetensors\n```\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud will be updated after the stable release; nightly-supported models may not be included yet, please wait for the next stable release.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/Comfy-Org/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n\n\n"
+      ],
+      "widgets_values_named": {
+        "text": "# GAN Upscaler Workflow\n\nA fast approach for upscaling videos using GAN models. It can't create new detail like diffusion can, but it's much faster.\n\n- **Model determines output size** — 2x models upscale 2x, 4x models upscale 4x\n- **Tip:** Upscale 4x first, then use a resize node to bring it down to your target resolution\n\n## Model Links\n\n- [Hugging Face:Comfy-Org/Real-ESRGAN_repackaged](https://huggingface.co/Comfy-Org/Real-ESRGAN_repackaged)\n- [ModelScope:Comfy-Org/Real-ESRGAN_repackaged](https://modelscope.cn/models/Comfy-Org/Real-ESRGAN_repackaged)\n\n**upscale_models**\n\n- [RealESRGAN_x4plus.safetensors](https://huggingface.co/Comfy-Org/Real-ESRGAN_repackaged/resolve/main/RealESRGAN_x4plus.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 upscale_models/\n│   │   ├── RealESRGAN_x4plus.safetensors\n```\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud will be updated after the stable release; nightly-supported models may not be included yet, please wait for the next stable release.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/Comfy-Org/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n\n\n"
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 13,
+      "type": "LoadImage",
+      "pos": [
+        690,
+        570
+      ],
+      "size": [
+        353.85546875,
+        102
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "choisissez le fichier à télécharger",
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            17
+          ]
+        },
+        {
+          "localized_name": "MASQUE",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        null,
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": null,
+        "upload": "image"
+      }
+    },
+    {
+      "id": 14,
+      "type": "SaveImage",
+      "pos": [
+        1430,
+        450
+      ],
+      "size": [
+        314.48046875,
+        58
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 18
+        },
+        {
+          "localized_name": "préfixe_du_nom_de_fichier",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "atelier3d/upscale"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "atelier3d/upscale"
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "UPSCALE_MODEL"
+    ],
+    [
+      17,
+      13,
+      0,
+      2,
+      1,
+      "IMAGE"
+    ],
+    [
+      18,
+      2,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9,
+      "offset": [
+        416,
+        110
+      ]
+    },
+    "frontendVersion": "1.37.11",
+    "workflowRendererVersion": "LG",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

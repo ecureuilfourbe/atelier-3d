@@ -1,0 +1,38 @@
+{
+  "id": "krea2_identity_edit",
+  "label": "Krea 2 Identity Edit v1.2 — édition image + instruction (comfyui-krea2edit)",
+  "capability": "image.edit",
+  "engine": {"name": "Krea 2 Turbo + LoRA Krea 2 Identity Edit v1.2", "runtime": "ComfyUI dédié + nodes comfyui-krea2edit 86f886da",
+             "model": "krea2_turbo_fp8_scaled.safetensors + Krea2/krea2_identity_edit_v1_2.safetensors"},
+  "provenance": {
+    "source": "github.com/lbouaraba/comfyui-krea2edit@86f886dac23013d88996e3a2e99093ba44d322fb workflows/krea2_identity_edit.json",
+    "conversion": "app.graphToPrompt() du frontend officiel ComfyUI 1.53.6 ; groupe optionnel « deux images » laissé désactivé (mode du workflow d'origine)",
+    "preset": "Turbo, 10 steps, CFG 1, euler/simple, ref_boost 4, fit, grounding_px 768 (valeurs du workflow d'origine)",
+    "conditioning": "double conditionnement réel : Krea2EditModelPatch (latents de référence + target_latent câblé) et Krea2EditGroundedEncode (Qwen3-VL avec l'image)"
+  },
+  "inputs": {
+    "prompt": {"node": "84", "input": "prompt", "type": "STRING", "description": "Instruction d'édition"},
+    "image": {"node": "72", "input": "image", "type": "IMAGE_UPLOAD", "description": "Image source (référence)"},
+    "seed": {"node": "53", "input": "seed", "type": "INT"},
+    "steps": {"node": "53", "input": "steps", "type": "INT"},
+    "ref_boost": {"node": "79", "input": "ref_boost", "type": "FLOAT"},
+    "grounding_px": [{"node": "84", "input": "grounding_px", "type": "INT"}, {"node": "85", "input": "grounding_px", "type": "INT"}],
+    "width": {"node": "82", "input": "width", "type": "INT", "replaces_link": true},
+    "height": {"node": "82", "input": "height", "type": "INT", "replaces_link": true},
+    "filename_prefix": {"node": "29", "input": "filename_prefix", "type": "STRING"}
+  },
+  "flatten_alpha_inputs": {"image": "#FFFFFF"},
+  "outputs": {"image": {"node": "29", "kind": "images"}},
+  "required_models": [
+    {"folder": "diffusion_models", "name": "krea2_turbo_fp8_scaled.safetensors"},
+    {"folder": "text_encoders", "name": "qwen3vl_4b_fp8_scaled.safetensors"},
+    {"folder": "vae", "name": "qwen_image_vae.safetensors"},
+    {"folder": "loras/Krea2", "name": "krea2_identity_edit_v1_2.safetensors"}
+  ],
+  "required_classes": ["SaveImage", "KSampler", "VAEDecode", "UNETLoader", "CLIPLoader", "VAELoader", "LoraLoaderModelOnly", "LoadImage",
+                       "VAEEncode", "Krea2EditModelPatch", "EmptySD3LatentImage", "ResolutionSelector", "Krea2EditGroundedEncode"],
+  "limits": {"accepts_image": true, "max_references": 1,
+             "note": "Profil à une référence. Le mode deux références (scène puis sujet, ordre fixe) existe dans le workflow d'origine mais n'est pas exposé en V1. Fidélité « proportion-conservative » : l'identité n'est pas garantie ; les suppressions sont peu fiables avec Turbo.",
+             "alpha": "LoadImage n'exploite pas l'alpha : une source RGBA est composée sur fond blanc avant envoi (sinon l'ancien fond réapparaît).",
+             "max_megapixels": 2.0}
+}

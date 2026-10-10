@@ -1,0 +1,337 @@
+{
+  "8": {
+    "inputs": {
+      "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "MiniMax H3 FL2VA MODEL — T2V + I2V"
+    }
+  },
+  "10": {
+    "inputs": {
+      "unet_name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "MiniMax H3 REF2VA MODEL — REFERENCE VIDEO"
+    }
+  },
+  "12": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "MiniMax H3 QWEN3-VL TEXT ENCODER"
+    }
+  },
+  "14": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "MiniMax H3 VIDEO VAE"
+    }
+  },
+  "16": {
+    "inputs": {
+      "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "MiniMax H3 AUDIO VAE"
+    }
+  },
+  "2089": {
+    "inputs": {
+      "scheduler": "beta",
+      "steps": 8,
+      "denoise": 1,
+      "model": [
+        "2092:2074",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler",
+    "_meta": {
+      "title": "PlanificateurBasique"
+    }
+  },
+  "2090": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "KSamplerSelect",
+    "_meta": {
+      "title": "KSamplerSelect"
+    }
+  },
+  "2095": {
+    "inputs": {
+      "PowerLoraLoaderHeaderWidget": {
+        "type": "PowerLoraLoaderHeaderWidget"
+      },
+      "lora_1": {
+        "on": true,
+        "lora": "minimax_h3_turbo_4step_ckpt500_comfyui_pruned.safetensors",
+        "strength": 1
+      },
+      "➕ Add Lora": "",
+      "model": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "Power Lora Loader (rgthree)",
+    "_meta": {
+      "title": "Power Lora Loader (rgthree)"
+    }
+  },
+  "2097": {
+    "inputs": {
+      "value": 5
+    },
+    "class_type": "PrimitiveFloat",
+    "_meta": {
+      "title": "Video Duration (in seconds)"
+    }
+  },
+  "2098": {
+    "inputs": {
+      "noise_seed": 42069
+    },
+    "class_type": "RandomNoise",
+    "_meta": {
+      "title": "SEED"
+    }
+  },
+  "2099": {
+    "inputs": {
+      "image": "Krea2_00558_.png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "REFERENCE IMAGE 0"
+    }
+  },
+  "2102": {
+    "inputs": {
+      "aspect_ratio": "16:9 (Widescreen)",
+      "megapixels": 0.9,
+      "multiple": 32
+    },
+    "class_type": "ResolutionSelector",
+    "_meta": {
+      "title": "Sélecteur de résolution"
+    }
+  },
+  "2110": {
+    "inputs": {
+      "frame_rate": 24,
+      "loop_count": 0,
+      "filename_prefix": "MiMx-REF",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": true,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "2125:2113",
+        0
+      ],
+      "audio": [
+        "2125:2115",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "2112": {
+    "inputs": {
+      "prompt": [
+        "2124",
+        0
+      ],
+      "width": [
+        "2125:2118",
+        0
+      ],
+      "height": [
+        "2125:2119",
+        0
+      ],
+      "length": [
+        "2125:2117",
+        1
+      ],
+      "ref_image_size": "match",
+      "clip": [
+        "12",
+        0
+      ],
+      "vae": [
+        "14",
+        0
+      ],
+      "audio_vae": [
+        "16",
+        0
+      ],
+      "ref_images.ref_image_0": [
+        "2099",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ReferenceToVideo",
+    "_meta": {
+      "title": "MiniMax H3 Reference to Video"
+    }
+  },
+  "2124": {
+    "inputs": {
+      "value": ""
+    },
+    "class_type": "PrimitiveStringMultiline",
+    "_meta": {
+      "title": "PROMPT"
+    }
+  },
+  "2092:2074": {
+    "inputs": {
+      "shift_video": 12.191111450195313,
+      "shift_audio": 3,
+      "model": [
+        "2095",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3SigmaShift",
+    "_meta": {
+      "title": "MiniMax H3 Sigma Shift"
+    }
+  },
+  "2125:2113": {
+    "inputs": {
+      "samples": [
+        "2125:2114",
+        0
+      ],
+      "vae": [
+        "14",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "2125:2114": {
+    "inputs": {
+      "noise": [
+        "2098",
+        0
+      ],
+      "guider": [
+        "2125:2116",
+        0
+      ],
+      "sampler": [
+        "2090",
+        0
+      ],
+      "sigmas": [
+        "2089",
+        0
+      ],
+      "latent_image": [
+        "2112",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced",
+    "_meta": {
+      "title": "ÉchantillonneurPersonnaliséAvancé"
+    }
+  },
+  "2125:2115": {
+    "inputs": {
+      "samples": [
+        "2125:2114",
+        0
+      ],
+      "vae": [
+        "16",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeAudio",
+    "_meta": {
+      "title": "VAEDecodeAudio"
+    }
+  },
+  "2125:2117": {
+    "inputs": {
+      "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17",
+      "values.a": [
+        "2097",
+        0
+      ]
+    },
+    "class_type": "ComfyMathExpression",
+    "_meta": {
+      "title": "H3 VALID FRAME LENGTH"
+    }
+  },
+  "2125:2118": {
+    "inputs": {
+      "any_02": [
+        "2102",
+        0
+      ]
+    },
+    "class_type": "Any Switch (rgthree)",
+    "_meta": {
+      "title": "WIDTH"
+    }
+  },
+  "2125:2119": {
+    "inputs": {
+      "any_02": [
+        "2102",
+        1
+      ]
+    },
+    "class_type": "Any Switch (rgthree)",
+    "_meta": {
+      "title": "HEIGHT"
+    }
+  },
+  "2125:2116": {
+    "inputs": {
+      "model": [
+        "2092:2074",
+        0
+      ],
+      "conditioning": [
+        "2112",
+        0
+      ]
+    },
+    "class_type": "BasicGuider",
+    "_meta": {
+      "title": "GuideBasique"
+    }
+  }
+}

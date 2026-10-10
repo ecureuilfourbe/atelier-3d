@@ -1,0 +1,55 @@
+{
+  "id": "realesrgan_upscale_image",
+  "label": "Real-ESRGAN x4plus — upscale rapide (nodes du template officiel « GAN Upscaler »)",
+  "capability": "image.upscale",
+  "engine": {
+    "name": "Real-ESRGAN x4plus",
+    "runtime": "ComfyUI dédié (ImageUpscaleWithModel natif)",
+    "model": "RealESRGAN_x4plus.safetensors",
+    "license": "BSD-3-Clause"
+  },
+  "provenance": {
+    "source": "comfyui_workflow_templates_json/templates/utility-gan_upscaler.json (ComfyUI v0.38.0, prévu pour la vidéo)",
+    "conversion": "dans le frontend officiel 1.53.6 : nodes UpscaleModelLoader + ImageUpscaleWithModel du template conservées telles quelles, LoadVideo/GetVideoComponents/CreateVideo/SaveVideo remplacées par LoadImage/SaveImage, puis app.graphToPrompt()",
+    "postprocess": "conformément à la note du template (« upscale 4x first, then resize »), Atelier 3D réduit ensuite à la taille cible (Pillow, lanczos) et réapplique le canal alpha"
+  },
+  "inputs": {
+    "image": {
+      "node": "13",
+      "input": "image",
+      "type": "IMAGE_UPLOAD",
+      "adds_input": true,
+      "description": "LoadImage exporté sans fichier par défaut : l'entrée est ajoutée à l'instanciation"
+    },
+    "filename_prefix": {
+      "node": "14",
+      "input": "filename_prefix",
+      "type": "STRING"
+    }
+  },
+  "outputs": {
+    "image": {
+      "node": "14",
+      "kind": "images"
+    }
+  },
+  "flatten_alpha_inputs": {
+    "image": "#808080"
+  },
+  "required_models": [
+    {
+      "folder": "upscale_models",
+      "name": "RealESRGAN_x4plus.safetensors"
+    }
+  ],
+  "required_classes": [
+    "LoadImage",
+    "SaveImage",
+    "UpscaleModelLoader",
+    "ImageUpscaleWithModel"
+  ],
+  "limits": {
+    "scale": 4,
+    "note": "GAN : rapide, n'invente pas de détails (rendu plus lisse que SeedVR2)."
+  }
+}
