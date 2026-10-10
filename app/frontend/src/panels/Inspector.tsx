@@ -76,7 +76,9 @@ function Params({ node }: { node: GNode }) {
     if (["image.import", "mesh.import", "video.import"].includes(node.type) && k === "upload_id") return false;
     return true;
   };
-  const field = (k: string, s: any) => s["x-openai-models"] || s["x-openai-text-models"]
+  const field = (k: string, s: any) => s["x-claude-models"]
+    ? <ClaudeModelField key={k} value={node.params?.[k] || ""} onChange={(v) => set(k, v)} />
+    : s["x-openai-models"] || s["x-openai-text-models"]
     ? <OpenAIModelField key={k} value={node.params?.[k] || ""} onChange={(v) => set(k, v)}
         purpose={s["x-openai-text-models"] ? "text" : node.type === "image.generate" ? "generate" : "edit"} />
     : <Field key={k} name={k} schema={s} value={node.params?.[k]} onChange={(v) => set(k, v)} />;
@@ -94,6 +96,13 @@ function Params({ node }: { node: GNode }) {
       {node.type === "text.randomize" && engine === "openai" && (
         <p className="warn">Écriture par OpenAI : le contexte est envoyé à OpenAI (service externe, facturé sur votre compte). Clé : ⚙ Réglages.</p>
       )}
+      {node.type === "text.randomize" && engine === "claude" && (
+        <p className="warn">Écriture par Claude : le contexte est envoyé à Anthropic (service externe, facturé sur votre compte). Clé : ⚙ Réglages.</p>
+      )}
+      {node.type === "image.props" && engine === "claude" && (
+        <p className="warn">Analyse par Claude : l'image est envoyée à Anthropic (service externe, facturé sur votre compte). Clé : ⚙ Réglages.
+          Les images extraites restent produites par Krea 2 sur ce PC.</p>
+      )}
       {node.type === "image.prepare" && engine === "openai" && ["a_pose", "t_pose"].includes(val("pose")) && (
         <p className="warn">Pose par OpenAI : l'image est envoyée à OpenAI (service externe, facturé sur votre compte). Clé : ⚙ Réglages.</p>
       )}
@@ -105,6 +114,19 @@ function Params({ node }: { node: GNode }) {
         </details>
       )}
     </div>
+  );
+}
+
+function ClaudeModelField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const a = useStore((s) => s.settings?.anthropic) || {};
+  const models: string[] = a.models || [];
+  return (
+    <label className="field"><span>Modèle Claude</span>
+      <select value={value} onChange={(e) => onChange(e.target.value)}>
+        <option value="">par défaut des Réglages{a.model ? ` (${a.model})` : ""}</option>
+        {models.map((m) => <option key={m} value={m}>{m}</option>)}
+        {value && !models.includes(value) && <option value={value}>{value}</option>}
+      </select></label>
   );
 }
 

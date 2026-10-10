@@ -219,6 +219,10 @@ class Worker:
 
             o = load_services(self.cfg.config_dir)["openai"]  # modèles par défaut des Réglages : font partie du moteur
             fp["openai"] = {k: o.get(k) for k in ("model_generate", "model_edit", "model_text", "quality", "moderation")}
+        if payload.get("capability") in ("vision.claude", "text.claude"):
+            from .secrets_store import load_services
+
+            fp["anthropic"] = {"model": load_services(self.cfg.config_dir)["anthropic"].get("model")}
         if payload.get("capability") == "video.minimax":
             fp["video"] = {k: self.cfg.get(f"video.{k}") for k in ("comfy_dir", "version", "models")}
         return fp

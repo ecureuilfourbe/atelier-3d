@@ -28,7 +28,8 @@ function Engines() {
   const c = caps.capabilities || {};
   const keys: [string, string][] = [["image.create", "Krea 2"], ["image.edit", "Édition"], ["image.remove_background", "Détourage"],
     ["mesh.generate", "Pixal3D"], ["rig.mia", "Rigging MIA"], ["blender", "Blender"], ["video.minimax", "MiniMax H3"],
-    ...(c["image.openai"]?.status && c["image.openai"].status !== "indisponible" ? [["image.openai", "☁ OpenAI"] as [string, string]] : [])];
+    ...(c["image.openai"]?.status && c["image.openai"].status !== "indisponible" ? [["image.openai", "☁ OpenAI"] as [string, string]] : []),
+    ...(c["text.claude"]?.status && c["text.claude"].status !== "indisponible" ? [["text.claude", "☁ Claude"] as [string, string]] : [])];
   return (
     <div className="engines">
       {keys.map(([k, l]) => (

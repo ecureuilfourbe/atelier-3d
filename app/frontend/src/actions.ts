@@ -4,10 +4,10 @@ import { getState, setState, toast } from "./store";
 
 export function errText(e: any) { return e instanceof ApiError ? e.message : String(e?.message || e); }
 
-/** Toast d'erreur ; si la cause est la clé OpenAI absente/refusée, propose d'ouvrir directement les Réglages. */
+/** Toast d'erreur ; si la cause est une clé OpenAI / Claude absente ou refusée, propose d'ouvrir directement les Réglages. */
 export function errToast(e: any, prefix = "") {
   const text = prefix + errText(e);
-  toast(text, "error", /Réglages → OpenAI|openai_(key_missing|auth)/.test(text + JSON.stringify((e as any)?.payload || ""))
+  toast(text, "error", /Réglages → (OpenAI|Claude)|(openai|anthropic)_(key_missing|auth)/.test(text + JSON.stringify((e as any)?.payload || ""))
     ? { label: "⚙ Réglages", run: () => setState({ settingsOpen: true }) } : undefined);
 }
 

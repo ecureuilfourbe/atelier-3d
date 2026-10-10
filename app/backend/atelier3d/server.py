@@ -1030,12 +1030,38 @@ def _openai_test(key: str) -> dict:
     return o["last_test"]
 
 
+def _anthropic_test(key: str) -> dict:
+    from .adapters import anthropic_api as A
+    from .adapters.base import StepFailure
+    from .secrets_store import load_services, save_services
+
+    svc = load_services(CFG.config_dir)
+    a = svc["anthropic"]
+    try:
+        models = A.list_models(key)
+    except StepFailure as e:
+        a["last_test"] = {"ok": False, "at": now(), "message": str(e)}
+        save_services(CFG.config_dir, svc)
+        return a["last_test"]
+    except Exception as e:  # noqa: BLE001 — réseau, proxy…
+        a["last_test"] = {"ok": False, "at": now(), "message": f"Anthropic injoignable : {type(e).__name__}"}
+        save_services(CFG.config_dir, svc)
+        return a["last_test"]
+    a["models"] = models
+    if not a.get("model") or a["model"] not in models:
+        a["model"] = A.pick_default(models)
+    msg = f"Clé valide : {len(models)} modèle(s) Claude disponible(s)" if models else "Clé valide, mais aucun modèle n'est listé pour ce compte"
+    a["last_test"] = {"ok": bool(models), "at": now(), "message": msg}
+    save_services(CFG.config_dir, svc)
+    return a["last_test"]
+
+
 @app.get("/api/v1/settings")
 def get_settings(request: Request):
-    from .secrets_store import openai_view
+    from .secrets_store import anthropic_view, openai_view
 
     conf = _remote_conf()
-    return {"openai": openai_view(CFG.config_dir),
+    return {"openai": openai_view(CFG.config_dir), "anthropic": anthropic_view(CFG.config_dir),
             "client": {"remote": is_remote(request), "ip": request.client.host if request.client else None},
             "remote": {"enabled": conf["enabled"], "networks": conf["networks"]}}
 
@@ -1174,6 +1200,55 @@ def delete_openai_key(request: Request):
     emit(DB, "settings_changed", setting="openai_api_key_deleted", author=author_of(request))
     capabilities.compute(CFG, DB, refresh=True)
     return {"openai": openai_view(CFG.config_dir)}
+
+
+@app.put("/api/v1/settings/anthropic")
+def put_anthropic_settings(request: Request, body: dict = Body(...)):
+    """Enregistre la clé Claude (si fournie, puis la teste) et/ou le modèle par défaut."""
+    from .secrets_store import ANTHROPIC_KEY, SecretStore, anthropic_view, load_services, save_services
+
+    svc = load_services(CFG.config_dir)
+    if "model" in body:
+        v = str(body["model"] or "")
+        if v and not v.startswith("claude-"):
+            raise HTTPException(422, "model : modèle Claude attendu (claude-…)")
+        svc["anthropic"]["model"] = v
+        save_services(CFG.config_dir, svc)
+    test = None
+    if body.get("api_key") is not None:
+        key = str(body["api_key"]).strip()
+        if not key or any(c.isspace() for c in key) or len(key) < 20:
+            raise HTTPException(422, "Clé d'API invalide (vide, trop courte ou contenant des espaces)")
+        SecretStore(CFG.config_dir).set(ANTHROPIC_KEY, key)
+        emit(DB, "settings_changed", setting="anthropic_api_key", author=author_of(request))  # sans la valeur
+        test = _anthropic_test(key)
+    capabilities.compute(CFG, DB, refresh=True)
+    return {"anthropic": anthropic_view(CFG.config_dir), "test": test}
+
+
+@app.post("/api/v1/settings/anthropic/test")
+def test_anthropic_settings():
+    from .secrets_store import ANTHROPIC_KEY, SecretStore, anthropic_view
+
+    key = SecretStore(CFG.config_dir).get(ANTHROPIC_KEY)
+    if not key:
+        raise HTTPException(409, "Aucune clé Claude enregistrée")
+    test = _anthropic_test(key)
+    capabilities.compute(CFG, DB, refresh=True)
+    return {"anthropic": anthropic_view(CFG.config_dir), "test": test}
+
+
+@app.delete("/api/v1/settings/anthropic/key")
+def delete_anthropic_key(request: Request):
+    from .secrets_store import ANTHROPIC_KEY, SecretStore, anthropic_view, load_services, save_services
+
+    SecretStore(CFG.config_dir).delete(ANTHROPIC_KEY)
+    svc = load_services(CFG.config_dir)
+    svc["anthropic"]["last_test"], svc["anthropic"]["models"] = None, []
+    save_services(CFG.config_dir, svc)
+    emit(DB, "settings_changed", setting="anthropic_api_key_deleted", author=author_of(request))
+    capabilities.compute(CFG, DB, refresh=True)
+    return {"anthropic": anthropic_view(CFG.config_dir)}
 
 
 @app.get("/api/v1/system")

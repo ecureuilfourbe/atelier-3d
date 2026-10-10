@@ -546,8 +546,12 @@ def _validate_business(doc, n, err, warn, capabilities, aliases):
             err("missing_input", f"{nid} : « Extraction de props » exige une image", node_id=nid)
         if p.get("engine", "openai") == "openai":
             warn("external_service", f"{nid} : analyse par OpenAI — l'image est envoyée à OpenAI (service externe, facturé).", node_id=nid)
+        elif p.get("engine") == "claude":
+            warn("external_service", f"{nid} : analyse par Claude — l'image est envoyée à Anthropic (service externe, facturé).", node_id=nid)
     elif t == "text.randomize" and p.get("engine") == "openai":
         warn("external_service", f"{nid} : écriture par OpenAI — le contexte est envoyé à OpenAI (service externe, facturé).", node_id=nid)
+    elif t == "text.randomize" and p.get("engine") == "claude":
+        warn("external_service", f"{nid} : écriture par Claude — le contexte est envoyé à Anthropic (service externe, facturé).", node_id=nid)
     elif t == "video.generate":
         mode = p.get("mode")
         refs, first, last = has("references"), has("image"), has("last_image")

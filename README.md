@@ -210,6 +210,17 @@ réglées sur OpenAI ; tout le reste reste local. Les appels sont facturés sur 
 PC pour votre compte Windows (DPAPI), n'est jamais réaffichée (seuls ses 4 derniers caractères), ni écrite dans les
 journaux ; **Supprimer la clé** l'efface. Sans clé, « Exécuter » est refusé avec un bouton **⚙ Réglages**.
 
+**Claude (Anthropic), facultatif.** Pour le texte et l'analyse d'image seulement (Claude ne génère pas d'images) :
+**Prompts aléatoires** (écriture des prompts) et **Extraction de props** (analyse de l'image ; les images extraites restent
+produites par Krea 2 sur ce PC).
+1. **⚙ Réglages** → section **Claude — Anthropic** → collez votre clé d'API (`sk-ant-…`, champ masqué ; créée sur
+   console.anthropic.com) → **Enregistrer et tester**. Le test lit les modèles Claude accessibles à votre compte et propose
+   le Sonnet le plus récent par défaut (modifiable).
+2. Dans l'inspecteur de la node, réglez **Moteur** / **Analyse par** sur *Claude / Anthropic* (pastille « ☁ Claude ») ; le
+   modèle est réglable par node.
+Mêmes garanties que pour OpenAI : contexte et image envoyés à Anthropic seulement pour ces nodes, facturés sur votre compte ;
+clé chiffrée (DPAPI), jamais réaffichée ni journalisée ; file réseau séparée du GPU.
+
 **Vidéo.** Node **« Générer vidéo · MiniMax H3 Ultra »** : votre ComfyUI MiniMax (poids locaux) est rattaché tel quel ;
 s'il n'est pas lancé, Atelier 3D peut le lancer avec son propre Python (processus arrêté par `STOP.bat`). Les travaux
 lancés hors d'Atelier 3D ne sont jamais interrompus. Voir `WORKFLOWS.md`.

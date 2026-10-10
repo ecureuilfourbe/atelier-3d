@@ -152,6 +152,7 @@ function StudioNodeImpl({ data, selected }: NodeProps) {
             <span className="pill">{n.params?.count ?? 5} prompts</span>
             <span className="pill">{n.params?.language === "fr" ? "français" : "anglais"}</span>
             {n.params?.engine === "openai" ? <span className="pill ext" title="Le contexte est envoyé à OpenAI">☁ OpenAI</span>
+              : n.params?.engine === "claude" ? <span className="pill ext" title="Le contexte est envoyé à Anthropic">☁ Claude</span>
               : <span className="pill">Qwen3-VL · local</span>}
           </div>
           {shown?.texts?.length ? (

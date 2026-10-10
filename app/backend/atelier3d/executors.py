@@ -1068,6 +1068,22 @@ def _openai_key_and_text_model(ctx: StepContext) -> tuple[str, str]:
     return key, model
 
 
+def _claude_key_and_model(ctx: StepContext) -> tuple[str, str]:
+    from .adapters import anthropic_api as A
+    from .secrets_store import ANTHROPIC_KEY, SecretStore, load_services
+
+    key = SecretStore(ctx.cfg.config_dir).get(ANTHROPIC_KEY)
+    if not key:
+        raise StepFailure("Clé d'API Claude (Anthropic) non configurée", code="anthropic_key_missing",
+                          corrective="Réglages → Claude : saisissez votre clé, puis « Tester la clé » — ou choisissez un autre moteur")
+    s = load_services(ctx.cfg.config_dir)["anthropic"]
+    model = ctx.params.get("claude_model") or s.get("model") or A.pick_default(s.get("models") or [])
+    if not model:
+        raise StepFailure("Aucun modèle Claude connu pour cette clé", code="anthropic_model",
+                          corrective="Réglages → Claude : « Tester la clé » (la liste des modèles accessibles est lue avec la clé)")
+    return key, model
+
+
 def _vision_input(ctx: StepContext, src: pathlib.Path) -> pathlib.Path:
     """Image envoyée à l'analyse : alpha composé sur gris clair, côté le plus long ≤ 1536 px (coût en jetons maîtrisé)."""
     with Image.open(src) as im:
@@ -1118,6 +1134,24 @@ def exec_props_openai(ctx: StepContext) -> dict:
                          {"instruction": instruction, "usage": usage, "raw_parts": len(data.get("parts") or []), "external_service": True})
 
 
+def exec_props_claude(ctx: StepContext) -> dict:
+    from . import props as P
+    from .adapters import anthropic_api as A
+
+    src = ctx.ref_file(ctx.ref("image"), prefer=("image",))
+    key, model = _claude_key_and_model(ctx)
+    img = _vision_input(ctx, src)
+    instruction = P.analysis_instruction(ctx.params, structured=True)
+    if ctx.cancelled():
+        raise Cancelled()
+    ctx.stage("engine", f"Claude {model} : analyse de l'image (service externe)")
+    ctx.log(f"Anthropic Messages : modèle={model} image={img.name}")
+    data, usage = A.respond_json(key, model=model, prompt=instruction, schema=P.OPENAI_SCHEMA, name="props_breakdown", images=[img])
+    norm = P.normalize(data, ctx.params)
+    return _props_result(ctx, norm, {"engine": "claude", "model": model},
+                         {"instruction": instruction, "usage": usage, "raw_parts": len(data.get("parts") or []), "external_service": True})
+
+
 def exec_props_local(ctx: StepContext) -> dict:
     from . import props as P
 
@@ -1141,30 +1175,34 @@ def exec_props_local(ctx: StepContext) -> dict:
 
 
 def exec_text_openai(ctx: StepContext) -> dict:
-    """« Prompts aléatoires » écrits par OpenAI (sortie structurée : liste de chaînes)."""
+    """« Prompts aléatoires » écrits par OpenAI ou Claude (sortie structurée : liste de chaînes)."""
+    from .adapters import anthropic_api as A
     from .adapters import openai_images as O
 
+    claude = ctx.job.get("payload", {}).get("capability") == "text.claude"
     p = ctx.params
     r = ctx.ref("context")
     context = ((r.get("text") if isinstance(r, dict) and r.get("kind") == "text" else None) or str(p.get("context") or "")).strip()
     if not context:
         raise StepFailure("Contexte vide : écrivez un thème dans la node (ou branchez un prompt sur « Contexte »)", code="missing_input")
     n = max(1, min(16, int(p.get("count", 5))))
-    key, model = _openai_key_and_text_model(ctx)
+    key, model = _claude_key_and_model(ctx) if claude else _openai_key_and_text_model(ctx)
+    name = "Claude" if claude else "OpenAI"
     instruction = randomize_instruction(context, n, p).rsplit("\n", 1)[0] + f"\nReturn exactly {n} prompts."
     schema = {"type": "object", "additionalProperties": False, "required": ["prompts"],
               "properties": {"prompts": {"type": "array", "items": {"type": "string"}}}}
-    ctx.stage("engine", f"OpenAI {model} : écriture de {n} prompt(s) (service externe)")
-    data, usage = O.respond_json(key, model=model, prompt=instruction, schema=schema, name="image_prompts")
+    ctx.stage("engine", f"{name} {model} : écriture de {n} prompt(s) (service externe)")
+    respond = A.respond_json if claude else O.respond_json
+    data, usage = respond(key, model=model, prompt=instruction, schema=schema, name="image_prompts")
     prompts = [re.sub(r"\s+", " ", str(x)).strip() for x in data.get("prompts") or [] if str(x).strip()][:n]
     if len(prompts) < n:
-        raise StepFailure(f"OpenAI n'a écrit que {len(prompts)} prompt(s) sur {n}", code="llm_output", details={"prompts": prompts})
+        raise StepFailure(f"{name} n'a écrit que {len(prompts)} prompt(s) sur {n}", code="llm_output", details={"prompts": prompts})
     out = ctx.out_path("prompts.json")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({"context": context, "prompts": prompts, "instruction": instruction, "model": model},
                               ensure_ascii=False, indent=2), encoding="utf-8")
     pid = ctx.add(out, "prompts", {"prompts": prompts, "context": context, "language": p.get("language", "en")})
-    return {"outputs": {"prompts": [pid]}, "engine": {"engine": "openai", "model": model},
+    return {"outputs": {"prompts": [pid]}, "engine": {"engine": "claude" if claude else "openai", "model": model},
             "report": {"context": context, "prompts": prompts, "count": n, "usage": usage, "external_service": True}}
 
 
@@ -1177,6 +1215,8 @@ EXECUTORS: dict[tuple[str, str], Callable[[StepContext], dict]] = {
     ("text.generate", "*"): exec_text_generate,
     ("text.openai", "*"): exec_text_openai,
     ("vision.openai", "*"): exec_props_openai,
+    ("text.claude", "*"): exec_text_openai,
+    ("vision.claude", "*"): exec_props_claude,
     ("vision.local", "*"): exec_props_local,
     ("image.openai", "*"): exec_openai_image,
     ("image.remove_background", "*"): exec_remove_background,

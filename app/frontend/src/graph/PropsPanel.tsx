@@ -66,6 +66,7 @@ export function PropsPanel({ n, slots, job }: { n: GNode; slots: any[]; job?: an
           <input type="checkbox" className="switch" checked={p.merge_symmetric !== false} onChange={(e) => set({ merge_symmetric: e.target.checked })} /></label>
         <div className="row"><span>Analyse</span>
           {engine === "openai" ? <span className="pill ext" title="L'image est envoyée à OpenAI (service externe, facturé)">☁ ChatGPT</span>
+            : engine === "claude" ? <span className="pill ext" title="L'image est envoyée à Anthropic (service externe, facturé)">☁ Claude</span>
             : <span className="pill" title="Qwen3-VL 4B sur ce PC">Qwen3-VL · local</span>}
           {group && <span className="pill" title="Moteur des images extraites (node « Props »)">{group.params?.engine === "openai" ? "extraction ☁ OpenAI" : "extraction Krea 2"}</span>}
         </div>

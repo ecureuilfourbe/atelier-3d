@@ -165,6 +165,14 @@ def compute(cfg: C.Config, db: Database, *, refresh: bool = False, comfy_url: st
         caps[cap] = {"status": ("disponible" if t else "à tester") if ov["configured"] else "indisponible", "label": label,
                      "engine": {"name": "OpenAI Responses API", "model": ov.get("model_text") or None}, "execution": "external",
                      "last_success": t, "reason": None if ov["configured"] else "Clé d'API OpenAI non configurée (Réglages → OpenAI)"}
+    from .secrets_store import anthropic_view
+
+    av = anthropic_view(cfg.config_dir)
+    for cap, label in (("vision.claude", "Claude — analyse d'image (service externe)"), ("text.claude", "Claude — écriture de texte (service externe)")):
+        t = _tested(db, cap)
+        caps[cap] = {"status": ("disponible" if t else "à tester") if av["configured"] else "indisponible", "label": label,
+                     "engine": {"name": "Anthropic Messages API", "model": av.get("model") or None}, "execution": "external",
+                     "last_success": t, "reason": None if av["configured"] else "Clé d'API Claude non configurée (Réglages → Claude)"}
     data = {"capabilities": caps, "engines": engines, "aliases": aliases, "execution_modes": {
         "single": "disponible", "foreach_prompts": "disponible", "foreach_images": "indisponible (non intégré en V1)",
         "zip": "indisponible (non intégré en V1)", "cartesian": "indisponible (non intégré en V1)"}}

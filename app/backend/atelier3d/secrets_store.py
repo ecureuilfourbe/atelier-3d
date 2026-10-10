@@ -92,6 +92,8 @@ class SecretStore:
 # ---------------------------------------------------------------------------- réglages des services
 
 OPENAI_KEY = "openai_api_key"
+ANTHROPIC_KEY = "anthropic_api_key"
+ANTHROPIC_DEFAULTS: dict[str, Any] = {"model": "", "models": [], "last_test": None}
 OPENAI_DEFAULTS: dict[str, Any] = {"model_generate": "", "model_edit": "", "model_text": "", "quality": "auto", "moderation": "auto",
                                    "models": [], "text_models": [], "last_test": None}
 
@@ -106,6 +108,7 @@ def load_services(config_dir: pathlib.Path) -> dict:
     except (FileNotFoundError, ValueError):
         d = {}
     d["openai"] = {**OPENAI_DEFAULTS, **(d.get("openai") or {})}
+    d["anthropic"] = {**ANTHROPIC_DEFAULTS, **(d.get("anthropic") or {})}
     return d
 
 
@@ -121,3 +124,10 @@ def openai_view(config_dir: pathlib.Path) -> dict:
     s = load_services(config_dir)["openai"]
     store = SecretStore(config_dir)
     return {**s, "configured": store.get(OPENAI_KEY) is not None, "key_hint": store.hint(OPENAI_KEY)}
+
+
+def anthropic_view(config_dir: pathlib.Path) -> dict:
+    """Idem pour Claude (Anthropic) : présence de la clé et ses 4 derniers caractères, jamais la clé."""
+    s = load_services(config_dir)["anthropic"]
+    store = SecretStore(config_dir)
+    return {**s, "configured": store.get(ANTHROPIC_KEY) is not None, "key_hint": store.hint(ANTHROPIC_KEY)}

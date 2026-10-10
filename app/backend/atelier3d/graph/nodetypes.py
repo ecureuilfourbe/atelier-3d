@@ -177,6 +177,9 @@ RANDOMIZE_PARAMS = ("context", "count", "language", "subject", "extra", "creativ
 
 
 def _randomize_steps(node: dict) -> list[Step]:
+    if (node.get("params") or {}).get("engine") == "claude":
+        return [Step("generate", "Écriture des prompts (Claude, service externe)", "text.claude", "net", generative=True,
+                     params=RANDOMIZE_PARAMS + ("engine", "claude_model"))]
     if (node.get("params") or {}).get("engine") == "openai":
         return [Step("generate", "Écriture des prompts (OpenAI, service externe)", "text.openai", "net", generative=True,
                      params=RANDOMIZE_PARAMS + ("engine", "openai_model"))]
@@ -187,6 +190,9 @@ PROPS_ANALYSIS_PARAMS = ("include", "detail", "merge_symmetric", "engine", "open
 
 
 def _props_steps(node: dict) -> list[Step]:
+    if (node.get("params") or {}).get("engine") == "claude":  # paramètres distincts : empreintes OpenAI / local inchangées
+        return [Step("analyze", "Analyse de l'image (Claude, service externe)", "vision.claude", "net",
+                     params=PROPS_ANALYSIS_PARAMS + ("claude_model",))]
     if (node.get("params") or {}).get("engine", "openai") == "openai":
         return [Step("analyze", "Analyse de l'image (OpenAI, service externe)", "vision.openai", "net", params=PROPS_ANALYSIS_PARAMS)]
     return [Step("analyze", "Analyse de l'image (Qwen3-VL 4B, local)", "vision.local", "gpu", generative=True, params=PROPS_ANALYSIS_PARAMS)]
@@ -267,10 +273,13 @@ register(NodeType(
                   "description": "Ex. « un seul personnage, de face, sans texte, fond neutre »."},
         "creativity": {"type": "number", "minimum": 0.2, "maximum": 1.5, "default": 0.9, "title": "Créativité (température)",
                        "x-advanced": True, "x-engine": "local"},
-        "engine": {"type": "string", "enum": ["local", "openai"], "default": "local", "title": "Moteur",
-                   "enumLabels": {"local": "Qwen3-VL 4B (local, sur ce PC)", "openai": "OpenAI / ChatGPT (service externe)"}},
+        "engine": {"type": "string", "enum": ["local", "openai", "claude"], "default": "local", "title": "Moteur",
+                   "enumLabels": {"local": "Qwen3-VL 4B (local, sur ce PC)", "openai": "OpenAI / ChatGPT (service externe)",
+                                  "claude": "Claude / Anthropic (service externe)"}},
         "openai_model": {"type": "string", "default": "", "title": "Modèle OpenAI (texte)", "x-engine": "openai", "x-openai-text-models": True,
                          "description": "Vide : modèle texte par défaut des Réglages → OpenAI."},
+        "claude_model": {"type": "string", "default": "", "title": "Modèle Claude", "x-engine": "claude", "x-claude-models": True,
+                         "description": "Vide : modèle par défaut des Réglages → Claude."},
         "seed": SEED,
     }),
     steps=_randomize_steps,
@@ -425,10 +434,13 @@ register(NodeType(
                    "enumLabels": {"minimal": "Minimal (3-6)", "standard": "Standard (6-15)", "detailed": "Détaillé (15+)"}},
         "merge_symmetric": {"type": "boolean", "default": True, "title": "Fusionner les pièces symétriques",
                             "description": "Une seule botte, un seul gant… (l'autre côté est son miroir)."},
-        "engine": {"type": "string", "enum": ["openai", "local"], "default": "openai", "title": "Analyse par",
-                   "enumLabels": {"openai": "OpenAI / ChatGPT (service externe)", "local": "Qwen3-VL 4B (local, sur ce PC)"}},
+        "engine": {"type": "string", "enum": ["openai", "local", "claude"], "default": "openai", "title": "Analyse par",
+                   "enumLabels": {"openai": "OpenAI / ChatGPT (service externe)", "local": "Qwen3-VL 4B (local, sur ce PC)",
+                                  "claude": "Claude / Anthropic (service externe)"}},
         "openai_model": {"type": "string", "default": "", "title": "Modèle OpenAI (vision)", "x-engine": "openai", "x-openai-text-models": True,
                          "description": "Vide : modèle texte / vision par défaut des Réglages → OpenAI."},
+        "claude_model": {"type": "string", "default": "", "title": "Modèle Claude (vision)", "x-engine": "claude", "x-claude-models": True,
+                         "description": "Vide : modèle par défaut des Réglages → Claude."},
         "character": {"type": "string", "default": "", "title": "Personnage (description)", "format": "textarea", "x-advanced": True,
                       "description": "Écrite par l'analyse ; modifiable. Reprise dans chaque consigne d'extraction."},
         "extra": {"type": "string", "default": "", "title": "Consigne ajoutée à chaque extraction", "format": "textarea", "x-advanced": True},

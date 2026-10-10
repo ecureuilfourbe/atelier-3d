@@ -73,6 +73,18 @@ l'adapter clone le `workflow.api.json` validé et ne modifie que les entrées ma
   `image.props` (analyse vision, **OpenAI par défaut** à la demande de l'utilisateur ; `engine: "local"` pour rester sur le PC).
   Modèle texte / vision : `openai_model` de la node, sinon `model_text` des Réglages (API Responses, sortie JSON stricte).
 
+## Moteur Claude (Anthropic, service externe, facultatif)
+
+- `engine: "claude"` sur `text.randomize` (capacité `text.claude`) et sur l'analyse de `image.props` (`vision.claude`) ;
+  pas d'image générée ou éditée par Claude (le groupe « Props » extrait alors avec Krea 2). **Seulement si l'utilisateur le
+  demande explicitement.**
+- Clé saisie **par l'utilisateur** dans ⚙ Réglages → Claude (DPAPI, `config\secrets.dat`) ; `GET /api/v1/settings` ne renvoie
+  que `anthropic.configured` et les 4 derniers caractères : ne jamais la demander, la lire ou l'écrire soi-même.
+- Modèle : `claude_model` de la node, sinon `anthropic.model` des Réglages (liste lue avec la clé, `POST
+  /api/v1/settings/anthropic/test`). API Messages, réponse imposée par un outil unique (JSON conforme au schéma).
+- Erreurs typées : `anthropic_key_missing`, `anthropic_auth`, `anthropic_rate_limit` / `anthropic_overloaded` (une nouvelle
+  tentative automatique), `anthropic_quota`, `anthropic_model`, `anthropic_refusal`. File `net`.
+
 ## Extraction de props
 
 1. Créer `image.import` → `image.props` : le groupe « Props » (node `props_<id>`, moteur d'extraction `openai` ou `krea2`
@@ -88,7 +100,7 @@ l'adapter clone le `workflow.api.json` validé et ne modifie que les entrées ma
 
 1. `get_capabilities` : vérifier `status` (`disponible` = testé ici, `à tester`, `indisponible` + `reason`) pour chaque
    capacité utilisée (`image.create`, `image.edit`, `image.openai`, `image.remove_background`, `image.upscale.seedvr2`,
-   `image.upscale.esrgan`, `text.generate`, `text.openai`, `vision.local`, `vision.openai`, `mesh.generate`, `rig.mia`, `rig.blender_auto`, `rig.articulated`, `blender`, `video.minimax` — et `video.minimax.modes.<mode>`, chaque mode ayant son propre statut).
+   `image.upscale.esrgan`, `text.generate`, `text.openai`, `text.claude`, `vision.local`, `vision.openai`, `vision.claude`, `mesh.generate`, `rig.mia`, `rig.blender_auto`, `rig.articulated`, `blender`, `video.minimax` — et `video.minimax.modes.<mode>`, chaque mode ayant son propre statut).
 2. `create_graph` avec le JSON (1.0 est migré en 1.1) ou partir d'un préréglage (`POST /api/v1/presets/{nom}`).
 3. `plan_graph` : erreurs bloquantes (types, cycles, moteur texte seul + image, `max_items`, modes vidéo incompatibles),
    dépendances, items foreach et moteurs choisis — **aucune génération**. Seules les erreurs des nodes concernées bloquent :

@@ -390,7 +390,7 @@ if ($needComfy) {
         # workflows MiniMax H3 Ultra fournis : nodes MiniMax natives de ComfyUI + rgthree (switch, LoRA) + VideoHelperSuite (MP4 avec son)
         foreach ($name in @('rgthree-comfy', 'ComfyUI-VideoHelperSuite')) {
             $spec = $Lock.comfyui.custom_nodes.$name
-            $dest = Join-Path $ComfyDir ('ComfyUI\custom_nodes' + $name)
+            $dest = Join-Path (Join-Path $ComfyDir 'ComfyUI\custom_nodes') $name
             $st = Get-StepState ('node_' + $name)
             if ($null -eq $st -or $st['status'] -ne 'done' -or $st['data']['commit'] -ne $spec.commit -or -not (Test-Path -LiteralPath (Join-Path $dest '__init__.py'))) {
                 Install-PinnedRepo -Spec $spec -Dest $dest -DownloadDir $Downloads -Label ("{0} ({1})" -f $name, $spec.license)
