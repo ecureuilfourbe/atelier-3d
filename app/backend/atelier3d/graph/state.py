@@ -23,6 +23,7 @@ PREVIEW_TYPES = {"image.preview", "mesh.preview", "video.preview", "compare.befo
 OUTPUT_STEP = {
     ("image.prepare", "mask"): "crop",
     ("mesh.validate", "rigged_mesh"): "deform_tests",
+    ("mesh.animate", "motion"): "motion",
 }
 
 
@@ -259,15 +260,18 @@ class StateStore:
     def slot_inputs(self, doc: dict, node: dict, step_index: int, item_id: str = "", run_overrides: dict | None = None) -> dict:
         """Entrées effectives d'un slot. Étape > 0 : sortie active de l'étape précédente de la même node."""
         steps = self.node_steps(node)
+        only = steps[step_index].inputs if steps and step_index < len(steps) else None
+        ins: dict[str, Any] = {}
         if step_index > 0:
             prev = steps[step_index - 1].id
-            return {"previous": self._slot_ref(doc["id"], node["id"], prev, item_id, "*", run_overrides)}
-        ins: dict[str, Any] = {}
+            ins["previous"] = self._slot_ref(doc["id"], node["id"], prev, item_id, "*", run_overrides)
+            if not only:
+                return ins
         nt = NT.get(node["type"])
         foreach = node["type"] in NT.IMAGE_GEN_TYPES and exec_mode(node) == "foreach_prompts"
         item = next((i for i in node.get("items", []) if i["item_id"] == item_id), None) if foreach else None
         for port in nt.inputs:
-            if port.dynamic_prefix:
+            if port.dynamic_prefix or (only is not None and port.name not in only):
                 continue
             es = edges_into(doc, node["id"], port.name)
             if not es:

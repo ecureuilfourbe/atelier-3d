@@ -12,7 +12,7 @@ votre propre clé d'API. Claude Code peut piloter exactement les mêmes graphes 
 
 ### 1.0 Prérequis (rien d'autre n'est à installer)
 - Windows 10 ou 11, 64 bits ; une connexion Internet pendant l'installation ; de l'espace disque selon les composants cochés
-  (≈ 50 Go sans la vidéo, ≈ 130 Go avec tout : la fenêtre de l'installateur affiche le total).
+  (≈ 50 Go sans la vidéo ni l'animation, ≈ 140 Go avec tout : la fenêtre de l'installateur affiche le total).
 - Pour les moteurs IA (image, 3D, rig, upscale) : carte **NVIDIA RTX 20xx / GTX 16xx ou plus récente**, **8 Go de VRAM**
   conseillés (6 Go minimum), **pilote NVIDIA 580 ou plus récent** (les moteurs utilisent CUDA 13 ; mettez le pilote à jour
   avant l'installation). Sans carte compatible : interface, Blender et exports seulement (l'installateur le dit et ne coche
@@ -42,6 +42,8 @@ Double-cliquez sur **`INSTALL.bat`**. L'installateur :
    | Rigging humanoïde | Make-It-Animatable + environnement PyTorch | ≈ 5 Gio |
    | Vidéo MiniMax H3 (texte, image, début/fin) | workflows MiniMax H3 Ultra fournis, FL2VA int8, Qwen3-VL 32B int8, VAE, LoRA turbo, nodes rgthree + VideoHelperSuite | ≈ 53 Gio |
    | Vidéo : mode Références | Ref2VA int8 | + 19,5 Gio |
+   | Animation : vidéo → mouvement | MediaPipe Pose (environnement Python séparé « venv-motion ») | ≈ 110 Mo |
+   | Animation : prompt → mouvement | Kimodo : binaires kimodo.cpp fournis (Vulkan), modèle de mouvement SOMA + encodeur texte Llama 3 Q8 | ≈ 8,6 Gio |
    | Vidéo : ComfyUI MiniMax existant | proposé seulement si un ComfyUI avec MiniMax H3 **et ses poids** est trouvé : aucun téléchargement | — |
 
 3. vérifie l'espace libre pour la sélection ;
@@ -176,6 +178,18 @@ prompts en local (≈ 25 s pour 4) et les affiche dans la node. Reliez sa sortie
 d'une node « Générer une image » en mode *pour chaque prompt* : une image par prompt, chacune avec sa preview. **Régénérer**
 propose une nouvelle liste (candidate) ; **Utiliser** ne fait recalculer que les images dont le prompt a changé. Les sorties
 **Prompt 1…N** donnent un prompt à la fois. Préréglage : **« Idées · prompts aléatoires → images (foreach) »**.
+
+**Animer le modèle 3D.** Node **Animer le modèle 3D** (catégorie Animation) : branchez un **modèle riggé** (sortie de
+« Rigging » / « Vérifier la déformation », ou un .glb / .fbx importé avec un squelette Mixamo) et **soit** un **prompt de
+mouvement**, **soit** une **vidéo de référence** :
+- *prompt* → **Kimodo** (NVIDIA, modèle de mouvement local, version kimodo.cpp sur la carte graphique) génère le mouvement ;
+  une ligne par mouvement pour les enchaîner (ex. « walks forward » puis « waves with the right hand »), **Durée** en secondes ;
+- *vidéo* → **MediaPipe Pose** (Google, local, processeur) suit le corps image par image ; une vidéo de contrôle montre le
+  squelette détecté sur la vidéo. Une seule caméra : profondeur estimée, animation **sur place** ;
+- le mouvement est transféré sur le squelette du modèle dans Blender (os du buste, des bras, des jambes, de la tête ; doigts au
+  repos) : sorties **modèle animé** (.glb, .blend, .fbx — à brancher sur « Preview 3D », « Avant / après » ou « Export ») et
+  **aperçu vidéo**. Option **Sur place** pour retirer le déplacement au sol. Changer de modèle ne relance que le transfert.
+- Animation automatique : à vérifier visuellement (mains, glissement des pieds, interpénétrations).
 
 **Avant / après.** Node **Avant / après** (catégorie Comparer) : branchez deux résultats sur **Avant** et **Après** — images,
 vidéos, modèles 3D ou maillages riggés, même de natures différentes. Trois affichages : **Curseur** (glisser pour révéler),

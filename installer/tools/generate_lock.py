@@ -133,6 +133,21 @@ VIDEO_MODELS = [
 ]
 
 
+# Composants Animation : « motion_prompt » (Kimodo, binaires kimodo.cpp fournis dans app/engines/kimodo_cpp) et
+# « motion_video » (MediaPipe Pose dans runtime/venv-motion, app/engines/motion_runner/requirements.lock).
+MOTION_MODELS = [
+    ("kimodo_soma_rp_v1_1_f32", "LocalAI-io/Kimodo-SOMA-RP-v1.1-GGML", "models/kimodo-soma-rp-v1.1-f32.gguf", "kimodo", ["motion_prompt"]),
+    ("llama3_kimodo_q8_0", "LocalAI-io/Llama-3-Kimodo-GGML", "Llama-3-Kimodo-Q8_0.gguf", "kimodo", ["motion_prompt"]),
+    # tokenizer.gguf : lu dans le dossier de l'encodeur texte
+    ("kimodo_text_tokenizer", "LocalAI-io/Llama-3-Kimodo-GGML", "generated/llm2vec-text-bundle/tokenizer.gguf", "kimodo", ["motion_prompt"]),
+]
+POSE_MODEL = {  # MediaPipe Pose Landmarker « heavy » (Apache-2.0), URL versionnée (v1) : contenu identique à « latest » au 15/10/2026
+    "url": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/1/pose_landmarker_heavy.task",
+    "size": 30664242, "sha256": "64437af838a65d18e5ba7a0d39b465540069bc8aae8308de3e318aad31fcbc7b",
+    "source": "Google MediaPipe (storage.googleapis.com, float16 v1)", "revision": "1", "gated": False,
+    "filename": "pose_landmarker_heavy.task", "comfy_folder": "mediapipe", "profiles": ["motion_video"], "license": "Apache-2.0"}
+
+
 def video_nodes() -> dict:
     return {k: gh_tree(repo, commit, None, exclude=NODE_EXCLUDE) for k, (repo, commit) in VIDEO_CUSTOM_NODES.items()}
 
@@ -228,6 +243,7 @@ def main() -> None:
         ("seedvr2_ema_vae_fp16", "Comfy-Org/SeedVR2", "vae/seedvr2_ema_vae_fp16.safetensors", "vae", ["upscale"]),
         ("realesrgan_x4plus", "Comfy-Org/Real-ESRGAN_repackaged", "RealESRGAN_x4plus.safetensors", "upscale_models", ["upscale"]),
         *VIDEO_MODELS,
+        *MOTION_MODELS,
     ]
     extra = json.loads((ROOT / "installer" / "tools" / "extra_models.json").read_text("utf-8")) \
         if (ROOT / "installer" / "tools" / "extra_models.json").exists() else []
@@ -238,6 +254,7 @@ def main() -> None:
         entry.update({"filename": path.rsplit("/", 1)[-1], "comfy_folder": folder, "profiles": profiles})
         lock["models"][mid] = entry
 
+    lock["models"]["mediapipe_pose_landmarker_heavy"] = dict(POSE_MODEL)
     OUT.write_text(json.dumps(lock, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     total = sum(m["size"] for m in lock["models"].values())
     print(f"écrit {OUT} — {len(lock['models'])} modèles, {total / 1024**3:.1f} Gio")
@@ -256,7 +273,10 @@ def add_missing() -> None:
     if "video" not in pp:
         pp["video"] = [pypi_wheel(*w) for w in VIDEO_WHEELS]
         added.append("python_packages.video")
-    for mid, repo, path, folder, profiles in VIDEO_MODELS:
+    if "mediapipe_pose_landmarker_heavy" not in lock["models"]:
+        lock["models"]["mediapipe_pose_landmarker_heavy"] = dict(POSE_MODEL)
+        added.append("mediapipe_pose_landmarker_heavy")
+    for mid, repo, path, folder, profiles in VIDEO_MODELS + MOTION_MODELS:
         if mid not in lock["models"]:
             entry = hf_file(repo, path)
             entry.update({"filename": path.rsplit("/", 1)[-1], "comfy_folder": folder, "profiles": profiles})

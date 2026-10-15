@@ -66,6 +66,7 @@ class Worker:
         self.services = Services(self.db, cfg)
         from . import video  # enregistre l'exécuteur vidéo
         video.install(self.services)
+        from . import motion  # noqa: F401  — exécuteurs d'animation (Kimodo, MediaPipe, transfert Blender)
         self.pid = os.getpid()
         self.stop = threading.Event()
         self.busy = {"gpu": None, "cpu": None, "net": None}  # net : services externes (OpenAI), sans GPU
@@ -219,6 +220,10 @@ class Worker:
 
             o = load_services(self.cfg.config_dir)["openai"]  # modèles par défaut des Réglages : font partie du moteur
             fp["openai"] = {k: o.get(k) for k in ("model_generate", "model_edit", "model_text", "quality", "moderation")}
+        if payload.get("capability") == "motion.generate":
+            a = self.cfg.section("animation") or {}
+            fp["animation"] = {"kimodo": pathlib.Path((a.get("kimodo") or {}).get("model") or "").name,
+                               "mediapipe": pathlib.Path((a.get("mediapipe") or {}).get("model") or "").name}
         if payload.get("capability") in ("vision.claude", "text.claude"):
             from .secrets_store import load_services
 
@@ -441,7 +446,7 @@ class Worker:
 
 def _summary(report: dict) -> dict:
     keep = {}
-    for k in ("status", "verdict", "warnings", "prompt_final", "prompt_original", "status_label", "png_rgba_verified"):
+    for k in ("status", "verdict", "warnings", "prompt_final", "prompt_original", "status_label", "png_rgba_verified", "source"):
         if k in report:
             keep[k] = report[k]
     return keep

@@ -552,6 +552,19 @@ def _validate_business(doc, n, err, warn, capabilities, aliases):
         warn("external_service", f"{nid} : écriture par OpenAI — le contexte est envoyé à OpenAI (service externe, facturé).", node_id=nid)
     elif t == "text.randomize" and p.get("engine") == "claude":
         warn("external_service", f"{nid} : écriture par Claude — le contexte est envoyé à Anthropic (service externe, facturé).", node_id=nid)
+    elif t == "mesh.animate":
+        src = p.get("source", "auto")
+        hp, hv = has("prompt"), has("video")
+        if not has("rigged_mesh"):
+            err("missing_input", f"{nid} : « Animer le modèle 3D » exige un modèle riggé", node_id=nid)
+        if not hp and not hv:
+            err("missing_input", f"{nid} : branchez un prompt de mouvement ou une vidéo de référence", node_id=nid)
+        elif src == "auto" and hp and hv:
+            err("ambiguous_source", f"{nid} : prompt ET vidéo branchés — choisissez « Source du mouvement »", node_id=nid)
+        elif src == "prompt" and not hp:
+            err("missing_input", f"{nid} : source « prompt » sans prompt branché", node_id=nid)
+        elif src == "video" and not hv:
+            err("missing_input", f"{nid} : source « vidéo » sans vidéo branchée", node_id=nid)
     elif t == "video.generate":
         mode = p.get("mode")
         refs, first, last = has("references"), has("image"), has("last_image")

@@ -165,6 +165,21 @@ def compute(cfg: C.Config, db: Database, *, refresh: bool = False, comfy_url: st
         caps[cap] = {"status": ("disponible" if t else "à tester") if ov["configured"] else "indisponible", "label": label,
                      "engine": {"name": "OpenAI Responses API", "model": ov.get("model_text") or None}, "execution": "external",
                      "last_success": t, "reason": None if ov["configured"] else "Clé d'API OpenAI non configurée (Réglages → OpenAI)"}
+    from .motion import capabilities_for
+
+    mot = capabilities_for(cfg)
+    for cap, m in mot.items():
+        r = db.one("SELECT id, finished_at FROM jobs WHERE status = 'succeeded' AND kind = 'graph_step' AND node_type = 'mesh.animate' "
+                   "AND step = 'motion' AND json_extract(result, '$.report_summary.source') = ? ORDER BY finished_at DESC LIMIT 1",
+                   ("prompt" if cap == "motion.kimodo" else "video",))
+        t = {"job_id": r["id"], "at": r["finished_at"]} if r else None
+        caps[cap] = {"status": ("disponible" if t else "à tester") if m["ok"] else "indisponible", "label": m["label"],
+                     "engine": m["engine"], "execution": "local", "last_success": t, "reason": m["reason"]}
+    any_ok = [c for c in ("motion.kimodo", "motion.mediapipe") if caps[c]["status"] != "indisponible"]
+    caps["motion.generate"] = {"status": ("disponible" if any(caps[c]["status"] == "disponible" for c in any_ok) else "à tester") if any_ok else "indisponible",
+                               "label": "Mouvement pour « Animer le modèle 3D » (Kimodo : prompt, MediaPipe : vidéo)",
+                               "engines": {c: caps[c]["status"] for c in ("motion.kimodo", "motion.mediapipe")},
+                               "reason": None if any_ok else "ni Kimodo ni MediaPipe configurés (composant Animation)"}
     from .secrets_store import anthropic_view
 
     av = anthropic_view(cfg.config_dir)

@@ -124,7 +124,8 @@ $minVer = [version]$Lock.blender.minimum_version
 $blenderOk = @($blenders | Where-Object { try { [version]$_.version -ge $minVer } catch { $false } }).Count -gt 0
 
 # ------------------------------------------------------------ 4. choix des composants (fenêtre à cases à cocher)
-$profileMap = @{ image = @('image'); image_edit = @('image_edit'); mesh = @('mesh'); upscale = @('upscale'); video = @('video'); video_ref = @('video_ref') }
+$profileMap = @{ image = @('image'); image_edit = @('image_edit'); mesh = @('mesh'); upscale = @('upscale'); video = @('video'); video_ref = @('video_ref')
+                 motion_video = @('motion_video'); motion_prompt = @('motion_prompt') }
 $comfyComps = @('image', 'image_edit', 'mesh', 'upscale', 'video', 'video_ref')
 $videoComps = @('video', 'video_ref')
 $gpuNote = if ($gpuBlock) { 'Carte ou pilote non compatible (voir plus haut) : ne fonctionnera pas tant que ce point n''est pas réglé.' } elseif ($nvidia.Count -eq 0) { 'Nécessite une carte NVIDIA.' } else { $null }
@@ -147,6 +148,10 @@ $catalog = @(
         detail = 'Workflows MiniMax H3 Ultra fournis (LoRA turbo, son inclus), exécutés par le ComfyUI d''Atelier 3D : modèle FL2VA int8, encodeur texte Qwen3-VL 32B int8, VAE vidéo et audio, nodes rgthree et VideoHelperSuite. Licences : MiniMax H3 Community License (poids), Apache-2.0 (LoRA turbo).' }
     [ordered]@{ key = 'video_ref'; title = 'Vidéo MiniMax H3 : mode Références → vidéo'; requires = @('video'); excludes = @('video_attach'); note = $videoNote
         detail = 'Modèle Ref2VA int8 en plus : vidéo guidée par 1 ou 2 images de référence (personnage, décor…).' }
+    [ordered]@{ key = 'motion_video'; title = 'Animation : vidéo → mouvement (MediaPipe)'
+        detail = 'Node « Animer le modèle 3D » : anime un modèle riggé d''après une vidéo de référence (MediaPipe Pose de Google, Apache-2.0, sur le processeur ; environnement Python séparé).' }
+    [ordered]@{ key = 'motion_prompt'; title = 'Animation : prompt → mouvement (Kimodo)'; note = $gpuNote
+        detail = 'Node « Animer le modèle 3D » : anime un modèle riggé d''après un texte (Kimodo de NVIDIA via kimodo.cpp, sur la carte graphique). Licences : NVIDIA Open Model License (mouvement), Meta Llama 3 Community License (encodeur texte).' }
 )
 if ($minimaxInstalls.Count -gt 0) {
     $catalog += [ordered]@{ key = 'video_attach'; title = 'Vidéo : utiliser le ComfyUI MiniMax H3 déjà présent sur ce PC'; excludes = $videoComps
@@ -162,6 +167,29 @@ if (Get-A3DProp $prevCfg 'components') {
     if (-not $gpuBlock -and $vramGb -ge 6) { $recommended += @('image', 'image_edit', 'mesh', 'rig_mia', 'upscale') }
     if ($minimaxInstalls.Count -gt 0) { $recommended += 'video_attach' }
     elseif (-not $gpuBlock -and $vramGb -ge 7.5 -and $ramGb -ge 30) { $recommended += $videoComps }
+    $recommended += 'motion_video'
+    if (-not $gpuBlock -and $vramGb -ge 6) { $recommended += 'motion_prompt' }
+}
+
+# kimodo.cpp déjà installé à la main (ex. X:\AI\Animation\kimodo-cpp) : ses modèles identiques sont réutilisés sans copie
+$kimodoDirs = @()
+foreach ($d in [System.IO.DriveInfo]::GetDrives()) {
+    if ($d.DriveType -ne 'Fixed' -or -not $d.IsReady) { continue }
+    foreach ($sub in 'AI\Animation\kimodo-cpp', 'kimodo-cpp', 'Kimodo') {
+        $k = Join-Path $d.RootDirectory.FullName $sub
+        if (Test-Path -LiteralPath $k) { $kimodoDirs += $k; $kimodoDirs += (Join-Path $k 'models') }
+    }
+}
+function Find-A3DExtraModel($Entry, [switch]$Quick) {
+    <# Candidats hors ComfyUI (kimodo.cpp) ; Quick = taille seule (estimation), sinon taille + SHA-256. #>
+    if ($Entry.comfy_folder -ne 'kimodo') { return $null }
+    foreach ($k in $kimodoDirs) {
+        $c = Join-Path $k $Entry.filename
+        if ((Test-Path -LiteralPath $c) -and (Get-Item -LiteralPath $c).Length -eq [long]$Entry.size) {
+            if ($Quick -or (Get-FileSha256 $c) -eq $Entry.sha256) { return $c }
+        }
+    }
+    return $null
 }
 
 # tailles (téléchargement, disque) par élément ; un élément commun à plusieurs composants n'est compté qu'une fois
@@ -183,8 +211,10 @@ foreach ($p in $Lock.models.PSObject.Properties) {
     $sizeOf[$id] = @([double]$e.size, [double]$e.size)
     if (Test-Path -LiteralPath $dest) { $sizeOf[$id] = @(0, 0) }
     else {
-        foreach ($md in $shareDirs) {  # estimation rapide (taille identique) ; l'empreinte SHA-256 est vérifiée avant tout partage
-            $cand = Join-Path (Join-Path $md $e.comfy_folder) $e.filename
+        $cands = @($shareDirs | ForEach-Object { Join-Path (Join-Path $_ $e.comfy_folder) $e.filename })
+        $x = Find-A3DExtraModel $e -Quick
+        if ($x) { $cands += $x }
+        foreach ($cand in $cands) {  # estimation rapide (taille identique) ; l'empreinte SHA-256 est vérifiée avant tout partage
             if ((Test-Path -LiteralPath $cand) -and (Get-Item -LiteralPath $cand).Length -eq [long]$e.size) {
                 $sizeOf[$id] = @(0, $(if ([IO.Path]::GetPathRoot($cand) -eq $installRoot) { 0 } else { [double]$e.size }))
                 break
@@ -196,6 +226,8 @@ foreach ($p in $Lock.models.PSObject.Properties) {
 foreach ($comp in $comfyComps) { $compItems[$comp] += 'rt:comfyui' }
 foreach ($comp in $videoComps) { $compItems[$comp] += 'rt:video_nodes' }
 $compItems['rig_mia'] += 'rt:mia'
+$sizeOf['rt:venv_motion'] = if (Test-Path -LiteralPath (Join-Path $RuntimeReal 'venv-motion\Scripts\python.exe')) { @(0, 0) } else { @(80MB, 400MB) }
+$compItems['motion_video'] += 'rt:venv_motion'
 $Measure = {
     param([string[]]$Keys)
     $ids = @{}
@@ -294,6 +326,7 @@ foreach ($k in $neededModels.Keys) {
     if (Test-Path -LiteralPath $dest) { $state = 'present' }
     else {
         $shared = Find-A3DExistingModel -Entry $e -ModelDirs $shareDirs
+        if (-not $shared) { $shared = Find-A3DExtraModel $e }
         if ($shared) { $state = 'share' }
         elseif (Test-Path -LiteralPath (Join-Path $Downloads ($e.filename + '.part'))) { $state = 'resume' }
     }
@@ -481,6 +514,45 @@ if ($selected -contains 'rig_mia') {
     $tv = & $miaPy -c "import torch,torch_cluster,pytorch3d;print(torch.__version__, torch.version.cuda, torch.cuda.is_available())"
     Write-Ok ("Environnement MIA : PyTorch/CUDA/GPU = {0}" -f $tv)
     Set-ComponentRecord 'mia' @{ code = $MiaDir; python = $miaPy; torch = "$tv"; commit = $mia.code.commit }
+}
+
+# ------------------------------------------------------------ 10 bis. animation (« Animer le modèle 3D »)
+if ($selected -contains 'motion_video') {
+    Write-Step 'Animation depuis une vidéo : MediaPipe Pose (environnement isolé)'
+    $motionPy = Join-Path $Runtime 'venv-motion\Scripts\python.exe'
+    $motionLock = Join-Path $DistDir 'app\engines\motion_runner\requirements.lock'
+    $motionHash = Get-FileSha256 $motionLock
+    $st = Get-StepState 'venv_motion'
+    if (-not (Test-Path -LiteralPath $motionPy) -or $null -eq $st -or $st['status'] -ne 'done' -or $st['data']['lock_sha256'] -ne $motionHash) {
+        Invoke-Native -Exe $uv -Arguments @('python', 'install', $Lock.python.app_version) -What 'uv python install (animation)' -Env $uvEnv | Out-Null
+        if (-not (Test-Path -LiteralPath $motionPy)) { Invoke-Native -Exe $uv -Arguments @('venv', (Join-Path $Runtime 'venv-motion'), '--python', $Lock.python.app_version) -What 'uv venv (animation)' -Env $uvEnv | Out-Null }
+        Invoke-Native -Exe $uv -Arguments @('pip', 'sync', '--python', $motionPy, '--require-hashes', $motionLock) -What 'dépendances MediaPipe' -Env $uvEnv | Out-Null
+        Set-StepState 'venv_motion' 'done' @{ lock_sha256 = $motionHash }
+    }
+    $mv = & $motionPy -c "import mediapipe, numpy, PIL; print(mediapipe.__version__)"
+    if ($LASTEXITCODE -ne 0) { throw 'MediaPipe introuvable dans l''environnement d''animation après installation.' }
+    Write-Ok ("MediaPipe {0} prêt ({1})" -f "$mv".Trim(), $motionPy)
+    Set-ComponentRecord 'motion_video' @{ python = $motionPy; mediapipe = "$mv".Trim() }
+}
+if ($selected -contains 'motion_prompt') {
+    Write-Step 'Animation depuis un prompt : Kimodo (binaires kimodo.cpp fournis)'
+    $kexe = Join-Path $DistDir 'app\engines\kimodo_cpp\bin\kmd-generate.exe'
+    if (-not (Test-Path -LiteralPath $kexe)) { throw 'Binaires kimodo.cpp absents du dossier du logiciel (app\engines\kimodo_cpp\bin).' }
+    # outil C++ : chemins ASCII garantis (jonction vers les modèles si le dossier d'installation contient des accents)
+    $kmodels = Join-Path $ModelsDir 'kimodo'
+    if ($Runtime -ne $RuntimeReal -and -not (Test-Path -LiteralPath (Join-Path $Runtime 'kimodo-models'))) {
+        New-Item -ItemType Junction -Path (Join-Path $Runtime 'kimodo-models') -Target $kmodels | Out-Null
+    }
+    if (-not (Test-Path -LiteralPath (Join-Path $env:SystemRoot 'System32\vulkan-1.dll'))) {
+        Write-Warn 'Vulkan absent (vulkan-1.dll) : mettez à jour le pilote de la carte graphique ; Kimodo ne pourra pas démarrer.'
+    } else {
+        $prev = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+        $usage = & $kexe 2>&1 | Out-String
+        $ErrorActionPreference = $prev
+        if ($usage -notmatch 'usage') { throw ("kmd-generate ne démarre pas : {0}" -f $usage.Trim()) }
+        Write-Ok 'kimodo.cpp prêt (Vulkan)'
+    }
+    Set-ComponentRecord 'motion_prompt' @{ exe = $kexe; models = $kmodels }
 }
 
 # ------------------------------------------------------------ 11. Blender

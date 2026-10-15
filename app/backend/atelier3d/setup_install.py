@@ -75,6 +75,74 @@ def dedicated_video(home: pathlib.Path, runtime: pathlib.Path, dist: pathlib.Pat
     }
 
 
+def _drive_roots() -> list[pathlib.Path]:
+    import string
+
+    return [pathlib.Path(f"{d}:\\") for d in string.ascii_uppercase if pathlib.Path(f"{d}:\\").exists()]
+
+
+def _kimodo_ok(k: dict) -> bool:
+    return all(k.get(x) and pathlib.Path(k[x]).is_file() for x in ("exe", "model", "text_model"))
+
+
+def _mediapipe_ok(m: dict) -> bool:
+    return all(m.get(x) and pathlib.Path(m[x]).is_file() for x in ("python", "model"))
+
+
+def detect_animation(home: pathlib.Path, runtime: pathlib.Path, prev: dict | None, dist: pathlib.Path | None = None,
+                     comps: list | tuple = ()) -> dict:
+    """Moteurs d'animation (« Animer le modèle 3D ») : installés avec Atelier 3D (composants motion_prompt / motion_video),
+    sinon déjà présents sur la machine (lecture seule, rien n'est modifié). Les chemins déjà validés sont conservés."""
+    import subprocess
+
+    prev = prev or {}
+    k = dict(prev.get("kimodo") or {})
+    if dist is not None and "motion_prompt" in comps:
+        kdir = runtime / "kimodo-models" if (runtime / "kimodo-models").is_dir() else home / "models" / "kimodo"  # chemin ASCII si possible
+        exe = dist / "app" / "engines" / "kimodo_cpp" / "bin" / "kmd-generate.exe"
+        motion = sorted(kdir.glob("kimodo-soma-rp-v1.1-*.gguf")) if kdir.is_dir() else []
+        inst = {"dir": str(kdir), "exe": str(exe), "bin_dir": str(exe.parent), "model": str(motion[0]) if motion else "",
+                "text_model": str(kdir / "Llama-3-Kimodo-Q8_0.gguf"), "backend": "vulkan", "text_layer_chunk": 8,
+                "origin": "installé avec Atelier 3D"}
+        if _kimodo_ok(inst) and (kdir / "tokenizer.gguf").is_file():
+            k = inst
+    if not _kimodo_ok(k):
+        roots = [pathlib.Path(os.environ["ATELIER3D_KIMODO_DIR"])] if os.environ.get("ATELIER3D_KIMODO_DIR") else []
+        roots += [runtime / "kimodo-cpp"] + [r / "AI" / "Animation" / "kimodo-cpp" for r in _drive_roots()] + [r / "kimodo-cpp" for r in _drive_roots()]
+        for root in roots:
+            exe = root / "build" / "Release" / "kmd-generate.exe"
+            models = sorted((root / "models").glob("kimodo-soma-rp-v1.1-*.gguf")) if (root / "models").is_dir() else []
+            text = root / "Llama-3-Kimodo-Q8_0.gguf"
+            if exe.is_file() and models and text.is_file():
+                k = {"dir": str(root), "exe": str(exe), "bin_dir": str(root / "build" / "bin" / "Release"), "model": str(models[0]),
+                     "text_model": str(text), "backend": "vulkan", "text_layer_chunk": 8, "origin": "existant (lecture seule)"}
+                break
+    m = dict(prev.get("mediapipe") or {})
+    if "motion_video" in comps:
+        inst = {"python": str(runtime / "venv-motion" / "Scripts" / "python.exe"),
+                "model": str(home / "models" / "mediapipe" / "pose_landmarker_heavy.task"), "origin": "venv-motion"}
+        if _mediapipe_ok(inst):
+            m = inst
+    if not _mediapipe_ok(m):
+        model = home / "models" / "mediapipe" / "pose_landmarker_heavy.task"
+        pys = [runtime / "venv-motion" / "Scripts" / "python.exe"]
+        pys += [pathlib.Path(os.environ.get("ProgramFiles", r"C:\Program Files")) / f"Python3{v}" / "python.exe" for v in (12, 11, 13, 10)]
+        pys += [pathlib.Path(os.environ.get("LOCALAPPDATA", "")) / "Programs" / "Python" / f"Python3{v}" / "python.exe" for v in (12, 11, 13, 10)]
+        for py in pys:
+            if not py.is_file():
+                continue
+            try:
+                r = subprocess.run([str(py), "-c", "import mediapipe, numpy, PIL; print(mediapipe.__version__)"], capture_output=True,
+                                   text=True, timeout=120, creationflags=0x08000000)
+            except (OSError, subprocess.TimeoutExpired):
+                continue
+            if r.returncode == 0:
+                m = {"python": str(py), "model": str(model), "version": r.stdout.strip().splitlines()[-1] if r.stdout.strip() else None,
+                     "origin": "venv-motion" if "venv-motion" in str(py) else "Python existant (lecture seule)"}
+                break
+    return {"kimodo": k, "mediapipe": m}
+
+
 def detect_minimax(manifest: dict, home: pathlib.Path) -> dict:
     installs = (manifest.get("components") or {}).get("existing_comfyui") or []
     if isinstance(installs, dict):
@@ -198,6 +266,7 @@ def main() -> int:
     if (cfg.get("video") or {}).get("status") == "detected" and any((wf_root / f"minimax_h3_ultra_user_{m}" / "workflow.api.json").is_file() for m in ("t2v", "i2v", "flf", "r2v")):
         aliases["minimax_user"] = "minimax_h3_ultra_user"
     cfg["workflows"] = {"aliases": aliases}
+    cfg["animation"] = detect_animation(home, runtime, cfg.get("animation"), dist, comps)
 
     # chemins de modèles du ComfyUI dédié (modèles partagés par liens physiques dans <home>/models)
     yaml_lines = ["# Généré par Atelier 3D — modèles du ComfyUI dédié", "atelier3d:", f"  base_path: {models_dir.as_posix()}/"]

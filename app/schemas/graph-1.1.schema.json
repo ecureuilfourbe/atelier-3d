@@ -83,6 +83,7 @@
             "image.preview",
             "image.props",
             "image.upscale",
+            "mesh.animate",
             "mesh.generate",
             "mesh.import",
             "mesh.prepare",
@@ -1492,6 +1493,144 @@
       },
       "actions": [
         "regenerate"
+      ],
+      "execution_modes": {}
+    },
+    "mesh.animate": {
+      "type": "mesh.animate",
+      "label": "Animer le modèle 3D",
+      "category": "Animation",
+      "kind": "generative",
+      "description": "Anime un modèle riggé (squelette Mixamo du rig MIA) à partir d'un prompt de mouvement (Kimodo, local) ou d'une vidéo de référence (MediaPipe Pose, local). Sorties : modèle animé (.glb, .blend, .fbx) et aperçu vidéo.",
+      "inputs": [
+        {
+          "name": "rigged_mesh",
+          "type": "Mesh",
+          "type_label": "Maillage (avec matériaux/textures)",
+          "label": "Modèle riggé",
+          "multi": false,
+          "required": true,
+          "description": "Sortie de « Rigging » / « Vérifier la déformation », ou modèle importé (.glb, .fbx) avec un squelette Mixamo."
+        },
+        {
+          "name": "prompt",
+          "type": "Prompt",
+          "type_label": "Texte / prompt",
+          "label": "Prompt de mouvement",
+          "multi": false,
+          "required": false,
+          "description": "En anglais de préférence ; une ligne par mouvement pour les enchaîner."
+        },
+        {
+          "name": "video",
+          "type": "Video",
+          "type_label": "Vidéo",
+          "label": "Vidéo de référence",
+          "multi": false,
+          "required": false,
+          "description": "Une personne entière, caméra fixe de préférence."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "rigged_mesh",
+          "type": "RiggedMesh",
+          "type_label": "Maillage riggé",
+          "label": "Modèle animé",
+          "multi": false,
+          "required": false
+        },
+        {
+          "name": "video",
+          "type": "Video",
+          "type_label": "Vidéo",
+          "label": "Aperçu animé",
+          "multi": false,
+          "required": false
+        },
+        {
+          "name": "motion",
+          "type": "Animation",
+          "type_label": "Mouvement (squelette animé)",
+          "label": "Mouvement",
+          "multi": false,
+          "required": false
+        }
+      ],
+      "params_schema": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "auto",
+              "prompt",
+              "video"
+            ],
+            "default": "auto",
+            "title": "Source du mouvement",
+            "enumLabels": {
+              "auto": "automatique (l'entrée branchée)",
+              "prompt": "prompt (Kimodo)",
+              "video": "vidéo (MediaPipe)"
+            }
+          },
+          "duration_s": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 4,
+            "title": "Durée (s, prompt)",
+            "description": "Kimodo : 30 images/s ; jusqu'à 10 s par ligne de prompt."
+          },
+          "in_place": {
+            "type": "boolean",
+            "default": false,
+            "title": "Sur place (sans déplacement au sol)"
+          },
+          "smoothing": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.5,
+            "title": "Lissage (vidéo)",
+            "description": "Réduit les tremblements de la capture ; trop élevé = mouvements amortis."
+          },
+          "diffusion_steps": {
+            "type": "integer",
+            "minimum": 20,
+            "maximum": 200,
+            "default": 100,
+            "title": "Étapes de diffusion (Kimodo)",
+            "x-advanced": true
+          },
+          "start_s": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0,
+            "title": "Début de la vidéo (s)",
+            "x-advanced": true
+          },
+          "end_s": {
+            "type": "number",
+            "minimum": 0,
+            "default": 0,
+            "title": "Fin de la vidéo (s, 0 = jusqu'au bout)",
+            "x-advanced": true
+          },
+          "seed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991,
+            "title": "Seed"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "actions": [
+        "regenerate",
+        "select_variant"
       ],
       "execution_modes": {}
     },

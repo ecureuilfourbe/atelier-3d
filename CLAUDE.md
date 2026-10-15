@@ -47,6 +47,7 @@ l'adapter clone le `workflow.api.json` validé et ne modifie que les entrées ma
 | `mesh.generate` | Pixal3D (ou TRELLIS.2) → GLB texturé (couleur, metallic, roughness, normal, AO) | `image` → `mesh` |
 | `mesh.prepare` | macro : `repair`, `simplify` (décimation ou QuadriFlow), `bake` (UV + baking Cycles) | `mesh` → `mesh`, `report` |
 | `mesh.rig` | MIA (squelette Mixamo 52 os + poids) puis assemblage Blender ; `engine: blender_auto` = poids automatiques Blender (« rig automatique à vérifier ») ; `profile: articulated` = armature à pivots | `mesh` → `rigged_mesh` |
+| `mesh.animate` | « Animer le modèle 3D » : étape `motion` (`source` `auto`\|`prompt`\|`video` : Kimodo kimodo.cpp, `duration_s`, `diffusion_steps`, seed, une ligne de prompt par segment ; ou MediaPipe Pose, `smoothing`, `start_s`/`end_s`) puis `retarget` (Blender, `in_place`) ; changer de modèle ne relance que `retarget` | `rigged_mesh` (Mesh avec squelette Mixamo), `prompt` ou `video` → `rigged_mesh` (animé : .glb + .blend, .fbx), `video` (aperçu), `motion` |
 | `mesh.validate` | poses de test, mesures, images, GIF ; actions de contrôle séparées ; rest pose restaurée | `rigged_mesh` → `report`, `rigged_mesh` |
 | `asset.export` | `.blend` autonome, `.glb`, `.fbx`, textures, réouverture/réimport vérifiés | `asset` → `files`, `report` |
 | `reference.collection` | slots nommés (rôle, sujet, description) | `image:<slot>` → `references` |
@@ -100,7 +101,7 @@ l'adapter clone le `workflow.api.json` validé et ne modifie que les entrées ma
 
 1. `get_capabilities` : vérifier `status` (`disponible` = testé ici, `à tester`, `indisponible` + `reason`) pour chaque
    capacité utilisée (`image.create`, `image.edit`, `image.openai`, `image.remove_background`, `image.upscale.seedvr2`,
-   `image.upscale.esrgan`, `text.generate`, `text.openai`, `text.claude`, `vision.local`, `vision.openai`, `vision.claude`, `mesh.generate`, `rig.mia`, `rig.blender_auto`, `rig.articulated`, `blender`, `video.minimax` — et `video.minimax.modes.<mode>`, chaque mode ayant son propre statut).
+   `image.upscale.esrgan`, `text.generate`, `text.openai`, `text.claude`, `vision.local`, `vision.openai`, `vision.claude`, `mesh.generate`, `rig.mia`, `rig.blender_auto`, `rig.articulated`, `blender`, `motion.kimodo`, `motion.mediapipe`, `motion.generate`, `video.minimax` — et `video.minimax.modes.<mode>`, chaque mode ayant son propre statut).
 2. `create_graph` avec le JSON (1.0 est migré en 1.1) ou partir d'un préréglage (`POST /api/v1/presets/{nom}`).
 3. `plan_graph` : erreurs bloquantes (types, cycles, moteur texte seul + image, `max_items`, modes vidéo incompatibles),
    dépendances, items foreach et moteurs choisis — **aucune génération**. Seules les erreurs des nodes concernées bloquent :

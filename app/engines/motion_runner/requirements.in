@@ -1,0 +1,5 @@
+# Environnement « venv-motion » (composant Animation : vidéo → mouvement), isolé de l'application.
+# Verrouillé par hachage : uv pip compile requirements.in --python-version 3.12 --python-platform windows --generate-hashes -o requirements.lock
+mediapipe==0.10.31
+numpy
+pillow

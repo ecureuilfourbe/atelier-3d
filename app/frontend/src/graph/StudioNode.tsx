@@ -162,6 +162,19 @@ function StudioNodeImpl({ data, selected }: NodeProps) {
           ) : null}
         </>
       )}
+      {n.type === "mesh.animate" && (() => {
+        const ins: string[] = (d as any).connectedIn || [];
+        const src = n.params?.source && n.params.source !== "auto" ? n.params.source : ins.includes("video") && !ins.includes("prompt") ? "video" : ins.includes("prompt") && !ins.includes("video") ? "prompt" : null;
+        return (
+          <div className="snode-info">
+            {src === "video" ? <span className="pill" title="Capture du mouvement depuis la vidéo (MediaPipe Pose, sur ce PC)">vidéo · MediaPipe</span>
+              : src === "prompt" ? <span className="pill" title="Mouvement généré depuis le prompt (Kimodo, sur ce PC)">prompt · Kimodo</span>
+              : <span className="pill warn" title="Branchez un prompt OU une vidéo (ou choisissez la source)">source à choisir</span>}
+            {src === "prompt" && <span className="pill">{n.params?.duration_s ?? 4} s</span>}
+            {n.params?.in_place && <span className="pill">sur place</span>}
+          </div>
+        );
+      })()}
       {n.type === "image.props" && <PropsPanel n={n} slots={slots} job={job} />}
       {n.type === "compare.before_after" && <CompareNode n={n} refs={d.status?.refs} variant={d.variant} />}
       {(thumb || liveUrl) && (

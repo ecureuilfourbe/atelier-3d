@@ -20,7 +20,7 @@ PORT_TYPES = {
     "Mesh": "Maillage (avec matériaux/textures)",
     "Materials": "Matériaux",
     "RiggedMesh": "Maillage riggé",
-    "Animation": "Animation",
+    "Animation": "Mouvement (squelette animé)",
     "Video": "Vidéo",
     "Report": "Rapport",
     "Files": "Fichiers exportés",
@@ -76,6 +76,8 @@ class Step:
     resource: str             # "gpu" | "cpu" | "none"
     generative: bool = False  # accepte une seed
     params: tuple | None = None  # paramètres qui influencent cette étape (None = tous sauf la seed)
+    # entrées de la node utilisées par cette étape (None = toutes pour la 1re étape, aucune ensuite : sortie précédente seule)
+    inputs: tuple | None = None
 
 
 @dataclass
@@ -561,6 +563,40 @@ register(NodeType(
     outputs=[Port("report", "Report", "Rapport"), Port("rigged_mesh", "RiggedMesh", "Maillage riggé (inchangé)")],
     params_schema=_schema({"amplitude": {"type": "number", "minimum": 0.2, "maximum": 1.5, "default": 1.0, "title": "Amplitude des poses"}}),
     steps=lambda node: [Step("deform_tests", "Tests de déformation", "blender", "cpu")],
+))
+
+def _animate_steps(node: dict) -> list[Step]:
+    # le mouvement ne dépend que du prompt / de la vidéo : changer de modèle ne relance que le transfert
+    return [Step("motion", "Mouvement (Kimodo : prompt / MediaPipe : vidéo)", "motion.generate", "gpu", generative=True,
+                 params=("source", "duration_s", "diffusion_steps", "smoothing", "start_s", "end_s"), inputs=("prompt", "video")),
+            Step("retarget", "Transfert sur le modèle (Blender)", "blender", "cpu", params=("in_place",), inputs=("rigged_mesh",))]
+
+
+register(NodeType(
+    type="mesh.animate", label="Animer le modèle 3D", category="Animation", kind="generative",
+    description="Anime un modèle riggé (squelette Mixamo du rig MIA) à partir d'un prompt de mouvement (Kimodo, local) ou d'une "
+                "vidéo de référence (MediaPipe Pose, local). Sorties : modèle animé (.glb, .blend, .fbx) et aperçu vidéo.",
+    inputs=[Port("rigged_mesh", "Mesh", "Modèle riggé", required=True,
+                 description="Sortie de « Rigging » / « Vérifier la déformation », ou modèle importé (.glb, .fbx) avec un squelette Mixamo."),
+            Port("prompt", "Prompt", "Prompt de mouvement", description="En anglais de préférence ; une ligne par mouvement pour les enchaîner."),
+            Port("video", "Video", "Vidéo de référence", description="Une personne entière, caméra fixe de préférence.")],
+    outputs=[Port("rigged_mesh", "RiggedMesh", "Modèle animé"), Port("video", "Video", "Aperçu animé"),
+             Port("motion", "Animation", "Mouvement")],
+    params_schema=_schema({
+        "source": {"type": "string", "enum": ["auto", "prompt", "video"], "default": "auto", "title": "Source du mouvement",
+                   "enumLabels": {"auto": "automatique (l'entrée branchée)", "prompt": "prompt (Kimodo)", "video": "vidéo (MediaPipe)"}},
+        "duration_s": {"type": "number", "minimum": 1, "maximum": 20, "default": 4, "title": "Durée (s, prompt)",
+                       "description": "Kimodo : 30 images/s ; jusqu'à 10 s par ligne de prompt."},
+        "in_place": {"type": "boolean", "default": False, "title": "Sur place (sans déplacement au sol)"},
+        "smoothing": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.5, "title": "Lissage (vidéo)",
+                      "description": "Réduit les tremblements de la capture ; trop élevé = mouvements amortis."},
+        "diffusion_steps": {"type": "integer", "minimum": 20, "maximum": 200, "default": 100, "title": "Étapes de diffusion (Kimodo)", "x-advanced": True},
+        "start_s": {"type": "number", "minimum": 0, "default": 0, "title": "Début de la vidéo (s)", "x-advanced": True},
+        "end_s": {"type": "number", "minimum": 0, "default": 0, "title": "Fin de la vidéo (s, 0 = jusqu'au bout)", "x-advanced": True},
+        "seed": SEED,
+    }),
+    steps=_animate_steps,
+    actions=["regenerate", "select_variant"],
 ))
 
 register(NodeType(

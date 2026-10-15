@@ -8,3 +8,7 @@
 # workflows ComfyUI : octets inchangés (leur SHA-256 fait partie de l'empreinte des résultats)
 app/workflows/** -text
 installer/versions.lock.json -text
+*.exe binary
+*.dll binary
+*.gguf binary
+*.task binary

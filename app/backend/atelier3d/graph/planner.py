@@ -286,8 +286,16 @@ class Planner:
 
     def _depends_on_planned(self, doc, node, step_index, item_id, planned) -> bool:
         if step_index > 0:
-            prev = self.state.node_steps(node)[step_index - 1].id
-            return (node["id"], prev, item_id) in planned
+            steps = self.state.node_steps(node)
+            prev = steps[step_index - 1].id
+            if (node["id"], prev, item_id) in planned:
+                return True
+            if not steps[step_index].inputs:
+                return False
+            # étape qui lit aussi des entrées de la node (ex. modèle riggé du transfert d'animation)
+            ins = self.state.slot_inputs(doc, node, step_index, item_id, run_overrides={k: "x" for k in planned})
+            ins.pop("previous", None)
+            return _contains_job(ins)
         ins = self.state.slot_inputs(doc, node, 0, item_id, run_overrides={k: "x" for k in planned})
         return _contains_job(ins)
 

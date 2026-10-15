@@ -4,7 +4,7 @@ import { applyOps, deleteGraph, errText, openGraph, refreshGraphList, restoreGra
 import { createBlankGraph } from "../clipboard";
 import { getState, toast, useStore } from "../store";
 
-const CATS = ["Texte", "Image", "3D", "Vidéo"];
+const CATS = ["Texte", "Image", "3D", "Animation", "Vidéo", "Comparer"];
 
 export function Library() {
   const nts = useStore((s) => s.nodeTypes);
@@ -58,7 +58,7 @@ export function Library() {
       )) : <p className="hint">Vide.</p>)}
       <h4>Préréglages</h4>
       {Object.entries(presets).map(([k, label]) => <button key={k} className="lib-item" onClick={() => fromPreset(k)}>＋ {label}</button>)}
-      {CATS.map((cat) => (
+      {[...CATS, ...[...new Set(Object.values(nts).map((t) => t.category))].filter((c) => !CATS.includes(c))].map((cat) => (
         <div key={cat}>
           <h4>{cat}</h4>
           {Object.values(nts).filter((t) => t.category === cat).map((t) => {
